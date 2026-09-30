@@ -238,6 +238,8 @@ export const AgentHubDashboard: React.FC = () => {
         activeNavTab={activeNavTab}
         onNavTabChange={handleNavTabChange}
         totalAgentsCount={MOCK_AGENTS.length}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       {/* Main Views */}

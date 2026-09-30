@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import { syncFromUrl, openTetris, closeTetris, closeHardestGame, openInvoker, closeInvoker, openPudge, closePudge, setSearchQuery, type ActiveView } from '@/store/slices/appSlice'
+import { syncFromUrl, openTetris, closeTetris, closeHardestGame, openInvoker, closeInvoker, openPudge, closePudge, closeFeaturesMenu, setSearchQuery, type ActiveView } from '@/store/slices/appSlice'
 import { setComparisonSlugs } from '@/store/slices/compareSlice'
 import { Navbar } from '@/components/layout/Navbar'
 import { StagingDock } from '@/components/compare/StagingDock'
@@ -14,6 +14,7 @@ import { HardestGameModal } from '@/components/agenthub/HardestGameModal'
 import { InvokerTrainerModal } from '@/components/agenthub/InvokerTrainerModal'
 import { PudgeHookTrainerModal } from '@/components/agenthub/PudgeHookTrainerModal'
 import { ArcadePage } from '@/features/arcade/ArcadePage'
+import { FeaturesMenuDrawer } from '@/components/layout/FeaturesMenuDrawer'
 
 function App() {
   const dispatch = useDispatch()
@@ -230,6 +231,20 @@ function App() {
           if (['pudge', 'hook', 'meat', 'fresh meat'].includes(appState.searchQuery.trim().toLowerCase())) {
             dispatch(setSearchQuery(''))
           }
+        }}
+      />
+
+      {/* Global Categorized Features & Navigation Menu Drawer */}
+      <FeaturesMenuDrawer
+        isOpen={appState.isFeaturesMenuOpen}
+        onClose={() => dispatch(closeFeaturesMenu())}
+        onOpenSearch={() => {
+          // If on directory, focus search or open command modal
+          const input = document.querySelector('input[placeholder*="Пошук"]') as HTMLInputElement
+          if (input) input.focus()
+        }}
+        onOpenSubmit={() => {
+          dispatch(syncFromUrl({ activeView: 'submit' }))
         }}
       />
     </>

@@ -15,6 +15,7 @@ interface AppState {
   isHardestGameOpen: boolean
   isInvokerOpen: boolean
   isPudgeOpen: boolean
+  isFeaturesMenuOpen: boolean
 }
 
 const initialState: AppState = {
@@ -30,6 +31,7 @@ const initialState: AppState = {
   isHardestGameOpen: false,
   isInvokerOpen: false,
   isPudgeOpen: false,
+  isFeaturesMenuOpen: false,
 }
 
 export const appSlice = createSlice({
@@ -100,6 +102,15 @@ export const appSlice = createSlice({
     setPudgeOpen(state, action: PayloadAction<boolean>) {
       state.isPudgeOpen = action.payload
     },
+    openFeaturesMenu(state) {
+      state.isFeaturesMenuOpen = true
+    },
+    closeFeaturesMenu(state) {
+      state.isFeaturesMenuOpen = false
+    },
+    toggleFeaturesMenu(state) {
+      state.isFeaturesMenuOpen = !state.isFeaturesMenuOpen
+    },
     syncFromUrl(state, action: PayloadAction<Partial<AppState>>) {
       if (action.payload.activeView !== undefined) state.activeView = action.payload.activeView
       if (action.payload.activeProfileSlug !== undefined) state.activeProfileSlug = action.payload.activeProfileSlug
@@ -134,6 +145,9 @@ export const {
   openPudge,
   closePudge,
   setPudgeOpen,
+  openFeaturesMenu,
+  closeFeaturesMenu,
+  toggleFeaturesMenu,
   syncFromUrl,
 } = appSlice.actions
 
