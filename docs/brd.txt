@@ -1,0 +1,53 @@
+﻿Complete Technical and Business Specification: AgentHub
+1. Concept, Problem Statement, and Value Proposition
+The current software market is oversaturated with generative AI directories; however, the vast majority are cluttered with trivial text-generation wrappers built over basic LLMs. The AgentHub project focuses exclusively on autonomous and semi-autonomous AI agents. The key differentiator is that an agent possesses deliberate planning capabilities, the ability to invoke external tools autonomously via APIs or web browsers, long-term contextual memory, and multi-step task execution without requiring continuous human oversight at every stage.
+
+The primary user pain point is ecosystem fragmentation and opacity. Emerging agents are scattered across disparate GitHub repositories, private Discord communities, or unpolished CLI utilities. Developers and business teams struggle to assess the barrier to entry: whether local GPU hardware is required for Docker containers, whether a ready-to-use cloud SaaS interface exists, which foundation models are supported, whether the Model Context Protocol (MCP) is integrated, and what the real operational cost is. AgentHub resolves these challenges through a standardized directory featuring rigorous metadata, rapid faceted search, automated repository health verification, and authentic community ratings.
+
+2. Detailed Four-Page Interface Architecture
+Page 1. Homepage: Directory and Multi-Faceted Filtering
+The primary entry point serves as the interactive operational hub. The top section features a concise hero block communicating the core value proposition, live counters for verified solutions, and a centralized search bar. The search interface supports hotkey activation, executes client-side fuzzy matching against titles, tags, and frameworks with a 250-millisecond debounce window, and operates with sub-second responsiveness.
+
+Directly below the search bar lies the multi-facet filter control panel. The first selector block filters by functional category: Coding & DevOps, Web & Browser Automation, Deep Research & Data Analysis, Sales & Outreach, or Core Multi-Agent Frameworks. The second block filters by runtime environment: Cloud SaaS with a web GUI, Local Terminal CLI, Self-Hosted Docker Compose, or IDE extensions tailored for VS Code and Cursor. The third block isolates licensing and monetization tiers: fully open-source, Bring Your Own Key (BYOK), freemium, or commercial subscription.
+
+The main viewport displays an interactive grid of agent cards. Each card presents a square brand icon, verified project status badge, concise functional summary capped at 120 characters, technology stack chips, a synchronized GitHub star counter, and a dedicated upvote button with active state persistence. Clicking any card triggers immediate client-side navigation to the comprehensive agent profile.
+
+Page 2. Detailed Agent Profile Page
+This page conducts an in-depth technical audit of the selected solution. The header section contains the full project name, extended tagline, direct link to the official domain appending platform tracking parameters, source repository link, a one-click share button, and an upvote module.
+
+Beneath the header sits a structured technical telemetry grid: precise license type, supported foundation models (Claude, GPT, Llama, DeepSeek, or local Ollama instances), core orchestrator framework (such as LangGraph, CrewAI, AutoGen, or custom runtimes), native MCP support, and minimum hardware specifications required for stable execution.
+
+The body content is organized into three substantive documentation sections. The first section outlines autonomous capabilities executed end-to-end. The second section provides a copyable terminal setup sequence for rapid local environment bootstrapping. The third section offers a candid breakdown of validated architectural strengths alongside known operational edge cases (such as sensitivity to dynamic DOM shifts or high context token consumption). The bottom of the page renders contextual alternative suggestions from the identical functional category and an authenticated user review feed.
+
+Page 3. Community Submission Portal
+The third page provides a streamlined submission workflow for contributors and project maintainers. The input form enforces strict schema validation prior to payload delivery and is safeguarded against automated abuse via background bot mitigation.
+
+Contributors supply the official title, concise preview tagline, comprehensive Markdown-formatted product brief, production URL, GitHub repository link, target domain classification, supported deployment targets, and monetization structure. Additional fields accept square visual assets in modern image formats and maintainer contact details for moderation updates.
+
+Upon successful transmission, the record is committed to the persistence tier with a pending status flag, displaying a confirmation screen outlining the standard 12-hour manual review SLA.
+
+Page 4. Curated Collections and Side-by-Side Comparison
+The fourth view drives editorial context and structured organic discovery. It couples curated industry roundups (such as the top open-source browser automation agents or local offline refactoring tools) with an interactive comparative matrix.
+
+Users can stage two or three tools within the same operational domain to evaluate key engineering parameters: degree of execution autonomy, built-in vector memory or RAG integration, multimodal asset handling, estimated token consumption overhead, and community maintenance cadence.
+
+3. Data Schema and Database Architecture
+Data persistence is handled by a relational model hosted on PostgreSQL.
+
+The core entity resides within the agents table. It utilizes a UUID primary key, unique URL slug, formal title, teaser tagline, full Markdown documentation body, and secure URI references for logos, landing pages, and source repositories. GitHub star volume is tracked via an integer column refreshed periodically. Domain categorization links to a defined dictionary key. Deployment targets and supported LLM backends are stored as native text arrays. Discrete boolean flags record open-source status and MCP compliance. The table maintains a total upvote tally, lifecycle state (pending, approved, or rejected), submitter email, and timestamp audit columns. Dedicated database indexes cover the slug, category, and composite state-upvote pairs to optimize query read performance.
+
+The upvotes table prevents duplicate vote allocation. It binds an agent identifier to either an authenticated user ID or a hashed client digital footprint via a foreign key relationship, enforcing a strict unique composite constraint across both fields.
+
+The categories reference table stores unique semantic category slugs, localized display titles, functional domain definitions, and icon token identifiers.
+
+4. Ranking Algorithms and Background Jobs
+To prevent directory stagnation where legacy projects permanently dominate visibility, AgentHub applies an exponential time-decay ranking algorithm. The dynamic score is computed by dividing the net upvotes accumulated over a rolling seven-day window (with a single-unit offset) by the elapsed record age in hours plus two, raised to the power of 1.5. This mathematical degradation ensures emerging solutions with rapid short-term engagement surge to discovery tiers.
+
+Data synchronization is orchestrated via an automated nightly cron routine executed through a serverless scheduling layer. The routine queries all approved records containing active repository links, fetches current metrics via the GitHub API, synchronizes star tallies in the database, and flags archived repositories to deactivate outdated projects automatically.
+
+5. Technology Stack and Infrastructure
+Both client and server layers are constructed using Next.js with React Server Components, delivering aggressive static page generation across public directories to maximize technical SEO indexing for high-intent queries. The interface layer is built with Tailwind CSS utility architecture paired with accessible headless UI primitives, supporting system-level dark mode out of the box.
+
+Data persistence, authentication flows, and Row-Level Security policies are managed by Supabase PostgreSQL. First-stage search leverages in-browser fuzzy matching via Fuse.js, eliminating dedicated search cluster infrastructure expenses while guaranteeing response latencies under fifty milliseconds for catalog volumes up to one thousand entities.
+
+Application hosting and edge asset distribution are deployed across globally distributed serverless infrastructure on Vercel or Cloudflare Pages, maintaining edge caching near end-users and keeping initial page load benchmarks within one second.

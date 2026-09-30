@@ -1,15 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
-
-import { itemsApi } from '@/store/api/itemsApi'
+import { agentsApi } from '@/store/api/agentsApi'
 import appReducer from '@/store/slices/appSlice'
+import compareReducer from '@/store/slices/compareSlice'
 
 export const store = configureStore({
   reducer: {
     app: appReducer,
-    [itemsApi.reducerPath]: itemsApi.reducer,
+    compare: compareReducer,
+    [agentsApi.reducerPath]: agentsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(itemsApi.middleware),
+    getDefaultMiddleware().concat(agentsApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

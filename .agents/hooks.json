@@ -1,0 +1,46 @@
+{
+  "backend-cross-guard": {
+    "enabled": true,
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python ./scripts/backend-guard.py",
+        "timeout": 30
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ./scripts/backend-guard.py",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  },
+  "frontend-cross-guard": {
+    "enabled": true,
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python ./scripts/frontend-guard.py",
+        "timeout": 35
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ./scripts/frontend-guard.py",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
+}

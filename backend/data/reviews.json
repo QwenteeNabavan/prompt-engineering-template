@@ -1,0 +1,218 @@
+[
+  {
+    "id": "r0000001-0000-4000-8000-000000000001",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Alex Chen",
+    "author_role": "Staff Platform Engineer @ FinTech",
+    "rating": 5,
+    "comment": "Deployed OpenHands in our Kubernetes cluster for automated triage of Dependabot alerts. The Docker sandbox isolation is rock solid, and native MCP support made custom database tooling a breeze.",
+    "created_at": "2026-09-20T14:30:00Z"
+  },
+  {
+    "id": "r0000002-0000-4000-8000-000000000002",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Elena Rostova",
+    "author_role": "Open Source Maintainer",
+    "rating": 4,
+    "comment": "Impressive terminal loop and Git PR generation. Token consumption can spike on deep directory scans if you do not customize the ignore rules, but the planning accuracy is superb.",
+    "created_at": "2026-09-21T09:15:00Z"
+  },
+  {
+    "id": "r0000003-0000-4000-8000-000000000003",
+    "agent_id": "a0000002-0000-4000-8000-000000000002",
+    "author_name": "Marcus Vance",
+    "author_role": "VP of Engineering @ SaaS Unicorn",
+    "rating": 5,
+    "comment": "Devin solved a complex race condition in our distributed event pipeline that three senior developers struggled to reproduce. The managed cloud environment completely removes setup overhead.",
+    "created_at": "2026-09-18T18:00:00Z"
+  },
+  {
+    "id": "r0000004-0000-4000-8000-000000000004",
+    "agent_id": "a0000003-0000-4000-8000-000000000003",
+    "author_name": "Sarah Lin",
+    "author_role": "Lead Automation Architect",
+    "rating": 5,
+    "comment": "Stagehand replaced 4,000 lines of brittle Playwright XPath selectors with 20 semantic actions. The self-healing DOM capability survived a complete site redesign without breaking our scraper.",
+    "created_at": "2026-09-22T11:45:00Z"
+  },
+  {
+    "id": "a45b6797-0828-4494-a1af-3436ba14e79a",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-23T08:13:05.605232Z"
+  },
+  {
+    "id": "88bfc490-fe6a-4f2d-b98f-9d139dd17688",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-23T08:14:55.826554Z"
+  },
+  {
+    "id": "2835b91f-f3ea-4c74-979c-46fc16859262",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-23T08:17:31.495362Z"
+  },
+  {
+    "id": "9a70e1dc-f1d5-4cf8-863b-674aba67d27e",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Architect",
+    "author_role": "Staff AI Engineer",
+    "rating": 5,
+    "comment": "Excellent multi-agent orchestrator with robust Docker sandbox isolation.",
+    "created_at": "2026-09-23T08:20:54.449974Z"
+  },
+  {
+    "id": "2f9bc419-7ade-4082-bdef-f0aeb732afa0",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-23T08:20:59.356023Z"
+  },
+  {
+    "id": "6785340e-fb3f-40af-a522-08da69e82506",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T21:51:15.774235Z"
+  },
+  {
+    "id": "8e14b0e1-2f8b-4cc1-a75e-987dba3e425e",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T22:06:12.672177Z"
+  },
+  {
+    "id": "a16143b2-babf-46ea-b0bc-78331c3b1dd8",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T22:15:38.804129Z"
+  },
+  {
+    "id": "70dd3186-9bff-462e-aa1c-f85beabaafcc",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T22:24:08.464170Z"
+  },
+  {
+    "id": "60eb6fde-ee43-4af2-8c67-e595630092df",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T22:42:06.359194Z"
+  },
+  {
+    "id": "4bb38ea7-3c19-4ed7-8ded-03fc444f7846",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T22:54:55.181030Z"
+  },
+  {
+    "id": "e31e9553-b630-4bf4-90fb-a0e5da11cd97",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T23:16:41.915298Z"
+  },
+  {
+    "id": "377f00f4-dada-4d45-8de0-781befdb195c",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T23:31:51.506448Z"
+  },
+  {
+    "id": "c5e97333-9c67-44a3-a3b1-95ad83c063c1",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-29T23:44:40.404731Z"
+  },
+  {
+    "id": "2d3cc8b3-5361-4c3f-b6e7-1c4111da6101",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-30T06:45:23.248356Z"
+  },
+  {
+    "id": "5fc332ba-339b-4e48-9553-c645cc678868",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-30T06:50:06.026362Z"
+  },
+  {
+    "id": "7a304253-4213-4bcf-a8ad-72be0dc2e5c3",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-30T06:50:55.613309Z"
+  },
+  {
+    "id": "254c02dc-5994-4e54-8cea-e39bfc4ce899",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-30T06:50:56.510810Z"
+  },
+  {
+    "id": "e464bf33-fb9d-4544-a88b-7e4434e0a955",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-30T06:52:58.319919Z"
+  },
+  {
+    "id": "34d462c0-b4ec-42e7-b64f-8c8c97da17d5",
+    "agent_id": "a0000001-0000-4000-8000-000000000001",
+    "author_name": "Test Evaluator",
+    "author_role": "Lead Benchmark Engineer",
+    "rating": 5,
+    "comment": "Excellent autonomous performance and clean Docker sandbox integration.",
+    "created_at": "2026-09-30T07:31:56.288009Z"
+  }
+]

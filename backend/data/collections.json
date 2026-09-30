@@ -1,0 +1,33 @@
+[
+  {
+    "id": "c0000001-0000-4000-8000-000000000001",
+    "slug": "top-browser-automation",
+    "title": "Top Open-Source Browser Automation Agents",
+    "editorial_summary": "Autonomous agents utilizing computer vision, DOM reflection, and semantic actions to operate headless and visual browsers reliably.",
+    "content_markdown": "### The Evolution of Web Agents\nTraditional browser scripts depend on fragile XPath or CSS selectors that break on simple UI revisions. The new generation of browser agents combines real-time DOM distillation with multimodal screenshot grounding.\n\nFeatured tools in this roundup solve complex scraping, form submission, and testing workflows without fragile selector maintenance.",
+    "featured_agent_ids": [
+      "a0000003-0000-4000-8000-000000000003",
+      "a0000004-0000-4000-8000-000000000004"
+    ],
+    "is_published": true,
+    "display_order": 1,
+    "created_at": "2026-09-15T10:00:00Z",
+    "updated_at": "2026-09-22T10:00:00Z"
+  },
+  {
+    "id": "c0000002-0000-4000-8000-000000000002",
+    "slug": "autonomous-software-engineers",
+    "title": "Autonomous Coding & Refactoring Systems",
+    "editorial_summary": "Engineering agents equipped with bash terminals, code editors, and self-correcting testing loops that resolve full GitHub issues.",
+    "content_markdown": "### Moving Beyond Copilots\nUnlike code-completion widgets that suggest inline syntax, autonomous coding systems take an issue description, locate the relevant files across a large codebase, install packages, write tests, and verify passes in an isolated container.\n\nCompare the open-source self-hosted solutions against commercial cloud SaaS powerhouses.",
+    "featured_agent_ids": [
+      "a0000001-0000-4000-8000-000000000001",
+      "a0000002-0000-4000-8000-000000000002"
+    ],
+    "is_published": true,
+    "display_order": 2,
+    "created_at": "2026-09-12T10:00:00Z",
+    "updated_at": "2026-09-21T14:00:00Z"
+  }
+]
+
