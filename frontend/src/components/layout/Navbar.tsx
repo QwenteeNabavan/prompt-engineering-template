@@ -24,13 +24,25 @@ export const Navbar: React.FC = () => {
     dispatch(setActiveView('directory'))
   }
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    dispatch(setActiveView('directory'))
+    dispatch(setSearchQuery(''))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (window.location.search) {
+      window.history.pushState(null, '', window.location.pathname)
+    }
+  }
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Minimal Brand Logotype */}
-        <div
-          onClick={() => dispatch(setActiveView('directory'))}
-          className="group flex cursor-pointer items-center gap-2.5 transition-transform active:scale-98"
+        <a
+          href="/"
+          onClick={handleLogoClick}
+          className="group flex cursor-pointer items-center gap-2.5 transition-transform active:scale-95 no-underline"
+          title="Перейти на головну сторінку"
         >
           <div className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-500/30 bg-gradient-to-b from-cyan-500/20 to-cyan-500/5 shadow-[0_0_15px_rgba(6,182,212,0.25)] transition-all group-hover:border-cyan-400 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
             <Terminal className="h-4 w-4 text-cyan-400 transition-transform group-hover:scale-110" />
@@ -50,7 +62,7 @@ export const Navbar: React.FC = () => {
               v1.0
             </Badge>
           </div>
-        </div>
+        </a>
 
         {/* Center: Clean & Empty for Minimalist Spacing */}
         <div className="hidden md:block flex-1" />

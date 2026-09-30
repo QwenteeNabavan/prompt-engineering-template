@@ -221,6 +221,16 @@ export const AgentHubDashboard: React.FC = () => {
     setActiveNavTab(tab)
   }
 
+  const handleGoHome = () => {
+    handleResetFilters()
+    setActiveNavTab('explore')
+    dispatch(setActiveView('directory'))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (window.location.search) {
+      window.history.pushState(null, '', window.location.pathname)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-300 font-sans">
       {/* Toast Notification */}
@@ -240,6 +250,7 @@ export const AgentHubDashboard: React.FC = () => {
         totalAgentsCount={MOCK_AGENTS.length}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        onGoHome={handleGoHome}
       />
 
       {/* Main Views */}
