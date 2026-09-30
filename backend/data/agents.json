@@ -41,7 +41,7 @@
     "is_archived": false,
     "submitter_email": "maintainers@all-hands.dev",
     "created_at": "2026-09-01T12:00:00Z",
-    "updated_at": "2026-09-30T07:31:56.145525",
+    "updated_at": "2026-09-30T16:14:04.100785",
     "autonomy_level": "fully_autonomous",
     "has_vector_rag": true,
     "memory_backend": "Chroma Vector DB + Git History",
@@ -142,7 +142,7 @@
     "is_archived": false,
     "submitter_email": "team@browserbase.com",
     "created_at": "2026-09-10T14:30:00Z",
-    "updated_at": "2026-09-30T07:31:56.175510",
+    "updated_at": "2026-09-30T16:14:04.124771",
     "autonomy_level": "semi_autonomous",
     "has_vector_rag": false,
     "memory_backend": null,
@@ -193,7 +193,7 @@
     "is_archived": false,
     "submitter_email": "founders@browser-use.com",
     "created_at": "2026-09-05T10:00:00Z",
-    "updated_at": "2026-09-30T07:31:56.210489",
+    "updated_at": "2026-09-30T16:14:04.146759",
     "autonomy_level": "fully_autonomous",
     "has_vector_rag": false,
     "memory_backend": null,
@@ -246,7 +246,7 @@
     "is_archived": false,
     "submitter_email": "assaf@gptr.dev",
     "created_at": "2026-08-20T11:00:00Z",
-    "updated_at": "2026-09-30T07:31:56.241472",
+    "updated_at": "2026-09-30T16:14:04.169746",
     "autonomy_level": "fully_autonomous",
     "has_vector_rag": true,
     "memory_backend": "In-memory FAISS / Milvus Vector Store",
@@ -298,7 +298,7 @@
     "is_archived": false,
     "submitter_email": "joao@crewai.com",
     "created_at": "2026-08-01T08:00:00Z",
-    "updated_at": "2026-09-30T07:31:56.263458",
+    "updated_at": "2026-09-30T16:14:04.196730",
     "autonomy_level": "fully_autonomous",
     "has_vector_rag": true,
     "memory_backend": "Chroma Short & Long-term Episodic Memory",
@@ -1270,6 +1270,1106 @@
     "submitter_email": "qa@agenthub.dev",
     "created_at": "2026-09-30T07:31:56.121730",
     "updated_at": "2026-09-30T07:31:56.121730",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "9b47d4b7-8c5b-47ed-8e1c-eecb04cfd2ab",
+    "slug": "agent-verification-suite-22",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T09:08:39.661700",
+    "updated_at": "2026-09-30T09:08:39.661700",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "bdfa55f9-91ff-4721-ab33-de27372a89a0",
+    "slug": "agent-verification-suite-23",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T12:42:38.514354",
+    "updated_at": "2026-09-30T12:42:38.514354",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "870cd09a-6974-4df9-b540-eb9789084ad8",
+    "slug": "agent-verification-suite-24",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T12:47:54.637773",
+    "updated_at": "2026-09-30T12:47:54.637773",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "f20b533a-7019-4b3d-98f5-b84b36b9ba52",
+    "slug": "agent-verification-suite-25",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T12:53:44.634528",
+    "updated_at": "2026-09-30T12:53:44.634528",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "9745688e-3b98-4e85-a2e1-84c11d7d9651",
+    "slug": "agent-verification-suite-26",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T12:56:46.750981",
+    "updated_at": "2026-09-30T12:56:46.750981",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "07b7685e-c263-4c93-b34a-5a3882509879",
+    "slug": "agent-verification-suite-27",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T13:03:19.625567",
+    "updated_at": "2026-09-30T13:03:19.625567",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "7e743b75-8a8e-4bd7-9a2a-591da92f468d",
+    "slug": "agent-verification-suite-28",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T13:05:21.335087",
+    "updated_at": "2026-09-30T13:05:21.335087",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "7a89e4ca-264b-4c3f-b2b6-d2afb47d37de",
+    "slug": "agent-verification-suite-29",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T13:12:17.787420",
+    "updated_at": "2026-09-30T13:12:17.787420",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "eb161548-8c2c-4925-9913-337eea29bd45",
+    "slug": "agent-verification-suite-30",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T13:17:50.297480",
+    "updated_at": "2026-09-30T13:17:50.297480",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "2dc96ca8-0ca1-41e2-9049-5daa6490abfe",
+    "slug": "agent-verification-suite-31",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T13:51:27.968741",
+    "updated_at": "2026-09-30T13:51:27.968741",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "ba67fa72-8a13-405d-8f6b-dc5f60f8290b",
+    "slug": "agent-verification-suite-32",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T14:37:46.852676",
+    "updated_at": "2026-09-30T14:37:46.852676",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "bdd6c567-1d6c-483e-8082-7169f0aece0a",
+    "slug": "agent-verification-suite-33",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T14:39:41.241587",
+    "updated_at": "2026-09-30T14:39:41.241587",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "eea628c5-ca65-4606-99e9-9b96ef7779ff",
+    "slug": "agent-verification-suite-34",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T14:41:51.336595",
+    "updated_at": "2026-09-30T14:41:51.336595",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "331a4d13-5b6d-4935-928c-2c53c1bec9c6",
+    "slug": "agent-verification-suite-35",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:24:32.071004",
+    "updated_at": "2026-09-30T15:24:32.071004",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "3fdfd950-81de-45fb-9df3-8e64437f36d6",
+    "slug": "agent-verification-suite-36",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:27:35.632379",
+    "updated_at": "2026-09-30T15:27:35.632379",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "00dc00b2-927f-44e3-93fa-71c17f026ece",
+    "slug": "agent-verification-suite-37",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:28:41.909746",
+    "updated_at": "2026-09-30T15:28:41.909746",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "d1af3a71-540f-45fa-bc27-84e8c6fbe23a",
+    "slug": "agent-verification-suite-38",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:29:23.310011",
+    "updated_at": "2026-09-30T15:29:23.310011",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "942a291f-43c7-4b6e-8fab-ae6bae849cfb",
+    "slug": "agent-verification-suite-39",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:30:57.718935",
+    "updated_at": "2026-09-30T15:30:57.718935",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "9deee9db-c8c4-42b4-89cf-fd0cea69bf6a",
+    "slug": "agent-verification-suite-40",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:39:05.347538",
+    "updated_at": "2026-09-30T15:39:05.347538",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "ecab3fd4-a8a9-4be5-8570-fc50b171a33f",
+    "slug": "agent-verification-suite-41",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:40:29.225809",
+    "updated_at": "2026-09-30T15:40:29.225809",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "b2b9b5ea-94a1-45fe-800b-4bbd2f6a8099",
+    "slug": "agent-verification-suite-42",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:41:40.279143",
+    "updated_at": "2026-09-30T15:41:40.279143",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "1a057fd5-e64c-4fad-98f4-9f551d3baeaf",
+    "slug": "agent-verification-suite-43",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:45:51.158096",
+    "updated_at": "2026-09-30T15:45:51.158096",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "d47de03b-4248-4540-afc2-141719e60736",
+    "slug": "agent-verification-suite-44",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T15:49:37.369651",
+    "updated_at": "2026-09-30T15:49:37.369651",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "95949e2b-3e36-4161-af21-2eef7d10abec",
+    "slug": "agent-verification-suite-45",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T16:11:51.535848",
+    "updated_at": "2026-09-30T16:11:51.535848",
+    "autonomy_level": "fully_autonomous",
+    "has_vector_rag": false,
+    "memory_backend": null,
+    "multimodal_capabilities": [],
+    "token_overhead_tier": "moderate",
+    "maintenance_cadence": "weekly_releases"
+  },
+  {
+    "id": "0a28d067-8e2e-4476-a0ae-77c81e2e9658",
+    "slug": "agent-verification-suite-46",
+    "title": "Agent Verification Suite",
+    "tagline": "Autonomous verification suite for AgentHub platform testing",
+    "summary": "Automated test suite executing integration checks against directory models.",
+    "description_markdown": "### Verification Suite\nFull-stack autonomous execution.",
+    "logo_url": "https://verification.agenthub.dev/logo.png",
+    "website_url": "https://verification.agenthub.dev",
+    "repository_url": "https://github.com/agenthub/verification",
+    "github_stars": 0,
+    "category_id": "11111111-1111-4111-a111-111111111111",
+    "deployment_targets": [
+      "local_cli",
+      "docker"
+    ],
+    "llm_backends": [
+      "Claude 3.5 Sonnet"
+    ],
+    "framework": "Custom",
+    "is_open_source": true,
+    "is_mcp_compliant": true,
+    "hardware_requirements": null,
+    "terminal_setup_script": null,
+    "strengths": [
+      "Autonomous Task Execution",
+      "Structured Tool Usage"
+    ],
+    "known_edge_cases": [
+      "Pending initial technical telemetry audit"
+    ],
+    "upvotes_count": 0,
+    "lifecycle_state": "pending",
+    "is_archived": false,
+    "submitter_email": "qa@agenthub.dev",
+    "created_at": "2026-09-30T16:14:04.077798",
+    "updated_at": "2026-09-30T16:14:04.077798",
     "autonomy_level": "fully_autonomous",
     "has_vector_rag": false,
     "memory_backend": null,
