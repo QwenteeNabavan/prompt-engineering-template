@@ -71,7 +71,7 @@ export const Navbar: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
-              placeholder="Пошук... ⌘K"
+              placeholder="Пошук..."
               className="h-8 w-36 sm:w-44 md:w-56 rounded-lg border border-slate-800 bg-slate-900/80 pl-8 pr-7 text-xs text-white placeholder:text-slate-500 transition-all focus:border-cyan-500/50 focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 font-sans"
             />
             {searchQuery && (

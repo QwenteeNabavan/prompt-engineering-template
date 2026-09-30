@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { openFeaturesMenu } from '@/store/slices/appSlice'
 
 interface HeaderNavProps {
-  onOpenSearch: () => void
+  onOpenSearch?: () => void
   onOpenSubmit: () => void
   onOpenTetris?: () => void
   activeNavTab?: string
@@ -23,7 +23,6 @@ interface HeaderNavProps {
 }
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({
-  onOpenSearch,
   onOpenSubmit,
   searchQuery = '',
   onSearchChange,
@@ -84,10 +83,10 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-              placeholder="Пошук... ⌘K"
+              placeholder="Пошук..."
               className="h-8 w-36 sm:w-44 md:w-56 rounded-lg border border-slate-800 bg-slate-900/80 pl-8 pr-7 text-xs text-white placeholder:text-slate-500 transition-all focus:border-cyan-500/50 focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 font-sans"
             />
-            {searchQuery ? (
+            {searchQuery && (
               <button
                 type="button"
                 onClick={() => onSearchChange && onSearchChange('')}
@@ -95,15 +94,6 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
                 aria-label="Очистити пошук"
               >
                 <X className="h-3 w-3" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={onOpenSearch}
-                className="absolute right-1.5 hidden sm:flex items-center rounded border border-slate-700/80 bg-slate-800/80 px-1 font-mono text-[9px] text-slate-400 hover:text-slate-200 cursor-pointer"
-                title="Відкрити командне меню (⌘K)"
-              >
-                ⌘K
               </button>
             )}
           </div>
