@@ -8,15 +8,15 @@ import {
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useDispatch } from 'react-redux'
-import { openFeaturesMenu, setActiveView } from '@/store/slices/appSlice'
+import { openFeaturesMenu } from '@/store/slices/appSlice'
 
 interface HeaderNavProps {
   onOpenSearch: () => void
   onOpenSubmit: () => void
   onOpenTetris?: () => void
-  activeNavTab: string
-  onNavTabChange: (tab: string) => void
-  totalAgentsCount: number
+  activeNavTab?: string
+  onNavTabChange?: (tab: string) => void
+  totalAgentsCount?: number
   searchQuery?: string
   onSearchChange?: (q: string) => void
   onGoHome?: () => void
@@ -25,7 +25,6 @@ interface HeaderNavProps {
 export const HeaderNav: React.FC<HeaderNavProps> = ({
   onOpenSearch,
   onOpenSubmit,
-  onNavTabChange,
   searchQuery = '',
   onSearchChange,
   onGoHome,
@@ -37,13 +36,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
     if (onGoHome) {
       onGoHome()
     } else {
-      dispatch(setActiveView('directory'))
-      onNavTabChange('explore')
-      if (onSearchChange) onSearchChange('')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      if (window.location.search) {
-        window.history.pushState(null, '', window.location.pathname)
-      }
+      window.location.reload()
     }
   }
 

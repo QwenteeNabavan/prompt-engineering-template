@@ -26,12 +26,7 @@ export const Navbar: React.FC = () => {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    dispatch(setActiveView('directory'))
-    dispatch(setSearchQuery(''))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    if (window.location.search) {
-      window.history.pushState(null, '', window.location.pathname)
-    }
+    window.location.href = '/'
   }
 
   return (

@@ -222,13 +222,8 @@ export const AgentHubDashboard: React.FC = () => {
   }
 
   const handleGoHome = () => {
-    handleResetFilters()
-    setActiveNavTab('explore')
-    dispatch(setActiveView('directory'))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    if (window.location.search) {
-      window.history.pushState(null, '', window.location.pathname)
-    }
+    // If clicked on the main page, simply reload/refresh the page
+    window.location.reload()
   }
 
   return (
