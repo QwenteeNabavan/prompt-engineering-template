@@ -417,7 +417,7 @@ export const FeaturesMenuDrawer: React.FC<FeaturesMenuDrawerProps> = ({
                     <PlusCircle className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="font-semibold text-xs text-white">+ Запропонувати агента</div>
+                    <div className="font-semibold text-xs text-white">Запропонувати агента</div>
                     <div className="text-[11px] text-slate-400">
                       Форма подачі з перевіркою за 12h SLA
                     </div>

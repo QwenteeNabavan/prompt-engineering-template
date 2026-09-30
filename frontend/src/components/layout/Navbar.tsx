@@ -86,7 +86,7 @@ export const Navbar: React.FC = () => {
             className="hidden sm:inline-flex group relative h-8 items-center gap-1.5 overflow-hidden rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 px-2.5 text-xs font-semibold text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-all hover:shadow-[0_0_18px_rgba(6,182,212,0.4)] hover:brightness-105 active:scale-98 cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
-            <span>+ Submit</span>
+            <span>Submit</span>
           </button>
 
           {/* Features Menu Button */}
