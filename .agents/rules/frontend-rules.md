@@ -1,7 +1,6 @@
 ---
 trigger: glob
-globs:
-  - "frontend/**"
+globs: "frontend/**"
 description: React 19, TypeScript, RTK Query server state, Fuse.js search, and shadcn/ui rules for frontend files.
 ---
 <!-- [DEMO-02B] Path-Scoped Frontend Rules (loaded only when working in frontend/**) -->

@@ -1,9 +1,6 @@
 ---
 trigger: glob
-globs:
-  - "backend/data/**"
-  - "backend/app/repositories/**"
-  - "backend/app/services/**"
+globs: "backend/data/**, backend/app/repositories/**, backend/app/services/**"
 description: JSON array storage invariants, immutable audit fields, deduplication, and time-decay formula rules.
 ---
 # Safety & Data Persistence Guidelines

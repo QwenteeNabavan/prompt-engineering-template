@@ -1,7 +1,6 @@
 ---
 trigger: glob
-globs:
-  - "backend/**"
+globs: "backend/**"
 description: FastAPI 4-tier layered architecture, Pydantic v2 validation, and DI rules for backend files.
 ---
 <!-- [DEMO-02] Path-Scoped Backend Rules (loaded only when working in backend/**) -->
