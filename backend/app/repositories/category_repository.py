@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Optional
+
 from app.models.category import CategoryInDb
 from app.utils.json_store import read_list_file, write_list_file
 
@@ -28,4 +29,3 @@ class CategoryRepository:
 
     def save_all(self, categories: list[CategoryInDb]) -> None:
         write_list_file(self.file_path, categories)
-

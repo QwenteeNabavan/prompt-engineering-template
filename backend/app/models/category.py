@@ -17,4 +17,3 @@ class CategoryResponse(BaseModel):
     description: str
     icon_token: str
     display_order: int
-

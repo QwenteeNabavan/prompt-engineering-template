@@ -1,19 +1,19 @@
-from app.models.category import CategoryInDb, CategoryResponse
 from app.models.agent import (
+    AgentCatalogQuery,
+    AgentDetailResponse,
     AgentInDb,
     AgentListItemResponse,
-    AgentDetailResponse,
-    AgentCatalogQuery,
 )
-from app.models.upvote import UpvoteRecord, UpvoteRequest, UpvoteResponse
-from app.models.submission import SubmissionCreateRequest, SubmissionResponse
+from app.models.category import CategoryInDb, CategoryResponse
 from app.models.collection import (
+    AgentComparisonItem,
     CollectionInDb,
     CollectionResponse,
-    AgentComparisonItem,
     ComparisonMatrixResponse,
 )
-from app.models.review import ReviewInDb, ReviewCreateRequest, ReviewResponse
+from app.models.review import ReviewCreateRequest, ReviewInDb, ReviewResponse
+from app.models.submission import SubmissionCreateRequest, SubmissionResponse
+from app.models.upvote import UpvoteRecord, UpvoteRequest, UpvoteResponse
 
 __all__ = [
     "CategoryInDb",

@@ -3,6 +3,7 @@ import {
   Code2,
   Globe,
   Search,
+  Mail,
   Network,
   Cpu,
   Layers,
@@ -39,6 +40,7 @@ const CATEGORY_ITEMS: { label: AgentCategory; icon: React.ReactNode }[] = [
   { label: 'Coding & DevOps', icon: <Code2 className="h-3.5 w-3.5" /> },
   { label: 'Browser Automation', icon: <Globe className="h-3.5 w-3.5" /> },
   { label: 'Deep Research', icon: <Search className="h-3.5 w-3.5" /> },
+  { label: 'Sales & Outreach', icon: <Mail className="h-3.5 w-3.5" /> },
   { label: 'Multi-Agent Frameworks', icon: <Network className="h-3.5 w-3.5" /> },
 ]
 
@@ -87,9 +89,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                 }`}
               >
-                <span className={isSelected ? 'text-cyan-400' : 'text-slate-400'}>
-                  {icon}
-                </span>
+                <span className={isSelected ? 'text-cyan-400' : 'text-slate-400'}>{icon}</span>
                 <span>{label}</span>
               </button>
             )

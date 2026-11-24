@@ -1,7 +1,8 @@
+import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
-import uuid
+
 from app.models.upvote import UpvoteRecord
 from app.utils.json_store import read_list_file, write_list_file
 
@@ -36,8 +37,7 @@ class UpvoteRepository:
     ) -> bool:
         records = read_list_file(self.file_path, UpvoteRecord)
         return any(
-            r.agent_id == agent_id and self._matches_voter(r, user_id, fingerprint)
-            for r in records
+            r.agent_id == agent_id and self._matches_voter(r, user_id, fingerprint) for r in records
         )
 
     def add_upvote(
@@ -48,8 +48,7 @@ class UpvoteRepository:
     ) -> Optional[UpvoteRecord]:
         records = read_list_file(self.file_path, UpvoteRecord)
         if any(
-            r.agent_id == agent_id and self._matches_voter(r, user_id, fingerprint)
-            for r in records
+            r.agent_id == agent_id and self._matches_voter(r, user_id, fingerprint) for r in records
         ):
             return None  # already upvoted
 
@@ -75,10 +74,7 @@ class UpvoteRepository:
         records = [
             r
             for r in records
-            if not (
-                r.agent_id == agent_id
-                and self._matches_voter(r, user_id, fingerprint)
-            )
+            if not (r.agent_id == agent_id and self._matches_voter(r, user_id, fingerprint))
         ]
         if len(records) < initial_len:
             write_list_file(self.file_path, records)
@@ -88,9 +84,4 @@ class UpvoteRepository:
     def get_recent_upvotes_count(self, agent_id: str, hours: int = 168) -> int:
         records = read_list_file(self.file_path, UpvoteRecord)
         cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
-        return sum(
-            1
-            for r in records
-            if r.agent_id == agent_id and _to_utc(r.created_at) >= cutoff
-        )
-
+        return sum(1 for r in records if r.agent_id == agent_id and _to_utc(r.created_at) >= cutoff)

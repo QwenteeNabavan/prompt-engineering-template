@@ -5,18 +5,41 @@ Validates that JSON storage files in backend/data/ are well-formed arrays.
 Supports both Stop and PostToolUse event contracts.
 """
 import json
+import os
 import sys
 from pathlib import Path
 
 
-def main():
-    payload = {}
+def read_stdin_payload() -> dict:
     try:
-        raw_input = sys.stdin.read()
-        if raw_input.strip():
-            payload = json.loads(raw_input)
+        if sys.stdin.isatty():
+            return {}
+        if os.name == "nt":
+            import ctypes
+            import msvcrt
+
+            handle = msvcrt.get_osfhandle(sys.stdin.fileno())
+            avail = ctypes.c_ulong(0)
+            if not ctypes.windll.kernel32.PeekNamedPipe(handle, None, 0, None, ctypes.byref(avail), None):
+                return {}
+            if avail.value == 0:
+                return {}
+            raw = os.read(sys.stdin.fileno(), avail.value).decode("utf-8", errors="replace")
+        else:
+            import select
+
+            if not select.select([sys.stdin], [], [], 0.0)[0]:
+                return {}
+            raw = sys.stdin.read()
+        if raw.strip():
+            return json.loads(raw)
     except Exception:
         pass
+    return {}
+
+
+def main():
+    payload = read_stdin_payload()
 
     # Check if this is a PostToolUse event or Stop event
     is_post_tool = "stepIdx" in payload and "terminationReason" not in payload

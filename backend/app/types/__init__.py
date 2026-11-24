@@ -1,11 +1,11 @@
 from app.types.agent import (
     AgentId,
+    AutonomyLevel,
     CategoryId,
     CollectionId,
     LifecycleState,
-    RuntimeEnvironment,
     MonetizationTier,
-    AutonomyLevel,
+    RuntimeEnvironment,
     TokenOverheadTier,
 )
 

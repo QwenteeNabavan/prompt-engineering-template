@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
 from app.models.agent import AgentInDb
 from app.utils.json_store import read_list_file, write_list_file
 
@@ -56,4 +57,3 @@ class AgentRepository:
             write_list_file(self.file_path, agents)
             return True
         return False
-

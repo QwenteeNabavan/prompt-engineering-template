@@ -3,27 +3,14 @@ export type AgentCategory =
   | 'Coding & DevOps'
   | 'Browser Automation'
   | 'Deep Research'
+  | 'Sales & Outreach'
   | 'Multi-Agent Frameworks'
 
-export type RuntimeEnvironment =
-  | 'All'
-  | 'VS Code Extension'
-  | 'Local CLI'
-  | 'Docker'
-  | 'Cloud Web'
+export type RuntimeEnvironment = 'All' | 'VS Code Extension' | 'Local CLI' | 'Docker' | 'Cloud Web'
 
-export type PricingModel =
-  | 'All'
-  | '100% Free'
-  | 'BYOK'
-  | 'Freemium'
-  | 'Paid'
+export type PricingModel = 'All' | '100% Free' | 'BYOK' | 'Freemium' | 'Paid'
 
-export type SortOption =
-  | 'trending'
-  | 'top_rated'
-  | 'stars'
-  | 'recently_added'
+export type SortOption = 'trending' | 'top_rated' | 'stars' | 'recently_added'
 
 export interface AgentArchitecture {
   planningLoop: string
@@ -42,6 +29,7 @@ export interface AgentRegistryItem {
   upvotesCount: number
   category: Exclude<AgentCategory, 'All'>
   runtime: Exclude<RuntimeEnvironment, 'All'>
+  supportedRuntimes?: Exclude<RuntimeEnvironment, 'All'>[]
   pricing: Exclude<PricingModel, 'All'>
   primaryLlm: string
   license: string

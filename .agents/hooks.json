@@ -4,18 +4,18 @@
     "Stop": [
       {
         "type": "command",
-        "command": "python ./scripts/backend-guard.py",
-        "timeout": 30
+        "command": "python ./hooks/backend-guard.py",
+        "timeout": 90
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "write_to_file|replace_file_content",
+        "matcher": "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
         "hooks": [
           {
             "type": "command",
-            "command": "python ./scripts/backend-guard.py",
-            "timeout": 15
+            "command": "python ./hooks/backend-guard.py",
+            "timeout": 30
           }
         ]
       }
@@ -26,18 +26,40 @@
     "Stop": [
       {
         "type": "command",
-        "command": "python ./scripts/frontend-guard.py",
-        "timeout": 35
+        "command": "python ./hooks/frontend-guard.py",
+        "timeout": 90
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "write_to_file|replace_file_content",
+        "matcher": "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
         "hooks": [
           {
             "type": "command",
-            "command": "python ./scripts/frontend-guard.py",
-            "timeout": 20
+            "command": "python ./hooks/frontend-guard.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "data-integrity-guard": {
+    "enabled": true,
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python ./hooks/guard-integrity.py",
+        "timeout": 15
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ./hooks/guard-integrity.py",
+            "timeout": 10
           }
         ]
       }

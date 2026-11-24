@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, Query
+
+from app.dependencies import get_collection_service
 from app.models.collection import (
     CollectionResponse,
     ComparisonMatrixResponse,
 )
 from app.services.collection_service import CollectionService
-from app.dependencies import get_collection_service
 
 router = APIRouter(prefix="/collections", tags=["collections"])
 
@@ -34,4 +35,3 @@ def get_collection(
     service: CollectionService = Depends(get_collection_service),
 ) -> CollectionResponse:
     return service.get_collection_by_slug(slug)
-

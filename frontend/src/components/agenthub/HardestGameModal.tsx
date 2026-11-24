@@ -78,7 +78,9 @@ class SoundFX {
 
   private getContext(): AudioContext | null {
     if (!this.ctx && typeof window !== 'undefined') {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
       if (AudioCtx) {
         this.ctx = new AudioCtx()
       }
@@ -201,7 +203,8 @@ const createLevels = (): LevelConfig[] => [
   {
     id: 2,
     name: 'Level 2: Crossfire & The Key',
-    subtitle: 'Collect the central yellow coin and dodge the horizontal hazard fire to open the exit.',
+    subtitle:
+      'Collect the central yellow coin and dodge the horizontal hazard fire to open the exit.',
     arena: { x: 32, y: 64, w: 576, h: 288 },
     startZone: { x: 32, y: 64, w: 96, h: 288 },
     goalZone: { x: 512, y: 64, w: 96, h: 288 },
@@ -224,18 +227,63 @@ const createLevels = (): LevelConfig[] => [
   {
     id: 3,
     name: 'Level 3: The Orbital Vortex',
-    subtitle: 'Gather both gold coins from opposite corners while navigating spinning hazard rings.',
+    subtitle:
+      'Gather both gold coins from opposite corners while navigating spinning hazard rings.',
     arena: { x: 32, y: 48, w: 576, h: 320 },
     startZone: { x: 32, y: 48, w: 100, h: 100 },
     goalZone: { x: 508, y: 268, w: 100, h: 100 },
     playerStart: { x: 72, y: 88 },
     enemies: [
       // Orbiting ring 1 (Inner)
-      { x: 320, y: 208, vx: 0, vy: 0, radius: 8, cx: 320, cy: 208, orbitRadius: 65, angle: 0, angularSpeed: 0.045 },
-      { x: 320, y: 208, vx: 0, vy: 0, radius: 8, cx: 320, cy: 208, orbitRadius: 65, angle: Math.PI, angularSpeed: 0.045 },
+      {
+        x: 320,
+        y: 208,
+        vx: 0,
+        vy: 0,
+        radius: 8,
+        cx: 320,
+        cy: 208,
+        orbitRadius: 65,
+        angle: 0,
+        angularSpeed: 0.045,
+      },
+      {
+        x: 320,
+        y: 208,
+        vx: 0,
+        vy: 0,
+        radius: 8,
+        cx: 320,
+        cy: 208,
+        orbitRadius: 65,
+        angle: Math.PI,
+        angularSpeed: 0.045,
+      },
       // Orbiting ring 2 (Middle)
-      { x: 320, y: 208, vx: 0, vy: 0, radius: 8, cx: 320, cy: 208, orbitRadius: 115, angle: Math.PI / 2, angularSpeed: -0.035 },
-      { x: 320, y: 208, vx: 0, vy: 0, radius: 8, cx: 320, cy: 208, orbitRadius: 115, angle: (3 * Math.PI) / 2, angularSpeed: -0.035 },
+      {
+        x: 320,
+        y: 208,
+        vx: 0,
+        vy: 0,
+        radius: 8,
+        cx: 320,
+        cy: 208,
+        orbitRadius: 115,
+        angle: Math.PI / 2,
+        angularSpeed: -0.035,
+      },
+      {
+        x: 320,
+        y: 208,
+        vx: 0,
+        vy: 0,
+        radius: 8,
+        cx: 320,
+        cy: 208,
+        orbitRadius: 115,
+        angle: (3 * Math.PI) / 2,
+        angularSpeed: -0.035,
+      },
       // Corner patrollers
       { x: 180, y: 80, vx: 0, vy: 3.5, radius: 8, minY: 65, maxY: 345 },
       { x: 440, y: 340, vx: 0, vy: -3.5, radius: 8, minY: 65, maxY: 345 },
@@ -250,7 +298,8 @@ const createLevels = (): LevelConfig[] => [
   {
     id: 4,
     name: 'Level 4: The Final Trial',
-    subtitle: 'Maximum precision required. Grab all 3 coins across opposing high-speed wave barriers.',
+    subtitle:
+      'Maximum precision required. Grab all 3 coins across opposing high-speed wave barriers.',
     arena: { x: 32, y: 48, w: 576, h: 320 },
     startZone: { x: 32, y: 160, w: 80, h: 96 },
     goalZone: { x: 528, y: 160, w: 80, h: 96 },
@@ -274,10 +323,7 @@ const createLevels = (): LevelConfig[] => [
   },
 ]
 
-export const HardestGameModal: React.FC<HardestGameModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const HardestGameModal: React.FC<HardestGameModalProps> = ({ isOpen, onClose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // Game States
@@ -464,7 +510,13 @@ export const HardestGameModal: React.FC<HardestGameModalProps> = ({
 
       // 2. Update Enemy Obstacles
       lvl.enemies.forEach((enemy) => {
-        if (enemy.orbitRadius !== undefined && enemy.cx !== undefined && enemy.cy !== undefined && enemy.angle !== undefined && enemy.angularSpeed !== undefined) {
+        if (
+          enemy.orbitRadius !== undefined &&
+          enemy.cx !== undefined &&
+          enemy.cy !== undefined &&
+          enemy.angle !== undefined &&
+          enemy.angularSpeed !== undefined
+        ) {
           // Circular / Orbital trajectory
           enemy.angle += enemy.angularSpeed
           enemy.x = enemy.cx + Math.cos(enemy.angle) * enemy.orbitRadius
@@ -652,7 +704,16 @@ export const HardestGameModal: React.FC<HardestGameModalProps> = ({
 
     animId = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(animId)
-  }, [isOpen, isPaused, showDeathMoment, isWon, levelIndex, soundEnabled, triggerDeath, resetToLevel])
+  }, [
+    isOpen,
+    isPaused,
+    showDeathMoment,
+    isWon,
+    levelIndex,
+    soundEnabled,
+    triggerDeath,
+    resetToLevel,
+  ])
 
   if (!isOpen) return null
 
@@ -800,7 +861,9 @@ export const HardestGameModal: React.FC<HardestGameModalProps> = ({
                 <div className="flex items-center gap-2 text-rose-300">
                   <Skull className="h-4 w-4 text-rose-500" />
                   <span className="font-bold text-white">DEATH #{deaths}</span>
-                  <span className="text-slate-400 text-[11px]">&bull; Failed on {currentLevel.name}</span>
+                  <span className="text-slate-400 text-[11px]">
+                    &bull; Failed on {currentLevel.name}
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -894,16 +957,28 @@ export const HardestGameModal: React.FC<HardestGameModalProps> = ({
 
           <div className="flex items-center gap-3 text-slate-500">
             <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">WASD / Arrows</kbd> Move
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">
+                WASD / Arrows
+              </kbd>{' '}
+              Move
             </span>
             <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">R</kbd> Restart
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">
+                R
+              </kbd>{' '}
+              Restart
             </span>
             <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">P</kbd> Pause
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">
+                P
+              </kbd>{' '}
+              Pause
             </span>
             <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">Esc</kbd> Close
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">
+                Esc
+              </kbd>{' '}
+              Close
             </span>
           </div>
         </div>

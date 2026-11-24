@@ -1,13 +1,16 @@
-from datetime import datetime
 import re
+from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel, Field, field_validator
 
 
 class SubmissionCreateRequest(BaseModel):
     title: str = Field(..., min_length=2, max_length=150)
     tagline: str = Field(..., min_length=5, max_length=255)
-    summary: str = Field(..., max_length=120, description="Directory preview snippet (capped at 120 chars)")
+    summary: str = Field(
+        ..., max_length=120, description="Directory preview snippet (capped at 120 chars)"
+    )
     description_markdown: str = Field(..., min_length=20)
     website_url: str = Field(..., description="HTTPS landing page URL")
     repository_url: Optional[str] = None
@@ -57,4 +60,3 @@ class SubmissionResponse(BaseModel):
     sla_hours: int = 12
     submitted_at: datetime
     message: str
-

@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  Terminal,
-  Search,
-  Plus,
-  Menu,
-  X,
-} from 'lucide-react'
+import { Terminal, Search, Plus, Menu, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useDispatch } from 'react-redux'
 import { openFeaturesMenu } from '@/store/slices/appSlice'
@@ -65,7 +59,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
                 variant="slate"
                 className="h-5 rounded-full border-slate-700/60 bg-slate-900 px-1.5 py-0 font-mono text-[10px] text-slate-400"
               >
-                v1.0
+                v1.1
               </Badge>
             </div>
           </a>

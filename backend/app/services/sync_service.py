@@ -31,4 +31,3 @@ class SyncService:
             "processed": updated_count,
             "archived_flagged": archived_count,
         }
-

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "atlassian": {
+      "serverUrl": "https://mcp.atlassian.com/v2/mcp"
+    }
+  }
+}
+
+
+
+

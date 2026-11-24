@@ -1,4 +1,4 @@
-from app.routers import agents, categories, submissions, collections, reviews
+from app.routers import agents, categories, collections, reviews, submissions
 
 __all__ = [
     "agents",

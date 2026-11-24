@@ -218,7 +218,8 @@ export const CommandMenuModal: React.FC<CommandMenuModalProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 truncate">
-                    Triggered by search &ldquo;Game&rdquo; &bull; Features Doggie crashout video loss moment (Track: Stalemate)
+                    Triggered by search &ldquo;Game&rdquo; &bull; Features Doggie crashout video
+                    loss moment (Track: Stalemate)
                   </p>
                 </div>
               </div>
@@ -377,9 +378,7 @@ export const CommandMenuModal: React.FC<CommandMenuModalProps> = ({
                           &bull; {agent.category}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-400 truncate">
-                        {agent.tagline}
-                      </p>
+                      <p className="text-[11px] text-slate-400 truncate">{agent.tagline}</p>
                     </div>
                   </div>
 
@@ -393,9 +392,7 @@ export const CommandMenuModal: React.FC<CommandMenuModalProps> = ({
                       <Star className="h-3 w-3 fill-amber-400/30" />
                       {(agent.githubStars / 1000).toFixed(0)}k
                     </span>
-                    {isSelected && (
-                      <CornerDownLeft className="h-3.5 w-3.5 text-cyan-400" />
-                    )}
+                    {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-cyan-400" />}
                   </div>
                 </div>
               )
@@ -407,23 +404,47 @@ export const CommandMenuModal: React.FC<CommandMenuModalProps> = ({
         <div className="flex items-center justify-between border-t border-slate-800 bg-slate-950/60 px-4 py-2 text-[10px] font-mono text-slate-500">
           <div className="flex items-center gap-3">
             <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">↑↓</kbd> to navigate
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">
+                ↑↓
+              </kbd>{' '}
+              to navigate
             </span>
             <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">↵</kbd> to select
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">
+                ↵
+              </kbd>{' '}
+              to select
             </span>
             <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">esc</kbd> to close
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-slate-300">
+                esc
+              </kbd>{' '}
+              to close
             </span>
-            <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-cyan-300">Alt+T</kbd> Tetris
-            </span>
-            <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-purple-300">Alt+I</kbd> Invoker
-            </span>
-            <span>
-              <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-rose-300">Alt+P</kbd> Pudge
-            </span>
+            {onOpenTetris && (
+              <span>
+                <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-cyan-300">
+                  Alt+T
+                </kbd>{' '}
+                Tetris
+              </span>
+            )}
+            {onOpenInvoker && (
+              <span>
+                <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-purple-300">
+                  Alt+I
+                </kbd>{' '}
+                Invoker
+              </span>
+            )}
+            {onOpenPudge && (
+              <span>
+                <kbd className="rounded border border-slate-700 bg-slate-800 px-1 py-0.5 text-rose-300">
+                  Alt+P
+                </kbd>{' '}
+                Pudge
+              </span>
+            )}
           </div>
           <span className="text-cyan-400/80">AgentHub Command Registry</span>
         </div>

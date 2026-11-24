@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -111,4 +112,3 @@ class AgentCatalogQuery(BaseModel):
     runtime: Optional[str] = None
     monetization: Optional[str] = None
     sort: Optional[str] = "trending"  # trending, top, stars, newest
-

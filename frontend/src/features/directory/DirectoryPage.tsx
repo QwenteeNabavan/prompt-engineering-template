@@ -16,6 +16,7 @@ import {
   setSortBy,
 } from '@/store/slices/appSlice'
 import { addAgentToCompare, removeAgentFromCompare } from '@/store/slices/compareSlice'
+import { getClientFingerprint } from '@/lib/utils'
 import type { AgentListItem } from '@/types/agent'
 import {
   Search,
@@ -47,9 +48,7 @@ export const DirectoryPage: React.FC = () => {
   const [debouncedSearch, setDebouncedSearch] = useState(searchQuery)
 
   // Staged agents for comparison
-  const stagedSlugs = useSelector(
-    (state: RootState) => state.compare.stagedAgentSlugs
-  )
+  const stagedSlugs = useSelector((state: RootState) => state.compare.stagedAgentSlugs)
 
   // Local upvote persistence for active UI toggling
   const [localUpvotedIds, setLocalUpvotedIds] = useState<Record<string, boolean>>(() => {
@@ -63,7 +62,11 @@ export const DirectoryPage: React.FC = () => {
 
   // Queries & Mutations
   const { data: categories = [] } = useListCategoriesQuery()
-  const { data: agents = [], isLoading, isError } = useListAgentsQuery({
+  const {
+    data: agents = [],
+    isLoading,
+    isError,
+  } = useListAgentsQuery({
     category: selectedCategory,
     runtime: selectedRuntime,
     monetization: selectedMonetization,
@@ -123,7 +126,7 @@ export const DirectoryPage: React.FC = () => {
       localStorage.setItem('agenthub_upvoted_ids', JSON.stringify(updated))
       await toggleUpvoteMutation({
         agentId: agent.id,
-        fingerprint: 'client-fingerprint-uuid',
+        fingerprint: getClientFingerprint(),
       }).unwrap()
     } catch (err) {
       // Rollback on network failure
@@ -144,16 +147,6 @@ export const DirectoryPage: React.FC = () => {
       }
       dispatch(addAgentToCompare(agent.slug))
     }
-  }
-
-  // Easter Egg: Launch Dota 2
-  const handleLaunchDota = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    window.location.href = 'steam://rungameid/570'
-    fetch('http://localhost:8001/api/easter-egg/launch-dota', {
-      method: 'POST',
-    }).catch(() => {})
   }
 
   // Aggregate stats
@@ -179,17 +172,8 @@ export const DirectoryPage: React.FC = () => {
           </h1>
 
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            Eliminating ecosystem fragmentation.{' '}
-            <button
-              type="button"
-              onClick={handleLaunchDota}
-              className="text-inherit font-inherit p-0 m-0 bg-transparent border-0 cursor-pointer hover:text-primary hover:underline underline-offset-4 transition-colors select-none focus:outline-none"
-              title="Discover (Launch Dota 2)"
-              aria-label="Discover (Easter Egg: Launch Dota 2)"
-            >
-              Discover
-            </button>{' '}
-            agents featuring deliberate planning, autonomous tool calling, long-term memory, and self-healing execution loops.
+            Eliminating ecosystem fragmentation. Discover agents featuring deliberate planning,
+            autonomous tool calling, long-term memory, and self-healing execution loops.
           </p>
 
           {/* Live Metrics Counters */}
@@ -345,7 +329,9 @@ export const DirectoryPage: React.FC = () => {
 
         {debouncedSearch.trim() && displayedAgents.length > 0 && (
           <div className="text-xs font-semibold text-muted-foreground px-1">
-            Found {displayedAgents.length} verified {displayedAgents.length === 1 ? 'agent' : 'agents'} matching &ldquo;{debouncedSearch}&rdquo;
+            Found {displayedAgents.length} verified{' '}
+            {displayedAgents.length === 1 ? 'agent' : 'agents'} matching &ldquo;{debouncedSearch}
+            &rdquo;
           </div>
         )}
 
@@ -402,10 +388,7 @@ export const DirectoryPage: React.FC = () => {
                           <h3 className="font-bold text-base text-foreground group-hover:text-primary transition-colors">
                             {agent.title}
                           </h3>
-                          <span
-                            title="Verified Autonomous Agent"
-                            className="text-emerald-500"
-                          >
+                          <span title="Verified Autonomous Agent" className="text-emerald-500">
                             <ShieldCheck className="w-4 h-4 fill-emerald-500/20" />
                           </span>
                         </div>
@@ -512,4 +495,3 @@ export const DirectoryPage: React.FC = () => {
     </div>
   )
 }
-

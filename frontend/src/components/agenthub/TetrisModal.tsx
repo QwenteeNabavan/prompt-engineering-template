@@ -22,13 +22,66 @@ const BOARD_COLS = 10
 
 // 7 Classic Tetrominoes
 const TETROMINOES = [
-  { id: 1, name: 'I', shape: [[1, 1, 1, 1]], color: 'bg-cyan-500 border-cyan-300 shadow-[0_0_8px_rgba(6,182,212,0.6)]' },
-  { id: 2, name: 'O', shape: [[2, 2], [2, 2]], color: 'bg-yellow-400 border-yellow-200 shadow-[0_0_8px_rgba(250,204,21,0.6)]' },
-  { id: 3, name: 'T', shape: [[0, 3, 0], [3, 3, 3]], color: 'bg-violet-500 border-violet-300 shadow-[0_0_8px_rgba(168,85,247,0.6)]' },
-  { id: 4, name: 'S', shape: [[0, 4, 4], [4, 4, 0]], color: 'bg-emerald-500 border-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.6)]' },
-  { id: 5, name: 'Z', shape: [[5, 5, 0], [0, 5, 5]], color: 'bg-rose-500 border-rose-300 shadow-[0_0_8px_rgba(244,63,94,0.6)]' },
-  { id: 6, name: 'J', shape: [[6, 0, 0], [6, 6, 6]], color: 'bg-blue-500 border-blue-300 shadow-[0_0_8px_rgba(59,130,246,0.6)]' },
-  { id: 7, name: 'L', shape: [[0, 0, 7], [7, 7, 7]], color: 'bg-amber-500 border-amber-300 shadow-[0_0_8px_rgba(245,158,11,0.6)]' },
+  {
+    id: 1,
+    name: 'I',
+    shape: [[1, 1, 1, 1]],
+    color: 'bg-cyan-500 border-cyan-300 shadow-[0_0_8px_rgba(6,182,212,0.6)]',
+  },
+  {
+    id: 2,
+    name: 'O',
+    shape: [
+      [2, 2],
+      [2, 2],
+    ],
+    color: 'bg-yellow-400 border-yellow-200 shadow-[0_0_8px_rgba(250,204,21,0.6)]',
+  },
+  {
+    id: 3,
+    name: 'T',
+    shape: [
+      [0, 3, 0],
+      [3, 3, 3],
+    ],
+    color: 'bg-violet-500 border-violet-300 shadow-[0_0_8px_rgba(168,85,247,0.6)]',
+  },
+  {
+    id: 4,
+    name: 'S',
+    shape: [
+      [0, 4, 4],
+      [4, 4, 0],
+    ],
+    color: 'bg-emerald-500 border-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.6)]',
+  },
+  {
+    id: 5,
+    name: 'Z',
+    shape: [
+      [5, 5, 0],
+      [0, 5, 5],
+    ],
+    color: 'bg-rose-500 border-rose-300 shadow-[0_0_8px_rgba(244,63,94,0.6)]',
+  },
+  {
+    id: 6,
+    name: 'J',
+    shape: [
+      [6, 0, 0],
+      [6, 6, 6],
+    ],
+    color: 'bg-blue-500 border-blue-300 shadow-[0_0_8px_rgba(59,130,246,0.6)]',
+  },
+  {
+    id: 7,
+    name: 'L',
+    shape: [
+      [0, 0, 7],
+      [7, 7, 7],
+    ],
+    color: 'bg-amber-500 border-amber-300 shadow-[0_0_8px_rgba(245,158,11,0.6)]',
+  },
 ]
 
 function rotateMatrix(matrix: number[][]): number[][] {
@@ -145,9 +198,7 @@ export const TetrisModal: React.FC<TetrisModalProps> = ({ isOpen, onClose }) => 
       setClearingRows(fullRows)
       setTimeout(() => {
         const remainingRows = newBoard.filter((_, idx) => !fullRows.includes(idx))
-        const newRows = Array.from({ length: fullRows.length }, () =>
-          Array(BOARD_COLS).fill(0)
-        )
+        const newRows = Array.from({ length: fullRows.length }, () => Array(BOARD_COLS).fill(0))
         const updatedBoard = [...newRows, ...remainingRows]
         setBoard(updatedBoard)
         setClearingRows([])
@@ -273,9 +324,7 @@ export const TetrisModal: React.FC<TetrisModalProps> = ({ isOpen, onClose }) => 
       setClearingRows(fullRows)
       setTimeout(() => {
         const remainingRows = newBoard.filter((_, idx) => !fullRows.includes(idx))
-        const newRows = Array.from({ length: fullRows.length }, () =>
-          Array(BOARD_COLS).fill(0)
-        )
+        const newRows = Array.from({ length: fullRows.length }, () => Array(BOARD_COLS).fill(0))
         const updatedBoard = [...newRows, ...remainingRows]
         setBoard(updatedBoard)
         setClearingRows([])
@@ -313,7 +362,17 @@ export const TetrisModal: React.FC<TetrisModalProps> = ({ isOpen, onClose }) => 
       setNextPiece(nextUpcoming)
       setPosition(spawnPos)
     }
-  }, [isGameOver, isPaused, position, currentPiece, checkCollision, board, level, highScore, nextPiece])
+  }, [
+    isGameOver,
+    isPaused,
+    position,
+    currentPiece,
+    checkCollision,
+    board,
+    level,
+    highScore,
+    nextPiece,
+  ])
 
   // Timer loop for falling pieces
   useEffect(() => {
@@ -369,7 +428,13 @@ export const TetrisModal: React.FC<TetrisModalProps> = ({ isOpen, onClose }) => 
       if (currentPiece.shape[r][c] !== 0) {
         const gr = ghostR + r
         const gc = position.c + c
-        if (gr >= 0 && gr < BOARD_ROWS && gc >= 0 && gc < BOARD_COLS && displayBoard[gr][gc] === 0) {
+        if (
+          gr >= 0 &&
+          gr < BOARD_ROWS &&
+          gc >= 0 &&
+          gc < BOARD_COLS &&
+          displayBoard[gr][gc] === 0
+        ) {
           displayBoard[gr][gc] = -currentPiece.id // Negative indicates ghost
         }
       }
@@ -550,18 +615,14 @@ export const TetrisModal: React.FC<TetrisModalProps> = ({ isOpen, onClose }) => 
                 <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                   Lines
                 </span>
-                <span className="text-xs font-semibold text-cyan-400">
-                  {lines}
-                </span>
+                <span className="text-xs font-semibold text-cyan-400">{lines}</span>
               </div>
 
               <div>
                 <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                   Level
                 </span>
-                <span className="text-xs font-semibold text-emerald-400">
-                  {level}
-                </span>
+                <span className="text-xs font-semibold text-emerald-400">{level}</span>
               </div>
 
               <div className="pt-1 border-t border-slate-800 flex items-center justify-between text-[10px]">

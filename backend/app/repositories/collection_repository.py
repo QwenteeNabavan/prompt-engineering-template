@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Optional
+
 from app.models.collection import CollectionInDb
 from app.utils.json_store import read_list_file, write_list_file
 
@@ -26,4 +27,3 @@ class CollectionRepository:
         cols.append(collection)
         write_list_file(self.file_path, cols)
         return collection
-

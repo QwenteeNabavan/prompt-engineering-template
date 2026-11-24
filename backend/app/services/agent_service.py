@@ -1,10 +1,12 @@
 from datetime import datetime, timezone
 from typing import Optional
+
 from fastapi import HTTPException
+
 from app.models.agent import (
+    AgentDetailResponse,
     AgentInDb,
     AgentListItemResponse,
-    AgentDetailResponse,
 )
 from app.models.upvote import UpvoteResponse
 from app.repositories.agent_repository import AgentRepository
@@ -34,9 +36,7 @@ class AgentService:
 
         Score = (Upvotes_7d + 1) / ((Age_hours + 2) ^ 1.5)
         """
-        recent_upvotes = self.upvote_repo.get_recent_upvotes_count(
-            agent.id, hours=168
-        )
+        recent_upvotes = self.upvote_repo.get_recent_upvotes_count(agent.id, hours=168)
         # fallback to agent.upvotes_count if no vote history in repository
         effective_upvotes = max(recent_upvotes, agent.upvotes_count)
         now = datetime.now(timezone.utc)
@@ -91,13 +91,9 @@ class AgentService:
 
         # 6. Sorting
         if sort_by == "top":
-            items_with_scores.sort(
-                key=lambda x: (x[0].upvotes_count, x[1]), reverse=True
-            )
+            items_with_scores.sort(key=lambda x: (x[0].upvotes_count, x[1]), reverse=True)
         elif sort_by == "stars":
-            items_with_scores.sort(
-                key=lambda x: (x[0].github_stars, x[1]), reverse=True
-            )
+            items_with_scores.sort(key=lambda x: (x[0].github_stars, x[1]), reverse=True)
         elif sort_by == "newest":
             items_with_scores.sort(key=lambda x: _to_utc(x[0].created_at), reverse=True)
         else:  # default: trending time-decay
@@ -181,18 +177,12 @@ class AgentService:
     ) -> UpvoteResponse:
         agent = self.agent_repo.get_by_id(agent_id)
         if not agent:
-            raise HTTPException(
-                status_code=404, detail=f"Agent ID '{agent_id}' not found"
-            )
+            raise HTTPException(status_code=404, detail=f"Agent ID '{agent_id}' not found")
 
-        has_voted = self.upvote_repo.has_upvoted(
-            agent_id, user_id=user_id, fingerprint=fingerprint
-        )
+        has_voted = self.upvote_repo.has_upvoted(agent_id, user_id=user_id, fingerprint=fingerprint)
         if has_voted:
             # Revoke upvote
-            self.upvote_repo.remove_upvote(
-                agent_id, user_id=user_id, fingerprint=fingerprint
-            )
+            self.upvote_repo.remove_upvote(agent_id, user_id=user_id, fingerprint=fingerprint)
             agent.upvotes_count = max(0, agent.upvotes_count - 1)
             self.agent_repo.update(agent)
             return UpvoteResponse(
@@ -204,9 +194,7 @@ class AgentService:
             )
         else:
             # Cast upvote
-            added = self.upvote_repo.add_upvote(
-                agent_id, user_id=user_id, fingerprint=fingerprint
-            )
+            added = self.upvote_repo.add_upvote(agent_id, user_id=user_id, fingerprint=fingerprint)
             if not added:
                 raise HTTPException(
                     status_code=409,
@@ -222,9 +210,7 @@ class AgentService:
                 message="Upvote recorded successfully",
             )
 
-    def get_alternatives(
-        self, slug: str, limit: int = 4
-    ) -> list[AgentListItemResponse]:
+    def get_alternatives(self, slug: str, limit: int = 4) -> list[AgentListItemResponse]:
         agent = self.agent_repo.get_by_slug(slug)
         if not agent:
             return []
@@ -262,4 +248,3 @@ class AgentService:
             )
             for a in top_alternatives
         ]
-

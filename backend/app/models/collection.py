@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from pydantic import BaseModel, Field
+
 from app.models.agent import AgentListItemResponse
 
 
@@ -52,4 +54,3 @@ class ComparisonMatrixResponse(BaseModel):
     agents: list[AgentComparisonItem]
     comparison_parameters: list[str]
     is_cross_category: bool
-

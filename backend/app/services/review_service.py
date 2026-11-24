@@ -1,9 +1,11 @@
-from datetime import datetime, timezone
 import uuid
+from datetime import datetime, timezone
+
 from fastapi import HTTPException
+
 from app.models.review import (
-    ReviewInDb,
     ReviewCreateRequest,
+    ReviewInDb,
     ReviewResponse,
 )
 from app.repositories.agent_repository import AgentRepository
@@ -40,9 +42,7 @@ class ReviewService:
             for r in records
         ]
 
-    def create_review(
-        self, agent_id: str, req: ReviewCreateRequest
-    ) -> ReviewResponse:
+    def create_review(self, agent_id: str, req: ReviewCreateRequest) -> ReviewResponse:
         agent = self.agent_repo.get_by_id(agent_id)
         if not agent:
             agent = self.agent_repo.get_by_slug(agent_id)

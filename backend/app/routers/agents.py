@@ -1,12 +1,14 @@
 from typing import Optional
+
 from fastapi import APIRouter, Depends, Header
+
+from app.dependencies import get_agent_service
 from app.models.agent import (
-    AgentListItemResponse,
     AgentDetailResponse,
+    AgentListItemResponse,
 )
 from app.models.upvote import UpvoteRequest, UpvoteResponse
 from app.services.agent_service import AgentService
-from app.dependencies import get_agent_service
 
 router = APIRouter(prefix="/agents", tags=["agents"])
 
@@ -65,4 +67,3 @@ def toggle_upvote(
         user_id=None,
         fingerprint=fingerprint,
     )
-

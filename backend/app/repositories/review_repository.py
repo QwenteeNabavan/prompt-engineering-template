@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+
 from app.models.review import ReviewInDb
 from app.utils.json_store import read_list_file, write_list_file
 
@@ -14,6 +14,9 @@ def _to_utc(dt: datetime) -> datetime:
 class ReviewRepository:
     def __init__(self, file_path: Path) -> None:
         self.file_path = file_path
+
+    def get_all(self) -> list[ReviewInDb]:
+        return read_list_file(self.file_path, ReviewInDb)
 
     def get_by_agent_id(self, agent_id: str) -> list[ReviewInDb]:
         reviews = read_list_file(self.file_path, ReviewInDb)

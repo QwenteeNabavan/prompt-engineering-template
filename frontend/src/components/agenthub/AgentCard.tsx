@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-  ShieldCheck,
-  ThumbsUp,
-  Star,
-  Cpu,
-  ArrowRight,
-} from 'lucide-react'
+import { ShieldCheck, ThumbsUp, Star, Cpu, ArrowRight, Plus, Check } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import type { AgentRegistryItem } from '@/types/agent-registry'
 
@@ -14,6 +8,8 @@ interface AgentCardProps {
   onQuickView: (agent: AgentRegistryItem) => void
   onToggleUpvote: (id: string) => void
   isUpvoted?: boolean
+  isStaged?: boolean
+  onToggleCompare?: (slug: string) => void
 }
 
 export const AgentCard: React.FC<AgentCardProps> = ({
@@ -21,6 +17,8 @@ export const AgentCard: React.FC<AgentCardProps> = ({
   onQuickView,
   onToggleUpvote,
   isUpvoted = false,
+  isStaged = false,
+  onToggleCompare,
 }) => {
   const [imgError, setImgError] = useState(false)
   const [upvoteAnimating, setUpvoteAnimating] = useState(false)
@@ -30,6 +28,11 @@ export const AgentCard: React.FC<AgentCardProps> = ({
     setUpvoteAnimating(true)
     onToggleUpvote(agent.id)
     setTimeout(() => setUpvoteAnimating(false), 300)
+  }
+
+  const handleCompareClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onToggleCompare?.(agent.slug)
   }
 
   // Format star counts nicely (e.g. 34.8k)
@@ -77,10 +80,7 @@ export const AgentCard: React.FC<AgentCardProps> = ({
                   {agent.name}
                 </h3>
                 {agent.verified && (
-                  <span
-                    title="Verified Autonomous Agent"
-                    className="flex shrink-0 text-cyan-400"
-                  >
+                  <span title="Verified Autonomous Agent" className="flex shrink-0 text-cyan-400">
                     <ShieldCheck className="h-4 w-4 fill-cyan-400/20" />
                   </span>
                 )}
@@ -107,7 +107,7 @@ export const AgentCard: React.FC<AgentCardProps> = ({
                 isUpvoted ? 'fill-cyan-400 text-cyan-400' : 'group-hover/vote:scale-110'
               }`}
             />
-            <span>{agent.upvotesCount + (isUpvoted ? 1 : 0)}</span>
+            <span>{agent.upvotesCount}</span>
           </button>
         </div>
 
@@ -155,24 +155,54 @@ export const AgentCard: React.FC<AgentCardProps> = ({
         </div>
       </div>
 
-      {/* Bottom Row: Stars, Framework Label & Quick View Trigger */}
+      {/* Bottom Row: Stars, Framework Label, Compare & Quick View Trigger */}
       <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-800/60 text-xs">
         {/* Left: GitHub Stars & Framework */}
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1 font-mono text-[11px] text-amber-400/90 font-medium">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="flex items-center gap-1 font-mono text-[11px] text-amber-400/90 font-medium shrink-0">
             <Star className="h-3 w-3 fill-amber-400/40 text-amber-400" />
             <span>{formatStars(agent.githubStars)}</span>
           </span>
 
-          <span className="font-mono text-[11px] text-slate-500 truncate max-w-[110px]" title={agent.framework}>
+          <span
+            className="font-mono text-[11px] text-slate-500 truncate max-w-[95px]"
+            title={agent.framework}
+          >
             {agent.framework}
           </span>
         </div>
 
-        {/* Right: Quick View Trigger */}
-        <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors">
-          <span>Quick View</span>
-          <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+        {/* Right: Compare & Quick View Triggers */}
+        <div className="flex items-center gap-2 shrink-0">
+          {onToggleCompare && (
+            <button
+              type="button"
+              onClick={handleCompareClick}
+              className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors cursor-pointer ${
+                isStaged
+                  ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300'
+                  : 'border-slate-800 bg-slate-950/80 text-slate-400 hover:border-slate-700 hover:text-white'
+              }`}
+              title={isStaged ? 'Remove from comparison' : 'Stage for side-by-side comparison'}
+            >
+              {isStaged ? (
+                <>
+                  <Check className="h-2.5 w-2.5 text-emerald-400" />
+                  <span>Staged</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="h-2.5 w-2.5" />
+                  <span>Compare</span>
+                </>
+              )}
+            </button>
+          )}
+
+          <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors">
+            <span>Quick View</span>
+            <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+          </div>
         </div>
       </div>
     </div>

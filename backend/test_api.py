@@ -1,29 +1,30 @@
 """Direct backend API and service verification test without external test dependencies."""
+
 from app.dependencies import (
-    get_category_repository,
     get_agent_repository,
-    get_upvote_repository,
-    get_collection_repository,
     get_agent_service,
-    get_submission_service,
+    get_category_repository,
+    get_collection_repository,
     get_collection_service,
+    get_submission_service,
     get_sync_service,
+    get_upvote_repository,
 )
 from app.models.submission import SubmissionCreateRequest
 from app.models.upvote import UpvoteRequest
-from app.routers.categories import list_categories
 from app.routers.agents import (
-    list_agents,
     get_agent_profile,
     get_contextual_alternatives,
+    list_agents,
     toggle_upvote,
 )
+from app.routers.categories import list_categories
 from app.routers.collections import (
-    list_collections,
-    get_collection,
     compare_agents,
+    list_collections,
 )
 from app.routers.submissions import submit_agent
+
 
 def main():
     print("--- 1. Testing Category Repository & Router ---")
@@ -62,7 +63,9 @@ def main():
     assert openhands.slug == "openhands"
     assert openhands.is_mcp_compliant is True
     assert openhands.terminal_setup_script is not None
-    print(f"[PASS] OpenHands profile: MCP={openhands.is_mcp_compliant}, Orchestrator='{openhands.framework}'")
+    print(
+        f"[PASS] OpenHands profile: MCP={openhands.is_mcp_compliant}, Orchestrator='{openhands.framework}'"
+    )
 
     print("\n--- 5. Testing Contextual Alternatives ---")
     alts = get_contextual_alternatives(slug="openhands", service=agent_svc)
@@ -136,7 +139,9 @@ def main():
     sub_res = submit_agent(payload=sub_req, service=sub_svc)
     assert sub_res.status == "pending"
     assert sub_res.sla_hours == 12
-    print(f"[PASS] Submission: status={sub_res.status}, SLA={sub_res.sla_hours} hours, slug={sub_res.slug}")
+    print(
+        f"[PASS] Submission: status={sub_res.status}, SLA={sub_res.sla_hours} hours, slug={sub_res.slug}"
+    )
 
     print("\n--- 9. Testing GitHub Sync Service ---")
     sync_svc = get_sync_service(agent_repo=get_agent_repository())
@@ -144,9 +149,10 @@ def main():
     print(f"[PASS] Sync job processed: {sync_res}")
 
     print("\n--- 10. Testing Community Review Service ---")
-    from app.dependencies import get_review_service, get_review_repository
+    from app.dependencies import get_review_repository, get_review_service
     from app.models.review import ReviewCreateRequest
-    from app.routers.reviews import get_agent_reviews, add_agent_review
+    from app.routers.reviews import add_agent_review, get_agent_reviews
+
     rev_svc = get_review_service(
         review_repo=get_review_repository(),
         agent_repo=get_agent_repository(),
@@ -172,5 +178,14 @@ def main():
     print(" ALL 10 BACKEND SUITES PASSED VALIDATION PERFECTLY! ")
     print("=======================================================")
 
+
 if __name__ == "__main__":
-    main()
+    from pathlib import Path
+
+    data_dir = Path(__file__).resolve().parent / "data"
+    snapshots = {p: p.read_text(encoding="utf-8") for p in data_dir.glob("*.json")}
+    try:
+        main()
+    finally:
+        for p, text in snapshots.items():
+            p.write_text(text, encoding="utf-8")

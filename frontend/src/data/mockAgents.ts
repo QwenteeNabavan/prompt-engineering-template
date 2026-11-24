@@ -5,8 +5,10 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     id: 'agent-cline',
     slug: 'cline',
     name: 'Cline',
-    tagline: 'Autonomous coding agent inside VS Code with terminal execution, browser testing, and MCP tool orchestration.',
-    description: 'Cline (formerly Claude Dev) is an open-source autonomous coding assistant operating directly within your IDE. It can create and edit files, execute bash commands, analyze compiler/linter diagnostics, and open headless browser tabs to debug web interfaces while adhering to strict user approval checkpoints.',
+    tagline:
+      'Autonomous coding agent inside VS Code with terminal execution, browser testing, and MCP tool orchestration.',
+    description:
+      'Cline (formerly Claude Dev) is an open-source autonomous coding assistant operating directly within your IDE. It can create and edit files, execute bash commands, analyze compiler/linter diagnostics, and open headless browser tabs to debug web interfaces while adhering to strict user approval checkpoints.',
     logoUrl: 'https://raw.githubusercontent.com/cline/cline/main/assets/icons/icon128.png',
     verified: true,
     upvotesCount: 2380,
@@ -20,9 +22,11 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     framework: 'Extension Host + AST',
     quickstartSnippet: 'code --install-extension saoudrizwan.claude-dev',
     architecture: {
-      planningLoop: 'Iterative Plan-Act-Observe cycle with human gating on sensitive terminal/file actions',
+      planningLoop:
+        'Iterative Plan-Act-Observe cycle with human gating on sensitive terminal/file actions',
       memoryType: 'Workspace AST cache + token-sliding conversation buffer',
-      toolExecution: 'VS Code Workspace API, integrated bash terminal, and Chrome Puppeteer sandbox',
+      toolExecution:
+        'VS Code Workspace API, integrated bash terminal, and Chrome Puppeteer sandbox',
     },
     strengths: [
       'Native Model Context Protocol (MCP) tool server connectivity',
@@ -45,9 +49,12 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     id: 'agent-browser-use',
     slug: 'browser-use',
     name: 'Browser Use',
-    tagline: 'Enable AI agents to seamlessly interact with websites via Chromium DOM distillation and multi-tab vision loops.',
-    description: 'Browser Use is an autonomous browser automation library designed to make any web application accessible to AI agents. It uses accessibility tree distillation, interactive bounding-box vision grounding, and multi-tab orchestration to execute complex online workflows like form-filling, research extraction, and dashboard actions.',
-    logoUrl: 'https://raw.githubusercontent.com/browser-use/browser-use/main/docs/static/img/browser-use-icon.png',
+    tagline:
+      'Enable AI agents to seamlessly interact with websites via Chromium DOM distillation and multi-tab vision loops.',
+    description:
+      'Browser Use is an autonomous browser automation library designed to make any web application accessible to AI agents. It uses accessibility tree distillation, interactive bounding-box vision grounding, and multi-tab orchestration to execute complex online workflows like form-filling, research extraction, and dashboard actions.',
+    logoUrl:
+      'https://raw.githubusercontent.com/browser-use/browser-use/main/docs/static/img/browser-use-icon.png',
     verified: true,
     upvotesCount: 1940,
     category: 'Browser Automation',
@@ -60,9 +67,11 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     framework: 'Playwright + LangChain',
     quickstartSnippet: 'pip install browser-use && playwright install chromium',
     architecture: {
-      planningLoop: 'ReAct visual-semantic loop processing rendered DOM bounding boxes and live screenshots',
+      planningLoop:
+        'ReAct visual-semantic loop processing rendered DOM bounding boxes and live screenshots',
       memoryType: 'Ephemeral DOM state diff tree with session cookie persistence',
-      toolExecution: 'Playwright Chromium runtime with synthetic mouse, keyboard, and storage hooks',
+      toolExecution:
+        'Playwright Chromium runtime with synthetic mouse, keyboard, and storage hooks',
     },
     strengths: [
       'Clean distillation of massive DOM trees to fit within LLM token context',
@@ -85,8 +94,10 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     id: 'agent-aider',
     slug: 'aider',
     name: 'Aider',
-    tagline: 'AI pair programming in your terminal. Edit code in your local git repo with automatic git commit diffs.',
-    description: 'Aider is a developer-beloved command-line coding assistant that pairs with you in your local git repository. It builds a high-density repository map using Tree-sitter ASTs, sends semantic diffs to state-of-the-art LLMs, and automatically commits validated changes with descriptive git commit messages.',
+    tagline:
+      'AI pair programming in your terminal. Edit code in your local git repo with automatic git commit diffs.',
+    description:
+      'Aider is a developer-beloved command-line coding assistant that pairs with you in your local git repository. It builds a high-density repository map using Tree-sitter ASTs, sends semantic diffs to state-of-the-art LLMs, and automatically commits validated changes with descriptive git commit messages.',
     logoUrl: 'https://aider.chat/assets/icons/favicon.svg',
     verified: true,
     upvotesCount: 2890,
@@ -100,7 +111,8 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     framework: 'Tree-sitter AST Core',
     quickstartSnippet: 'pip install aider-chat && cd /path/to/repo && aider',
     architecture: {
-      planningLoop: 'Architect/Editor dual-model pattern: reasoning model plans, fast model applies unified diffs',
+      planningLoop:
+        'Architect/Editor dual-model pattern: reasoning model plans, fast model applies unified diffs',
       memoryType: 'Repository Map computed with Tree-sitter and graph PageRank ranking',
       toolExecution: 'Local git plumbing, unified diff applicator, test suite execution runner',
     },
@@ -125,8 +137,10 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     id: 'agent-devin',
     slug: 'devin',
     name: 'Devin AI',
-    tagline: 'The premier autonomous AI software engineer designed to solve complex engineering issues end-to-end.',
-    description: 'Developed by Cognition, Devin is an autonomous software engineering teammate capable of planning long-horizon architecture, building microservices, debugging unit tests, and deploying applications directly into staging environments inside a cloud-hosted virtual sandbox.',
+    tagline:
+      'The premier autonomous AI software engineer designed to solve complex engineering issues end-to-end.',
+    description:
+      'Developed by Cognition, Devin is an autonomous software engineering teammate capable of planning long-horizon architecture, building microservices, debugging unit tests, and deploying applications directly into staging environments inside a cloud-hosted virtual sandbox.',
     logoUrl: 'https://cognition.ai/favicon.ico',
     verified: true,
     upvotesCount: 3410,
@@ -138,11 +152,14 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     isMcpReady: true,
     githubStars: 18500,
     framework: 'Cognition Cloud VM Orchestrator',
-    quickstartSnippet: '# Initialize via Devin Enterprise Cloud API\ncurl -X POST https://api.devin.ai/v1/sessions \\\n  -H "Authorization: Bearer $DEVIN_API_KEY" \\\n  -d \'{"prompt": "Deploy Next.js auth microservice"}\'',
+    quickstartSnippet:
+      '# Initialize via Devin Enterprise Cloud API\ncurl -X POST https://api.devin.ai/v1/sessions \\\n  -H "Authorization: Bearer $DEVIN_API_KEY" \\\n  -d \'{"prompt": "Deploy Next.js auth microservice"}\'',
     architecture: {
-      planningLoop: 'Hierarchical long-horizon planner evaluating thousands of continuous step transitions',
+      planningLoop:
+        'Hierarchical long-horizon planner evaluating thousands of continuous step transitions',
       memoryType: 'Persistent codebase graph memory and remote filesystem virtual volume',
-      toolExecution: 'Isolated cloud Debian sandbox with shell, Chrome, VS Code, and reverse proxy access',
+      toolExecution:
+        'Isolated cloud Debian sandbox with shell, Chrome, VS Code, and reverse proxy access',
     },
     strengths: [
       'State-of-the-art SWE-bench autonomous problem-solving performance',
@@ -165,9 +182,12 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     id: 'agent-autogpt',
     slug: 'autogpt',
     name: 'AutoGPT',
-    tagline: 'Pioneering vision of accessible AI for everyone. Build, test, and deploy complex autonomous multi-agent graphs.',
-    description: 'AutoGPT is the foundational open-source autonomous multi-agent framework. Now restructured into AutoGPT Forge and the visual Agent Builder, it allows engineers to compose autonomous agent swarms with custom blocks, vector memory stores, web research crawlers, and scheduled cron executions.',
-    logoUrl: 'https://raw.githubusercontent.com/Significant-Gravitas/AutoGPT/master/classic/forge/assets/icon.png',
+    tagline:
+      'Pioneering vision of accessible AI for everyone. Build, test, and deploy complex autonomous multi-agent graphs.',
+    description:
+      'AutoGPT is the foundational open-source autonomous multi-agent framework. Now restructured into AutoGPT Forge and the visual Agent Builder, it allows engineers to compose autonomous agent swarms with custom blocks, vector memory stores, web research crawlers, and scheduled cron executions.',
+    logoUrl:
+      'https://raw.githubusercontent.com/Significant-Gravitas/AutoGPT/master/classic/forge/assets/icon.png',
     verified: true,
     upvotesCount: 4210,
     category: 'Multi-Agent Frameworks',
@@ -178,7 +198,8 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     isMcpReady: true,
     githubStars: 169000,
     framework: 'AutoGPT Forge / Block Graph',
-    quickstartSnippet: 'git clone https://github.com/Significant-Gravitas/AutoGPT.git && cd AutoGPT && ./run setup',
+    quickstartSnippet:
+      'git clone https://github.com/Significant-Gravitas/AutoGPT.git && cd AutoGPT && ./run setup',
     architecture: {
       planningLoop: 'Recursive goal decomposition graph with multi-agent delegate execution',
       memoryType: 'Chroma / Milvus vector index for long-term associative memory',
@@ -205,9 +226,12 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     id: 'agent-gpt-researcher',
     slug: 'gpt-researcher',
     name: 'GPT Researcher',
-    tagline: 'Autonomous deep research agent that aggregates, filters, and generates factual research reports from 20+ web sources.',
-    description: 'GPT Researcher is an autonomous agent specialized in comprehensive online research across any academic, technical, or financial topic. It deploys parallel scraping agents to gather verified sources, cross-checks facts to eliminate hallucinations, and produces publication-ready Markdown/PDF reports with inline citations.',
-    logoUrl: 'https://raw.githubusercontent.com/assafelovic/gpt-researcher/master/docs/docs/img/gptr-logo.png',
+    tagline:
+      'Autonomous deep research agent that aggregates, filters, and generates factual research reports from 20+ web sources.',
+    description:
+      'GPT Researcher is an autonomous agent specialized in comprehensive online research across any academic, technical, or financial topic. It deploys parallel scraping agents to gather verified sources, cross-checks facts to eliminate hallucinations, and produces publication-ready Markdown/PDF reports with inline citations.',
+    logoUrl:
+      'https://raw.githubusercontent.com/assafelovic/gpt-researcher/master/docs/docs/img/gptr-logo.png',
     verified: true,
     upvotesCount: 2150,
     category: 'Deep Research',
@@ -220,9 +244,11 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     framework: 'LangGraph + Tavily',
     quickstartSnippet: 'pip install gpt-researcher && export TAVILY_API_KEY=your_key',
     architecture: {
-      planningLoop: 'LangGraph orchestrated multi-step workflow: Query Planner -> Parallel Scrapers -> Fact Synthesizer',
+      planningLoop:
+        'LangGraph orchestrated multi-step workflow: Query Planner -> Parallel Scrapers -> Fact Synthesizer',
       memoryType: 'Vectorized in-memory citation graph + source deduplication cache',
-      toolExecution: 'Tavily Search API, DuckDuckGo scraper, Playwright headless reader, PDF parser',
+      toolExecution:
+        'Tavily Search API, DuckDuckGo scraper, Playwright headless reader, PDF parser',
     },
     strengths: [
       'Strict deterministic fact-grounding with clickable source citations',
@@ -240,5 +266,137 @@ export const MOCK_AGENTS: AgentRegistryItem[] = [
     },
     trendingScore: 95.7,
     createdAt: '2023-07-15T11:00:00Z',
+  },
+  {
+    id: 'agent-openhands',
+    slug: 'openhands',
+    name: 'OpenHands',
+    tagline:
+      'The open-source AI platform for software development, debugging, and sandboxed terminal operations.',
+    description:
+      'OpenHands (formerly OpenDevin) is a community-driven AI software engineering agent capable of writing code, debugging issues, running bash terminal commands, and interacting with web browsers inside an isolated Docker runtime.',
+    logoUrl: 'https://avatars.githubusercontent.com/u/163580556?s=200&v=4',
+    verified: true,
+    upvotesCount: 3150,
+    category: 'Coding & DevOps',
+    runtime: 'Docker',
+    pricing: '100% Free',
+    primaryLlm: 'Claude 3.7 Sonnet',
+    license: 'MIT Open Source',
+    isMcpReady: true,
+    githubStars: 41200,
+    framework: 'Custom Async Event Runtime',
+    quickstartSnippet:
+      'docker run -it -p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock docker.all-hands.dev/all-hands-ai/runtime:latest',
+    architecture: {
+      planningLoop:
+        'Long-horizon event-stream planner decomposing GitHub issues into verified container steps',
+      memoryType: 'Chroma Vector DB + workspace git history state condenser',
+      toolExecution:
+        'Isolated Docker container with bash shell, IPython kernel, and Chromium browser',
+    },
+    strengths: [
+      'Full terminal, editor, and browser execution loop',
+      'Native Model Context Protocol (MCP) tool integration',
+      'Robust Docker container isolation',
+    ],
+    knownEdgeCases: [
+      'Token-heavy on large repos without selective indexing',
+      'Requires local Docker daemon setup',
+    ],
+    externalLinks: {
+      launchUrl: 'https://all-hands.dev',
+      repoUrl: 'https://github.com/All-Hands-AI/OpenHands',
+      docsUrl: 'https://docs.all-hands.dev',
+    },
+    trendingScore: 97.9,
+    createdAt: '2024-03-20T12:00:00Z',
+  },
+  {
+    id: 'agent-stagehand',
+    slug: 'stagehand',
+    name: 'Stagehand',
+    tagline:
+      'The AI web browsing framework built on Playwright for resilient, self-healing browser workflows.',
+    description:
+      'Stagehand by Browserbase is an open-source web automation framework built on top of Playwright. It replaces brittle XPath and CSS selectors with deterministic LLM-powered semantic actions (act, extract, observe).',
+    logoUrl: 'https://raw.githubusercontent.com/browserbase/stagehand/main/docs/static/logo.svg',
+    verified: true,
+    upvotesCount: 1680,
+    category: 'Browser Automation',
+    runtime: 'Local CLI',
+    pricing: '100% Free',
+    primaryLlm: 'Claude 3.5 Sonnet / GPT-4o',
+    license: 'MIT Open Source',
+    isMcpReady: true,
+    githubStars: 12400,
+    framework: 'Playwright + Stagehand Semantic Agent',
+    quickstartSnippet: 'npm install @browserbase/stagehand && npx stagehand init',
+    architecture: {
+      planningLoop:
+        'Atomic semantic primitive loop (act/extract/observe) with DOM accessibility tree caching',
+      memoryType: 'Playwright session context with deterministic action selector cache',
+      toolExecution: 'Native Playwright browser automation + Zod schema structured extraction',
+    },
+    strengths: [
+      'Self-healing actions resilient to website redesigns',
+      'Type-safe data extraction with Zod schemas',
+      'Built natively on standard Playwright primitives',
+    ],
+    knownEdgeCases: [
+      'Can consume excessive tokens on infinite scroll DOMs',
+      'Requires browser proxy routing for strict CAPTCHA sites',
+    ],
+    externalLinks: {
+      launchUrl: 'https://stagehand.dev',
+      repoUrl: 'https://github.com/browserbase/stagehand',
+      docsUrl: 'https://docs.stagehand.dev',
+    },
+    trendingScore: 92.8,
+    createdAt: '2024-09-10T14:30:00Z',
+  },
+  {
+    id: 'agent-crewai',
+    slug: 'crewai',
+    name: 'CrewAI',
+    tagline:
+      'Framework for orchestrating role-playing autonomous AI agents to tackle complex multi-step workflows.',
+    description:
+      'CrewAI enables developers to build collaborative multi-agent teams where individual agents have distinct roles, goals, and backstories. Agents autonomously delegate subtasks, execute tools, and share episodic memory.',
+    logoUrl:
+      'https://raw.githubusercontent.com/crewAIInc/crewAI/main/docs/static/img/crewai_logo.png',
+    verified: true,
+    upvotesCount: 2740,
+    category: 'Multi-Agent Frameworks',
+    runtime: 'Local CLI',
+    pricing: '100% Free',
+    primaryLlm: 'Claude 3.5 Sonnet / GPT-4o',
+    license: 'MIT Open Source',
+    isMcpReady: true,
+    githubStars: 28400,
+    framework: 'CrewAI Orchestrator Engine',
+    quickstartSnippet: "pip install 'crewai[tools]' && crewai create crew my_project",
+    architecture: {
+      planningLoop:
+        'Sequential and hierarchical manager-worker task delegation with role conditioning',
+      memoryType: 'Chroma short-term, long-term, and entity episodic vector memory',
+      toolExecution: 'Extensible Python tool decorators, web scrapers, and MCP tool adapters',
+    },
+    strengths: [
+      'Intuitive role-based prompt modeling',
+      'Comprehensive built-in tool library (web, scrapers, DBs)',
+      'Native memory and cache delegation',
+    ],
+    knownEdgeCases: [
+      'Can descend into recursive delegation cycles without explicit max_rpm limits',
+      'Debugging inter-agent chatter requires external tracing',
+    ],
+    externalLinks: {
+      launchUrl: 'https://crewai.com',
+      repoUrl: 'https://github.com/crewAIInc/crewAI',
+      docsUrl: 'https://docs.crewai.com',
+    },
+    trendingScore: 95.1,
+    createdAt: '2024-01-15T08:00:00Z',
   },
 ]

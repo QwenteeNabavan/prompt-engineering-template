@@ -1,0 +1,31 @@
+#!/bin/sh
+# Git pre-commit hook to verify AgentHub project health before any commit
+# Runs linter, formatter check, and type checker for both backend and frontend
+
+echo "==> Running pre-commit validation for AgentHub..."
+
+echo "--> [1/4] Checking backend linting (Ruff), formatting, and types (Mypy)..."
+cd backend || exit 1
+uv run ruff check . || { echo "[ERROR] Backend ruff check failed! Run 'uv run ruff check --fix .' to fix."; exit 1; }
+uv run ruff format --check . || { echo "[ERROR] Backend ruff format check failed! Run 'uv run ruff format .' to fix."; exit 1; }
+uv run mypy || { echo "[ERROR] Backend mypy type check failed!"; exit 1; }
+cd ..
+
+echo "--> [2/4] Checking frontend linting (Oxlint), formatting (Prettier), and TypeScript types..."
+cd frontend || exit 1
+npm run lint || { echo "[ERROR] Frontend Oxlint check failed! Run 'npm run lint:fix' to fix."; exit 1; }
+npm run format:check || { echo "[ERROR] Frontend Prettier formatting check failed! Run 'npm run format' to fix."; exit 1; }
+npm run type-check || { echo "[ERROR] Frontend TypeScript type check failed!"; exit 1; }
+cd ..
+
+echo "--> [3/4] Checking JSON data store integrity..."
+python .agents/hooks/guard-integrity.py || { echo "[ERROR] Data integrity check failed!"; exit 1; }
+
+echo "--> [4/4] Running backend integration test suite..."
+cd backend || exit 1
+uv run python test_api.py || { echo "[ERROR] Backend tests failed!"; exit 1; }
+cd ..
+git checkout -- backend/data/ 2>/dev/null || true
+
+echo "==> All pre-commit checks passed cleanly! Proceeding with commit."
+exit 0

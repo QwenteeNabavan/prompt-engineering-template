@@ -7,9 +7,7 @@ import { ArrowLeftRight, X, Sparkles } from 'lucide-react'
 
 export const StagingDock: React.FC = () => {
   const dispatch = useDispatch()
-  const stagedSlugs = useSelector(
-    (state: RootState) => state.compare.stagedAgentSlugs
-  )
+  const stagedSlugs = useSelector((state: RootState) => state.compare.stagedAgentSlugs)
   const activeView = useSelector((state: RootState) => state.app.activeView)
 
   if (stagedSlugs.length === 0 || activeView === 'compare') {
@@ -27,9 +25,7 @@ export const StagingDock: React.FC = () => {
         <div className="flex items-center gap-2 overflow-x-auto py-1">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-xs font-semibold whitespace-nowrap">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>
-              {stagedSlugs.length}/3 Staged
-            </span>
+            <span>{stagedSlugs.length}/3 Staged</span>
           </div>
 
           <div className="flex items-center gap-1.5">
@@ -74,4 +70,3 @@ export const StagingDock: React.FC = () => {
     </div>
   )
 }
-

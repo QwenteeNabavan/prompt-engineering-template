@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
-import {
-  ShieldCheck,
-  GitFork,
-  Cpu,
-  Clock,
-  Sparkles,
-  Gamepad2,
-} from 'lucide-react'
+import { ShieldCheck, GitFork, Cpu, Clock, Sparkles, Gamepad2 } from 'lucide-react'
 
-export const HeroTelemetry: React.FC = () => {
+interface HeroTelemetryProps {
+  verifiedCount?: number
+  openSourceCount?: number
+  mcpReadyCount?: number
+  enableEasterEgg?: boolean
+}
+
+export const HeroTelemetry: React.FC<HeroTelemetryProps> = ({
+  verifiedCount = 9,
+  openSourceCount = 8,
+  mcpReadyCount = 7,
+  enableEasterEgg = false,
+}) => {
   const [dotaStatus, setDotaStatus] = useState<string | null>(null)
 
   const handleLaunchDota = async (e: React.MouseEvent) => {
@@ -59,18 +64,21 @@ export const HeroTelemetry: React.FC = () => {
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
-            <button
-              type="button"
-              onClick={handleLaunchDota}
-              className="text-inherit font-inherit p-0 m-0 bg-transparent border-0 cursor-pointer hover:text-cyan-400 hover:underline decoration-cyan-500/40 underline-offset-4 transition-colors select-none focus:outline-none"
-              title="Discover (Launch Dota 2)"
-              aria-label="Discover (Easter Egg: Launch Dota 2)"
-            >
-              Discover
-            </button>
-            , benchmark, and deploy agents with tool calling, MCP support,
-            and planning capabilities. Verified telemetry, reproducible execution loops,
-            and community upvotes.
+            {enableEasterEgg ? (
+              <button
+                type="button"
+                onClick={handleLaunchDota}
+                className="text-inherit font-inherit p-0 m-0 bg-transparent border-0 cursor-pointer hover:text-cyan-400 hover:underline decoration-cyan-500/40 underline-offset-4 transition-colors select-none focus:outline-none"
+                title="Discover (Launch Dota 2)"
+                aria-label="Discover (Easter Egg: Launch Dota 2)"
+              >
+                Discover
+              </button>
+            ) : (
+              'Discover'
+            )}
+            , benchmark, and deploy agents with tool calling, MCP support, and planning
+            capabilities. Verified telemetry, reproducible execution loops, and community upvotes.
           </p>
 
           {/* Secret launch status banner */}
@@ -89,7 +97,9 @@ export const HeroTelemetry: React.FC = () => {
                 <ShieldCheck className="h-4 w-4" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-bold font-mono text-white">280+</span>
+                <span className="text-xs font-bold font-mono text-white">
+                  {verifiedCount} Active
+                </span>
                 <span className="text-[10px] text-slate-400">Verified Agents</span>
               </div>
             </div>
@@ -100,7 +110,7 @@ export const HeroTelemetry: React.FC = () => {
                 <GitFork className="h-4 w-4" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-bold font-mono text-white">48</span>
+                <span className="text-xs font-bold font-mono text-white">{openSourceCount}</span>
                 <span className="text-[10px] text-slate-400">Open Source</span>
               </div>
             </div>
@@ -111,8 +121,10 @@ export const HeroTelemetry: React.FC = () => {
                 <Cpu className="h-4 w-4" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-bold font-mono text-violet-300">MCP Protocol</span>
-                <span className="text-[10px] text-slate-400">Ready & Tested</span>
+                <span className="text-xs font-bold font-mono text-violet-300">
+                  {mcpReadyCount} Native
+                </span>
+                <span className="text-[10px] text-slate-400">MCP Protocol</span>
               </div>
             </div>
 
@@ -122,8 +134,8 @@ export const HeroTelemetry: React.FC = () => {
                 <Clock className="h-4 w-4" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-bold font-mono text-white">Updated Hourly</span>
-                <span className="text-[10px] text-slate-400">Automated Audit</span>
+                <span className="text-xs font-bold font-mono text-white">7d Dynamic</span>
+                <span className="text-[10px] text-slate-400">Time-Decay Rank</span>
               </div>
             </div>
           </div>

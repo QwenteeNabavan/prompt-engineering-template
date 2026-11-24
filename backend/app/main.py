@@ -1,12 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import agents, categories, submissions, collections, reviews
+from app.dependencies import (
+    get_agent_repository,
+    get_category_repository,
+    get_collection_repository,
+    get_review_repository,
+)
+from app.routers import agents, categories, collections, reviews, submissions
 
 app = FastAPI(
     title="AgentHub API",
     description="Backend API for the AgentHub Autonomous AI Agent Directory and Benchmarking Platform",
-    version="1.0.0",
+    version="1.1.0",
 )
 
 app.add_middleware(
@@ -23,13 +29,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.dependencies import (
-    get_agent_repository,
-    get_category_repository,
-    get_collection_repository,
-    get_review_repository,
-)
-
 app.include_router(agents.router, prefix="/api")
 app.include_router(categories.router, prefix="/api")
 app.include_router(submissions.router, prefix="/api")
@@ -40,18 +39,18 @@ app.include_router(reviews.router, prefix="/api")
 @app.get("/")
 def root():
     try:
-        agent_count = len(get_agent_repository().list_all())
-        cat_count = len(get_category_repository().list_all())
-        col_count = len(get_collection_repository().list_all())
-        rev_count = len(get_review_repository().list_all())
+        agent_count = len(get_agent_repository().get_all(include_pending=True))
+        cat_count = len(get_category_repository().get_all())
+        col_count = len(get_collection_repository().get_all())
+        rev_count = len(get_review_repository().get_all())
     except Exception:
-        agent_count, cat_count, col_count, rev_count = 27, 5, 2, 23
+        agent_count, cat_count, col_count, rev_count = 9, 5, 2, 4
 
     return {
         "service": "AgentHub API",
         "description": "Standardized Directory & Technical Benchmark for Autonomous AI Agents",
         "status": "online",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "documentation": {
             "swagger_ui": "/docs",
             "redoc": "/redoc",
@@ -89,13 +88,14 @@ def health() -> dict[str, str]:
 def launch_dota() -> dict[str, str]:
     import os
     import sys
+
     try:
         if sys.platform == "win32":
             os.startfile("steam://rungameid/570")
         else:
             import subprocess
+
             subprocess.Popen(["xdg-open", "steam://rungameid/570"])
         return {"status": "ok", "message": "Dota 2 launch initiated via Steam"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
-

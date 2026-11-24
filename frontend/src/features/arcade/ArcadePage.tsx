@@ -21,6 +21,7 @@ import {
   Terminal,
   ChevronRight,
   Target,
+  Coins,
 } from 'lucide-react'
 
 export const ArcadePage: React.FC = () => {
@@ -146,36 +147,53 @@ export const ArcadePage: React.FC = () => {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            AgentHub <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">Arcade</span>
+            AgentHub{' '}
+            <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">
+              Arcade
+            </span>
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-            A curated suite of interactive games, reflex trainers, and retro simulations built right into AgentHub.
-            Test your rotation speed in Tetris, test your patience in The World&apos;s Hardest Game, drill Invoker spell combos, or bridge directly to Steam.
+            A curated suite of interactive games, reflex trainers, and retro simulations built right
+            into AgentHub. Test your rotation speed in Tetris, test your patience in The
+            World&apos;s Hardest Game, drill Invoker spell combos, or bridge directly to Steam.
           </p>
 
           {/* Quick Metrics Bar */}
-          <div className="pt-2 grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div className="pt-2 grid grid-cols-2 sm:grid-cols-6 gap-3">
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
               <span className="block text-[11px] font-mono text-slate-400">Total Games</span>
-              <span className="text-xl font-black text-cyan-400">5 Modules</span>
+              <span className="text-xl font-black text-cyan-400">6 Modules</span>
+            </div>
+            <div className="rounded-xl border border-amber-500/30 bg-amber-950/20 p-3">
+              <span className="block text-[11px] font-mono text-amber-400">TastyDrop</span>
+              <span className="text-xl font-black text-amber-300">500 🪙</span>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
               <span className="block text-[11px] font-mono text-slate-400">Tetris Record</span>
-              <span className="text-xl font-black text-amber-400">{tetrisHighScore.toLocaleString()} pts</span>
+              <span className="text-xl font-black text-amber-400">
+                {tetrisHighScore.toLocaleString()} pts
+              </span>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
               <span className="block text-[11px] font-mono text-slate-400">Invoker Score</span>
               <span className="text-xl font-black text-purple-400">
-                {Math.max(invokerScores.novice, invokerScores.magus, invokerScores.grandmaster).toLocaleString()} pts
+                {Math.max(
+                  invokerScores.novice,
+                  invokerScores.magus,
+                  invokerScores.grandmaster
+                ).toLocaleString()}{' '}
+                pts
               </span>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
               <span className="block text-[11px] font-mono text-slate-400">Pudge Best</span>
-              <span className="text-xl font-black text-rose-400">{pudgeHighScore.toLocaleString()} pts</span>
+              <span className="text-xl font-black text-rose-400">
+                {pudgeHighScore.toLocaleString()} pts
+              </span>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
-              <span className="block text-[11px] font-mono text-slate-400">Crashout Moments</span>
+              <span className="block text-[11px] font-mono text-slate-400">Crashout</span>
               <span className="text-xl font-black text-amber-500">Doggie Clip</span>
             </div>
           </div>
@@ -184,6 +202,83 @@ export const ArcadePage: React.FC = () => {
 
       {/* Main Game Showcase Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Premier Game: TastyDrop Case & Upgrader Simulator */}
+        <div className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-amber-500/40 bg-gradient-to-br from-amber-950/30 via-slate-900/80 to-[#0a0f1d] p-6 transition-all hover:border-amber-400 hover:shadow-[0_0_35px_rgba(245,158,11,0.2)] md:col-span-2">
+          <div className="space-y-4">
+            {/* Header / Badges */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="rounded-md border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] text-amber-300 uppercase tracking-wider font-bold">
+                  🍔 Flagship Simulation
+                </span>
+                <span className="rounded-md border border-emerald-500/30 bg-emerald-950/40 px-2 py-0.5 font-mono text-[10px] text-emerald-400">
+                  🎁 Безкоштовні кейси
+                </span>
+                <span className="rounded-md border border-purple-500/30 bg-purple-950/40 px-2 py-0.5 font-mono text-[10px] text-purple-300">
+                  ⚡ 360° Апгрейдер
+                </span>
+              </div>
+              <span className="font-mono text-xs text-amber-400 font-bold flex items-center gap-1.5">
+                <Coins className="h-4 w-4" /> Початковий баланс: 500 🪙
+              </span>
+            </div>
+
+            {/* Icon + Title */}
+            <div className="flex items-center gap-4">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-amber-500/40 bg-gradient-to-tr from-amber-950 to-orange-500/20 text-3xl shadow-inner group-hover:scale-105 transition-transform">
+                🍔
+              </div>
+              <div>
+                <h3 className="text-2xl font-black text-white group-hover:text-amber-300 transition-colors">
+                  TastyDrop Simulator
+                </h3>
+                <p className="text-xs font-mono text-slate-400">
+                  Кейси CS2 • Горизонтальна рулетка з тиками • Радіальний апгрейдер • Чесні шанси
+                </p>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="text-sm text-slate-300 leading-relaxed max-w-4xl">
+              Повноцінний симулятор популярного сайту кейсів TastyDrop! Відкривайте безкоштовні та
+              преміальні бокси (пончики, бургери, піцу, шаурму та ножі), дивіться плавні оберти
+              рулетки, вибивайте AWP Dragon Lore, та примножуйте виграні скіни на радіальному 360°
+              апгрейдері.
+            </p>
+
+            {/* Highlights Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 rounded-2xl border border-slate-800/80 bg-slate-950/60 p-3 font-mono text-xs">
+              <div>
+                <span className="block text-[10px] text-slate-500">БАЛАНС СТАРТУ</span>
+                <span className="text-amber-300 font-bold">500.00 🪙</span>
+              </div>
+              <div>
+                <span className="block text-[10px] text-slate-500">БЕЗКОШТОВНІ КЕЙСИ</span>
+                <span className="text-emerald-400 font-bold">3 бокси (0 🪙)</span>
+              </div>
+              <div>
+                <span className="block text-[10px] text-slate-500">АПГРЕЙДЕР</span>
+                <span className="text-purple-300 font-bold">1.5x - 100x</span>
+              </div>
+              <div>
+                <span className="block text-[10px] text-slate-500">МУЛЬТИ-ВІДКРИТТЯ</span>
+                <span className="text-cyan-400 font-bold">1x, 2x, 3x, 4x</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Button */}
+          <div className="pt-6">
+            <button
+              type="button"
+              onClick={() => dispatch(setActiveView('tastydrop'))}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-400 px-6 py-3.5 text-sm font-black text-slate-950 shadow-xl shadow-amber-500/25 hover:brightness-110 active:scale-98 transition-all cursor-pointer"
+            >
+              <Play className="h-4 w-4 fill-current" />
+              <span>Запустити TastyDrop Simulator (500 🪙 Баланс)</span>
+            </button>
+          </div>
+        </div>
         {/* Game 1: Classic Tetris */}
         <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-6 transition-all hover:border-cyan-500/50 hover:bg-slate-900/80 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]">
           <div className="space-y-4">
@@ -216,13 +311,17 @@ export const ArcadePage: React.FC = () => {
                 <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">
                   Classic Tetris
                 </h3>
-                <p className="text-xs font-mono text-slate-400">10x20 Standard Grid &bull; Ghost Piece &bull; Level Scaling</p>
+                <p className="text-xs font-mono text-slate-400">
+                  10x20 Standard Grid &bull; Ghost Piece &bull; Level Scaling
+                </p>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-xs text-slate-300 leading-relaxed">
-              Full-featured embedded tetromino engine complete with Super Rotation System (SRS) wall kicks, real-time ghost piece landing projection, soft/hard drops, line clear animations, and difficulty progression.
+              Full-featured embedded tetromino engine complete with Super Rotation System (SRS) wall
+              kicks, real-time ghost piece landing projection, soft/hard drops, line clear
+              animations, and difficulty progression.
             </p>
 
             {/* Controls Guide */}
@@ -287,13 +386,17 @@ export const ArcadePage: React.FC = () => {
                 <h3 className="text-xl font-bold text-white group-hover:text-rose-300 transition-colors">
                   The World&apos;s Hardest Game
                 </h3>
-                <p className="text-xs font-mono text-slate-400">Hazard Nodes &bull; Key Gathering &bull; Video Crashout</p>
+                <p className="text-xs font-mono text-slate-400">
+                  Hazard Nodes &bull; Key Gathering &bull; Video Crashout
+                </p>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-xs text-slate-300 leading-relaxed">
-              Brutally demanding geometric navigation simulator. Dodge oscillating blue hazard nodes, collect golden keys, and reach safe zones. Failure triggers the iconic 1.8s Doggie keyboard smash synced to KzX *Stalemate*!
+              Brutally demanding geometric navigation simulator. Dodge oscillating blue hazard
+              nodes, collect golden keys, and reach safe zones. Failure triggers the iconic 1.8s
+              Doggie keyboard smash synced to KzX *Stalemate*!
             </p>
 
             {/* Controls Guide */}
@@ -308,7 +411,9 @@ export const ArcadePage: React.FC = () => {
               </div>
               <div className="flex items-center justify-between border-t border-slate-800/60 pt-1.5">
                 <span className="text-rose-400">Secret Search Trigger</span>
-                <span className="text-slate-300 font-mono">Search &ldquo;game&rdquo; in header</span>
+                <span className="text-slate-300 font-mono">
+                  Search &ldquo;game&rdquo; in header
+                </span>
               </div>
             </div>
           </div>
@@ -348,22 +453,35 @@ export const ArcadePage: React.FC = () => {
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-purple-500/40 bg-gradient-to-tr from-purple-950 to-purple-500/20 shadow-inner group-hover:scale-105 transition-transform">
                 <div className="flex items-center -space-x-1.5">
-                  <div className="h-4 w-4 rounded-full bg-cyan-400 border border-slate-950 shadow-[0_0_8px_rgba(6,182,212,0.9)]" title="Quas" />
-                  <div className="h-4 w-4 rounded-full bg-fuchsia-400 border border-slate-950 shadow-[0_0_8px_rgba(217,70,239,0.9)]" title="Wex" />
-                  <div className="h-4 w-4 rounded-full bg-amber-400 border border-slate-950 shadow-[0_0_8px_rgba(245,158,11,0.9)]" title="Exort" />
+                  <div
+                    className="h-4 w-4 rounded-full bg-cyan-400 border border-slate-950 shadow-[0_0_8px_rgba(6,182,212,0.9)]"
+                    title="Quas"
+                  />
+                  <div
+                    className="h-4 w-4 rounded-full bg-fuchsia-400 border border-slate-950 shadow-[0_0_8px_rgba(217,70,239,0.9)]"
+                    title="Wex"
+                  />
+                  <div
+                    className="h-4 w-4 rounded-full bg-amber-400 border border-slate-950 shadow-[0_0_8px_rgba(245,158,11,0.9)]"
+                    title="Exort"
+                  />
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
                   Invoker Spell Trainer
                 </h3>
-                <p className="text-xs font-mono text-slate-400">Quas • Wex • Exort &bull; 3 Difficulty Tiers &bull; ms Telemetry</p>
+                <p className="text-xs font-mono text-slate-400">
+                  Quas • Wex • Exort &bull; 3 Difficulty Tiers &bull; ms Telemetry
+                </p>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-xs text-slate-300 leading-relaxed">
-              Drill all 10 canonical Invoker combinations with order-independent validation, 3-orb sliding chamber animation, procedural Web Audio SFX, and millisecond reaction tracking across Novice, Magus, and Arsenal Magus blitz modes.
+              Drill all 10 canonical Invoker combinations with order-independent validation, 3-orb
+              sliding chamber animation, procedural Web Audio SFX, and millisecond reaction tracking
+              across Novice, Magus, and Arsenal Magus blitz modes.
             </p>
 
             {/* Difficulty & Records Breakdown */}
@@ -443,13 +561,17 @@ export const ArcadePage: React.FC = () => {
                 <h3 className="text-xl font-bold text-white group-hover:text-red-300 transition-colors">
                   Dota 2 Steam Launcher
                 </h3>
-                <p className="text-xs font-mono text-slate-400">Direct Desktop Protocol &bull; Native Valve Client</p>
+                <p className="text-xs font-mono text-slate-400">
+                  Direct Desktop Protocol &bull; Native Valve Client
+                </p>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-xs text-slate-300 leading-relaxed">
-              Hardware bridge executing the <code className="text-red-400">steam://run/570</code> application protocol. Seamlessly launches your local desktop installation of Valve Dota 2 directly from AgentHub without exiting the browser.
+              Hardware bridge executing the <code className="text-red-400">steam://run/570</code>{' '}
+              application protocol. Seamlessly launches your local desktop installation of Valve
+              Dota 2 directly from AgentHub without exiting the browser.
             </p>
 
             {/* Controls Guide */}
@@ -512,13 +634,19 @@ export const ArcadePage: React.FC = () => {
                 <h3 className="text-xl font-bold text-white group-hover:text-rose-300 transition-colors">
                   Pudge Meat Hook Precision Trainer
                 </h3>
-                <p className="text-xs font-mono text-slate-400">Aim &bull; Target Leading &bull; Multi-Segment Chain &bull; 6 Moving Target Types</p>
+                <p className="text-xs font-mono text-slate-400">
+                  Aim &bull; Target Leading &bull; Multi-Segment Chain &bull; 6 Moving Target Types
+                </p>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-xs text-slate-300 leading-relaxed">
-              Step onto the Radiant riverbank and hone your Meat Hook precision with authentic 2D trajectory physics. Lead moving creeps, Crystal Maiden, Sniper, Windranger, Anti-Mage, and high-speed couriers. Features full multi-link chain rendering, procedural flesh impact sounds, blood splatter effects, combo streaks, and 3 game modes (60s Blitz, 3 Strikes, and Free Training).
+              Step onto the Radiant riverbank and hone your Meat Hook precision with authentic 2D
+              trajectory physics. Lead moving creeps, Crystal Maiden, Sniper, Windranger, Anti-Mage,
+              and high-speed couriers. Features full multi-link chain rendering, procedural flesh
+              impact sounds, blood splatter effects, combo streaks, and 3 game modes (60s Blitz, 3
+              Strikes, and Free Training).
             </p>
 
             {/* Controls Guide */}
@@ -563,7 +691,8 @@ export const ArcadePage: React.FC = () => {
               AgentHub Easter Eggs & Secret Keybindings Directory
             </h3>
             <p className="text-xs text-slate-400">
-              Quick reference for dev shortcuts and hidden command palette triggers across the platform.
+              Quick reference for dev shortcuts and hidden command palette triggers across the
+              platform.
             </p>
           </div>
         </div>
@@ -628,7 +757,8 @@ export const ArcadePage: React.FC = () => {
                 <span className="text-xs font-semibold text-white">Hardest Game</span>
               </div>
               <p className="text-[11px] text-slate-400">
-                Type &ldquo;game&rdquo; into the main search bar or Command Menu (<kbd className="font-mono text-[10px]">Cmd+K</kbd>).
+                Type &ldquo;game&rdquo; into the main search bar or Command Menu (
+                <kbd className="font-mono text-[10px]">Cmd+K</kbd>).
               </p>
             </div>
             {copiedShortcut === 'game' ? (
@@ -651,7 +781,8 @@ export const ArcadePage: React.FC = () => {
                 <span className="text-xs font-semibold text-white">Spell Search</span>
               </div>
               <p className="text-[11px] text-slate-400">
-                Type &ldquo;invoker&rdquo;, &ldquo;dota&rdquo;, or &ldquo;spell&rdquo; in the search bar.
+                Type &ldquo;invoker&rdquo;, &ldquo;dota&rdquo;, or &ldquo;spell&rdquo; in the search
+                bar.
               </p>
             </div>
             {copiedShortcut === 'invoker' ? (
@@ -674,7 +805,8 @@ export const ArcadePage: React.FC = () => {
                 <span className="text-xs font-semibold text-white">Launch Dota 2</span>
               </div>
               <p className="text-[11px] text-slate-400">
-                Clicking the word &ldquo;Discover&rdquo; in the homepage hero subtitle launches Dota 2 via Steam.
+                Clicking the word &ldquo;Discover&rdquo; in the homepage hero subtitle launches Dota
+                2 via Steam.
               </p>
             </div>
             {copiedShortcut === 'Discover' ? (
@@ -743,7 +875,8 @@ export const ArcadePage: React.FC = () => {
                 <span className="text-xs font-semibold text-white">Hook Search</span>
               </div>
               <p className="text-[11px] text-slate-400">
-                Type &ldquo;pudge&rdquo;, &ldquo;hook&rdquo;, or &ldquo;meat&rdquo; in the search bar.
+                Type &ldquo;pudge&rdquo;, &ldquo;hook&rdquo;, or &ldquo;meat&rdquo; in the search
+                bar.
               </p>
             </div>
             {copiedShortcut === 'pudge' ? (

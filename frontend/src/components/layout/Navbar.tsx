@@ -1,23 +1,14 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import {
-  setActiveView,
-  setSearchQuery,
-  openFeaturesMenu,
-} from '@/store/slices/appSlice'
-import {
-  Terminal,
-  Search,
-  Plus,
-  Menu,
-  X,
-} from 'lucide-react'
+import { setActiveView, setSearchQuery, openFeaturesMenu } from '@/store/slices/appSlice'
+import { Terminal, Search, Plus, Menu, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
 export const Navbar: React.FC = () => {
   const dispatch = useDispatch()
   const searchQuery = useSelector((state: RootState) => state.app.searchQuery)
+  const SHOW_ARCADE = false
 
   const handleSearchChange = (q: string) => {
     dispatch(setSearchQuery(q))
@@ -26,7 +17,8 @@ export const Navbar: React.FC = () => {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    window.location.href = '/'
+    dispatch(setActiveView('directory'))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -54,7 +46,7 @@ export const Navbar: React.FC = () => {
               variant="slate"
               className="h-5 rounded-full border-slate-700/60 bg-slate-900 px-1.5 py-0 font-mono text-[10px] text-slate-400"
             >
-              v1.0
+              v1.1
             </Badge>
           </div>
         </a>
@@ -95,6 +87,22 @@ export const Navbar: React.FC = () => {
             <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
             <span>Submit</span>
           </button>
+
+          {/* TastyDrop Simulator Quick Link */}
+          {SHOW_ARCADE && (
+            <button
+              type="button"
+              onClick={() => dispatch(setActiveView('tastydrop'))}
+              className="group relative inline-flex h-8 items-center gap-1.5 rounded-lg border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-yellow-500/5 px-2.5 text-xs font-bold text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)] hover:border-amber-400 hover:shadow-[0_0_18px_rgba(245,158,11,0.35)] transition-all active:scale-98 cursor-pointer"
+              title="TastyDrop — Симулятор кейсів та апгрейдер"
+            >
+              <span className="text-sm">🍔</span>
+              <span className="hidden sm:inline">TastyDrop</span>
+              <span className="rounded bg-amber-500/20 px-1 py-0 font-mono text-[10px] text-amber-200 border border-amber-500/30">
+                500🪙
+              </span>
+            </button>
+          )}
 
           {/* Features Menu Button */}
           <button

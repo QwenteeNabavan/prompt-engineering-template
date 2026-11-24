@@ -36,4 +36,3 @@ class TokenOverheadTier(str, Enum):
     LOW = "low"
     MODERATE = "moderate"
     HEAVY = "heavy"
-

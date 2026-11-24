@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
+import Fuse from 'fuse.js'
 import { HeaderNav } from './HeaderNav'
 import { HeroTelemetry } from './HeroTelemetry'
 import { FilterBar } from './FilterBar'
@@ -6,9 +7,17 @@ import { AgentCard } from './AgentCard'
 import { AgentQuickViewModal } from './AgentQuickViewModal'
 import { CommandMenuModal } from './CommandMenuModal'
 import { SubmitAgentModal } from './SubmitAgentModal'
+import { StagingDock } from '@/components/compare/StagingDock'
 import { ComparePage } from '@/features/compare/ComparePage'
 import { ArcadePage } from '@/features/arcade/ArcadePage'
 import { MOCK_AGENTS } from '@/data/mockAgents'
+import {
+  useListAgentsQuery,
+  useListCategoriesQuery,
+  useToggleUpvoteMutation,
+} from '@/store/api/agentsApi'
+import { getClientFingerprint } from '@/lib/utils'
+import type { AgentListItem, Category } from '@/types/agent'
 import type {
   AgentCategory,
   RuntimeEnvironment,
@@ -19,21 +28,131 @@ import type {
 import { Search, Sparkles, Terminal } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import { openTetris, openHardestGame, closeHardestGame, openInvoker, openPudge, setActiveView } from '@/store/slices/appSlice'
-import { HardestGameModal } from './HardestGameModal'
+import {
+  openTetris,
+  openHardestGame,
+  openInvoker,
+  openPudge,
+  setActiveView,
+  setSearchQuery as setReduxSearchQuery,
+  openAgentProfile,
+} from '@/store/slices/appSlice'
+import { addAgentToCompare, removeAgentFromCompare } from '@/store/slices/compareSlice'
+
+const CATEGORY_SLUG_MAP: Record<string, Exclude<AgentCategory, 'All'>> = {
+  'coding-devops': 'Coding & DevOps',
+  'web-browser-automation': 'Browser Automation',
+  'research-data-analysis': 'Deep Research',
+  'sales-outreach': 'Sales & Outreach',
+  'multi-agent-frameworks': 'Multi-Agent Frameworks',
+}
+
+const TARGET_TO_RUNTIME: Record<string, Exclude<RuntimeEnvironment, 'All'>> = {
+  ide_extension: 'VS Code Extension',
+  local_cli: 'Local CLI',
+  docker: 'Docker',
+  cloud_saas: 'Cloud Web',
+}
+
+function mapApiAgentToRegistryItem(
+  agent: AgentListItem,
+  categoriesById: Map<string, Category>,
+  staticBySlug: Map<string, AgentRegistryItem>
+): AgentRegistryItem {
+  const staticFallback = staticBySlug.get(agent.slug)
+  const categoryObj = categoriesById.get(agent.category_id)
+  const mappedCategory =
+    (categoryObj && CATEGORY_SLUG_MAP[categoryObj.slug]) ||
+    staticFallback?.category ||
+    'Coding & DevOps'
+
+  const mappedRuntimes = agent.deployment_targets
+    .map((t) => TARGET_TO_RUNTIME[t])
+    .filter((rt): rt is Exclude<RuntimeEnvironment, 'All'> => Boolean(rt))
+
+  const primaryRuntime =
+    staticFallback?.runtime && mappedRuntimes.includes(staticFallback.runtime)
+      ? staticFallback.runtime
+      : mappedRuntimes[0] || staticFallback?.runtime || 'Local CLI'
+
+  const pricing: Exclude<PricingModel, 'All'> = !agent.is_open_source
+    ? 'Paid'
+    : staticFallback?.pricing === 'BYOK' || staticFallback?.pricing === 'Freemium'
+      ? staticFallback.pricing
+      : '100% Free'
+
+  return {
+    id: agent.id,
+    slug: agent.slug,
+    name: agent.title,
+    tagline: agent.summary || agent.tagline,
+    description: staticFallback?.description || agent.tagline,
+    logoUrl: agent.logo_url,
+    verified: agent.lifecycle_state === 'approved',
+    upvotesCount: agent.upvotes_count,
+    category: mappedCategory,
+    runtime: primaryRuntime,
+    supportedRuntimes: mappedRuntimes.length > 0 ? mappedRuntimes : [primaryRuntime],
+    pricing,
+    primaryLlm: agent.llm_backends[0] || staticFallback?.primaryLlm || 'Multi-Model LLM',
+    license: agent.is_open_source ? staticFallback?.license || 'Open Source' : 'Commercial',
+    isMcpReady: agent.is_mcp_compliant,
+    githubStars: agent.github_stars,
+    framework: agent.framework || staticFallback?.framework || 'Autonomous Core',
+    quickstartSnippet:
+      staticFallback?.quickstartSnippet || `# Visit ${agent.website_url} for setup instructions`,
+    architecture: staticFallback?.architecture || {
+      planningLoop: 'Autonomous multi-step goal decomposition and verification loop',
+      memoryType: 'Contextual state buffer with persistent session history',
+      toolExecution: 'Sandboxed API, CLI, and runtime environment invocation',
+    },
+    strengths: staticFallback?.strengths || [
+      'Verified autonomous planning and multi-step tool execution',
+    ],
+    knownEdgeCases: staticFallback?.knownEdgeCases || [
+      'Token consumption scales with task horizon depth',
+    ],
+    externalLinks: {
+      launchUrl: agent.website_url,
+      repoUrl: agent.repository_url || undefined,
+      docsUrl: staticFallback?.externalLinks.docsUrl,
+    },
+    trendingScore: agent.ranking_score,
+    createdAt: agent.created_at,
+  }
+}
 
 export const AgentHubDashboard: React.FC = () => {
   const dispatch = useDispatch()
-  const isHardestGameOpen = useSelector((state: RootState) => state.app.isHardestGameOpen)
+  const searchQuery = useSelector((state: RootState) => state.app.searchQuery)
+  const stagedSlugs = useSelector((state: RootState) => state.compare.stagedAgentSlugs)
+  const SHOW_ARCADE = false
 
-  // Navigation & Modal States
-  const [activeNavTab, setActiveNavTab] = useState('explore')
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [isSubmitOpen, setIsSubmitOpen] = useState(false)
-  const [selectedAgentForPreview, setSelectedAgentForPreview] =
-    useState<AgentRegistryItem | null>(null)
+  const setSearchQuery = (q: string) => {
+    dispatch(setReduxSearchQuery(q))
+  }
 
-  // Local upvotes tracking
+  // RTK Query hooks connected to FastAPI backend
+  const { data: apiCategories = [] } = useListCategoriesQuery()
+  const {
+    data: apiAgents,
+    isLoading: isAgentsLoading,
+    isError: isAgentsError,
+  } = useListAgentsQuery()
+  const [toggleUpvoteMutation] = useToggleUpvoteMutation()
+
+  const isUsingLiveApi = Array.isArray(apiAgents) && !isAgentsError
+
+  // 250ms Debounced Search Query (per BRD specification)
+  const [debouncedSearch, setDebouncedSearch] = useState(searchQuery)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery)
+    }, 250)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  // Local upvotes state persisted in localStorage
   const [upvotedIds, setUpvotedIds] = useState<Record<string, boolean>>(() => {
     try {
       const stored = localStorage.getItem('agenthub_upvoted_ids')
@@ -43,44 +162,71 @@ export const AgentHubDashboard: React.FC = () => {
     }
   })
 
+  // Navigation & Modal States
+  const [activeNavTab, setActiveNavTab] = useState('explore')
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isSubmitOpen, setIsSubmitOpen] = useState(false)
+  const [previewSlug, setPreviewSlug] = useState<string | null>(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('agent')
+  })
+
   // Filter States
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<AgentCategory>('All')
-  const [selectedRuntime, setSelectedRuntime] =
-    useState<RuntimeEnvironment>('All')
+  const [selectedRuntime, setSelectedRuntime] = useState<RuntimeEnvironment>('All')
   const [selectedPricing, setSelectedPricing] = useState<PricingModel>('All')
   const [mcpOnly, setMcpOnly] = useState(false)
   const [selectedSort, setSelectedSort] = useState<SortOption>('trending')
 
-  // Notification Toast for submission
+  // Notification Toast for submission / comparison
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  // Global hotkey listener for Cmd+K / Ctrl+K and Tetris shortcut (Alt+T / Shift+T)
+  const showToast = (msg: string) => {
+    setToastMessage(msg)
+    setTimeout(() => setToastMessage(null), 3500)
+  }
+
+  // Build unified catalog from live FastAPI backend (with offline fallback to MOCK_AGENTS)
+  const catalogAgents = useMemo<AgentRegistryItem[]>(() => {
+    if (isUsingLiveApi && apiAgents) {
+      const categoriesById = new Map(apiCategories.map((c) => [c.id, c]))
+      const staticBySlug = new Map(MOCK_AGENTS.map((m) => [m.slug, m]))
+      return apiAgents.map((a) => mapApiAgentToRegistryItem(a, categoriesById, staticBySlug))
+    }
+    if (isAgentsLoading) {
+      return []
+    }
+    // Offline fallback: adjust mock counts for local upvote toggles
+    return MOCK_AGENTS.map((m) => ({
+      ...m,
+      upvotesCount: m.upvotesCount + (upvotedIds[m.id] ? 1 : 0),
+    }))
+  }, [isUsingLiveApi, apiAgents, apiCategories, isAgentsLoading, upvotedIds])
+
+  const selectedAgentForPreview = useMemo(
+    () => (previewSlug ? catalogAgents.find((a) => a.slug === previewSlug) || null : null),
+    [previewSlug, catalogAgents]
+  )
+
+  // Fuse.js client-side fuzzy matching across titles, tags, LLMs, and frameworks
+  const fuse = useMemo(() => {
+    return new Fuse(catalogAgents, {
+      keys: [
+        { name: 'name', weight: 0.4 },
+        { name: 'tagline', weight: 0.25 },
+        { name: 'framework', weight: 0.15 },
+        { name: 'primaryLlm', weight: 0.1 },
+        { name: 'category', weight: 0.1 },
+      ],
+      threshold: 0.35,
+      ignoreLocation: true,
+    })
+  }, [catalogAgents])
+
+  // Global hotkey listener for Cmd+K / Ctrl+K and "/" search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const isInput = ['INPUT', 'TEXTAREA'].includes(
-        (e.target as HTMLElement)?.tagName
-      )
-
-      // Tetris Easter Egg Shortcut: Alt+T or Shift+T (when not typing)
-      if (
-        (e.altKey && e.key.toLowerCase() === 't') ||
-        (e.shiftKey && e.key.toLowerCase() === 't' && !isInput)
-      ) {
-        e.preventDefault()
-        dispatch(openTetris())
-        return
-      }
-
-      // Invoker Trainer Shortcut: Alt+I or Shift+I (when not typing)
-      if (
-        (e.altKey && e.key.toLowerCase() === 'i') ||
-        (e.shiftKey && e.key.toLowerCase() === 'i' && !isInput)
-      ) {
-        e.preventDefault()
-        dispatch(openInvoker())
-        return
-      }
+      const isInput = ['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)
 
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
@@ -94,87 +240,100 @@ export const AgentHubDashboard: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  // Trigger The World's Hardest Game whenever user enters "Game" or "game" in the search bar
+  // Trigger Easter Egg games when SHOW_ARCADE is enabled
   useEffect(() => {
-    if (searchQuery.trim().toLowerCase() === 'game') {
+    if (!SHOW_ARCADE) return
+    const q = searchQuery.trim().toLowerCase()
+    if (q === 'game') {
       dispatch(openHardestGame())
-    }
-  }, [searchQuery, dispatch])
-
-  // Trigger Invoker Spell Trainer whenever user enters "invoker" or "dota" in the search bar
-  useEffect(() => {
-    const q = searchQuery.trim().toLowerCase()
-    if (['invoker', 'dota', 'spell'].includes(q)) {
+    } else if (['invoker', 'dota', 'spell'].includes(q)) {
       dispatch(openInvoker())
-    }
-  }, [searchQuery, dispatch])
-
-  // Trigger Pudge Hook Trainer whenever user enters "pudge", "hook", or "meat" in the search bar
-  useEffect(() => {
-    const q = searchQuery.trim().toLowerCase()
-    if (['pudge', 'hook', 'meat', 'fresh meat'].includes(q)) {
+    } else if (['pudge', 'hook', 'meat', 'fresh meat'].includes(q)) {
       dispatch(openPudge())
     }
-  }, [searchQuery, dispatch])
+  }, [searchQuery, dispatch, SHOW_ARCADE])
 
-  const handleCloseHardestGame = () => {
-    dispatch(closeHardestGame())
-    if (searchQuery.trim().toLowerCase() === 'game') {
-      setSearchQuery('')
+  // Handle Toggle Upvote via FastAPI backend mutation (with localStorage persistence)
+  const handleToggleUpvote = async (agentId: string) => {
+    const prevUpvoted = !!upvotedIds[agentId]
+    const optimisticNext = { ...upvotedIds, [agentId]: !prevUpvoted }
+    setUpvotedIds(optimisticNext)
+    try {
+      localStorage.setItem('agenthub_upvoted_ids', JSON.stringify(optimisticNext))
+    } catch {
+      // Ignore storage quota errors
+    }
+
+    if (!isUsingLiveApi) return
+
+    try {
+      const res = await toggleUpvoteMutation({
+        agentId,
+        fingerprint: getClientFingerprint(),
+      }).unwrap()
+      setUpvotedIds((curr) => {
+        const synced = { ...curr, [agentId]: res.has_upvoted }
+        try {
+          localStorage.setItem('agenthub_upvoted_ids', JSON.stringify(synced))
+        } catch {
+          // Ignore storage quota errors
+        }
+        return synced
+      })
+    } catch (err) {
+      // Rollback optimistic toggle on network error
+      setUpvotedIds((curr) => ({ ...curr, [agentId]: prevUpvoted }))
+      console.error('Failed to toggle upvote:', err)
     }
   }
 
-  // Handle Toggle Upvote
-  const handleToggleUpvote = (agentId: string) => {
-    setUpvotedIds((prev) => {
-      const next = { ...prev, [agentId]: !prev[agentId] }
-      try {
-        localStorage.setItem('agenthub_upvoted_ids', JSON.stringify(next))
-      } catch (e) {
-        console.error(e)
+  // Handle Toggle Compare Staging
+  const handleToggleCompare = (slug: string) => {
+    if (stagedSlugs.includes(slug)) {
+      dispatch(removeAgentFromCompare(slug))
+    } else {
+      if (stagedSlugs.length >= 3) {
+        showToast('Maximum 3 agents can be compared simultaneously.')
+        return
       }
-      return next
-    })
+      dispatch(addAgentToCompare(slug))
+    }
   }
 
-  // Filter & Sort Logic
+  // Fuzzy Search + Multi-Faceted Filter & Sort Logic
   const filteredAgents = useMemo(() => {
-    return MOCK_AGENTS.filter((agent) => {
-      // 1. Text Search (Name, Tagline, Primary LLM, Framework, Description)
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim()
-        const matchesText =
-          agent.name.toLowerCase().includes(q) ||
-          agent.tagline.toLowerCase().includes(q) ||
-          agent.primaryLlm.toLowerCase().includes(q) ||
-          agent.framework.toLowerCase().includes(q) ||
-          agent.category.toLowerCase().includes(q) ||
-          agent.runtime.toLowerCase().includes(q)
-        if (!matchesText) return false
-      }
+    const q = debouncedSearch.trim()
+    const baseList = q ? fuse.search(q).map((r) => r.item) : catalogAgents
 
-      // 2. Category Filter
+    const filtered = baseList.filter((agent) => {
       if (selectedCategory !== 'All' && agent.category !== selectedCategory) {
         return false
       }
 
-      // 3. Runtime Environment
-      if (selectedRuntime !== 'All' && agent.runtime !== selectedRuntime) {
-        return false
+      if (selectedRuntime !== 'All') {
+        const runtimes = agent.supportedRuntimes || [agent.runtime]
+        if (!runtimes.includes(selectedRuntime)) {
+          return false
+        }
       }
 
-      // 4. Pricing Model
       if (selectedPricing !== 'All' && agent.pricing !== selectedPricing) {
         return false
       }
 
-      // 5. MCP Protocol Ready
       if (mcpOnly && !agent.isMcpReady) {
         return false
       }
 
       return true
-    }).sort((a, b) => {
+    })
+
+    // Preserve Fuse relevance order when a search query is active and default sort is selected
+    if (q && selectedSort === 'trending') {
+      return filtered
+    }
+
+    return [...filtered].sort((a, b) => {
       if (selectedSort === 'top_rated') {
         return b.upvotesCount - a.upvotesCount
       }
@@ -184,17 +343,27 @@ export const AgentHubDashboard: React.FC = () => {
       if (selectedSort === 'recently_added') {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       }
-      // default: trending (decay score)
       return b.trendingScore - a.trendingScore
     })
   }, [
-    searchQuery,
+    debouncedSearch,
+    fuse,
+    catalogAgents,
     selectedCategory,
     selectedRuntime,
     selectedPricing,
     mcpOnly,
     selectedSort,
   ])
+
+  const openSourceCount = useMemo(
+    () => catalogAgents.filter((a) => a.pricing !== 'Paid').length,
+    [catalogAgents]
+  )
+  const mcpReadyCount = useMemo(
+    () => catalogAgents.filter((a) => a.isMcpReady).length,
+    [catalogAgents]
+  )
 
   const handleResetFilters = () => {
     setSearchQuery('')
@@ -222,8 +391,9 @@ export const AgentHubDashboard: React.FC = () => {
   }
 
   const handleGoHome = () => {
-    // If clicked on the main page, simply reload/refresh the page
-    window.location.reload()
+    setActiveNavTab('explore')
+    handleResetFilters()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -242,7 +412,7 @@ export const AgentHubDashboard: React.FC = () => {
         onOpenSubmit={() => setIsSubmitOpen(true)}
         activeNavTab={activeNavTab}
         onNavTabChange={handleNavTabChange}
-        totalAgentsCount={MOCK_AGENTS.length}
+        totalAgentsCount={catalogAgents.length}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onGoHome={handleGoHome}
@@ -251,8 +421,13 @@ export const AgentHubDashboard: React.FC = () => {
       {/* Main Views */}
       {activeNavTab === 'explore' ? (
         <>
-          {/* Hero & Telemetry Metrics Section */}
-          <HeroTelemetry />
+          {/* Hero & Live Telemetry Metrics Section */}
+          <HeroTelemetry
+            verifiedCount={catalogAgents.length || 9}
+            openSourceCount={openSourceCount || 8}
+            mcpReadyCount={mcpReadyCount || 7}
+            enableEasterEgg={SHOW_ARCADE}
+          />
 
           {/* Main Container */}
           <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
@@ -270,14 +445,23 @@ export const AgentHubDashboard: React.FC = () => {
               onMcpToggle={() => setMcpOnly((prev) => !prev)}
               selectedSort={selectedSort}
               onSortChange={setSelectedSort}
-              totalCount={MOCK_AGENTS.length}
+              totalCount={catalogAgents.length}
               filteredCount={filteredAgents.length}
               onResetFilters={handleResetFilters}
             />
 
             {/* Agent Cards Grid */}
             <section className="space-y-4">
-              {filteredAgents.length === 0 ? (
+              {isAgentsLoading && catalogAgents.length === 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <div
+                      key={i}
+                      className="h-52 rounded-xl border border-slate-800/80 bg-slate-900/40 animate-pulse p-4"
+                    />
+                  ))}
+                </div>
+              ) : filteredAgents.length === 0 ? (
                 /* Empty State */
                 <div className="flex flex-col items-center justify-center p-16 text-center rounded-2xl border border-slate-800 bg-slate-900/40 space-y-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 text-slate-400">
@@ -287,7 +471,8 @@ export const AgentHubDashboard: React.FC = () => {
                     No autonomous agents match your filters
                   </h3>
                   <p className="text-xs text-slate-400 max-w-sm">
-                    Try loosening your runtime, pricing, or MCP protocol filters to discover more agents.
+                    Try loosening your runtime, pricing, or MCP protocol filters to discover more
+                    agents.
                   </p>
                   <button
                     type="button"
@@ -305,8 +490,10 @@ export const AgentHubDashboard: React.FC = () => {
                       key={agent.id}
                       agent={agent}
                       isUpvoted={!!upvotedIds[agent.id]}
-                      onQuickView={(a) => setSelectedAgentForPreview(a)}
+                      isStaged={stagedSlugs.includes(agent.slug)}
+                      onQuickView={(a) => setPreviewSlug(a.slug)}
                       onToggleUpvote={handleToggleUpvote}
+                      onToggleCompare={handleToggleCompare}
                     />
                   ))}
                 </div>
@@ -324,12 +511,15 @@ export const AgentHubDashboard: React.FC = () => {
         </main>
       )}
 
+      {/* Floating Comparison Dock */}
+      <StagingDock />
+
       {/* Footer */}
       <footer className="border-t border-slate-800/80 mt-20 py-10 bg-slate-950/60 text-xs text-slate-500">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Terminal className="h-4 w-4 text-cyan-400" />
-            <span className="font-bold text-slate-300">AgentHub</span>
+            <span className="font-bold text-slate-300">AgentHub v1.1</span>
             <span>&mdash; The Open Registry for Autonomous AI Agents</span>
           </div>
 
@@ -346,7 +536,7 @@ export const AgentHubDashboard: React.FC = () => {
             </a>
             <span>&bull;</span>
             <button
-              onClick={() => setIsSubmitOpen(true)}
+              onClick={() => dispatch(setActiveView('submit'))}
               className="hover:text-cyan-400 transition-colors cursor-pointer"
             >
               Submit Protocol
@@ -359,34 +549,29 @@ export const AgentHubDashboard: React.FC = () => {
       <AgentQuickViewModal
         agent={selectedAgentForPreview}
         isOpen={!!selectedAgentForPreview}
-        onClose={() => setSelectedAgentForPreview(null)}
-        isUpvoted={
-          selectedAgentForPreview
-            ? !!upvotedIds[selectedAgentForPreview.id]
-            : false
+        onClose={() => setPreviewSlug(null)}
+        isUpvoted={selectedAgentForPreview ? !!upvotedIds[selectedAgentForPreview.id] : false}
+        isStaged={
+          selectedAgentForPreview ? stagedSlugs.includes(selectedAgentForPreview.slug) : false
         }
         onToggleUpvote={handleToggleUpvote}
+        onToggleCompare={handleToggleCompare}
+        onOpenFullProfile={(slug) => dispatch(openAgentProfile(slug))}
       />
 
       {/* Command Palette (Cmd+K) Modal */}
       <CommandMenuModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        agents={MOCK_AGENTS}
+        agents={catalogAgents}
         onSelectAgent={(agent) => {
-          setSelectedAgentForPreview(agent)
+          setPreviewSlug(agent.slug)
           setIsSearchOpen(false)
         }}
-        onOpenTetris={() => dispatch(openTetris())}
-        onOpenHardestGame={() => dispatch(openHardestGame())}
-        onOpenInvoker={() => dispatch(openInvoker())}
-        onOpenPudge={() => dispatch(openPudge())}
-      />
-
-      {/* The World's Hardest Game Secret Easter Egg Modal */}
-      <HardestGameModal
-        isOpen={isHardestGameOpen}
-        onClose={handleCloseHardestGame}
+        onOpenTetris={SHOW_ARCADE ? () => dispatch(openTetris()) : undefined}
+        onOpenHardestGame={SHOW_ARCADE ? () => dispatch(openHardestGame()) : undefined}
+        onOpenInvoker={SHOW_ARCADE ? () => dispatch(openInvoker()) : undefined}
+        onOpenPudge={SHOW_ARCADE ? () => dispatch(openPudge()) : undefined}
       />
 
       {/* Submit Agent Intake Modal */}
@@ -394,8 +579,7 @@ export const AgentHubDashboard: React.FC = () => {
         isOpen={isSubmitOpen}
         onClose={() => setIsSubmitOpen(false)}
         onSuccess={(name) => {
-          setToastMessage(`Agent "${name}" submitted for 12h SLA verification audit!`)
-          setTimeout(() => setToastMessage(null), 4000)
+          showToast(`Agent "${name}" submitted to moderation queue (12h SLA)!`)
         }}
       />
     </div>

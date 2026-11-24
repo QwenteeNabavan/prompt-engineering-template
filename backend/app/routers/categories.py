@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends
+
+from app.dependencies import get_category_repository
 from app.models.category import CategoryResponse
 from app.repositories.category_repository import CategoryRepository
-from app.dependencies import get_category_repository
 
 router = APIRouter(prefix="/categories", tags=["categories"])
 
@@ -22,4 +23,3 @@ def list_categories(
         )
         for c in categories
     ]
-

@@ -132,79 +132,84 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
   const nextTextIdRef = useRef<number>(1)
 
   // Web Audio Procedural Synthesis
-  const playSound = useCallback((type: 'throw' | 'hit' | 'miss' | 'reel' | 'cheer') => {
-    if (isMuted) return
-    try {
-      if (!audioCtxRef.current) {
-        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-        audioCtxRef.current = new AudioCtx()
-      }
-      const ctx = audioCtxRef.current
-      if (ctx.state === 'suspended') {
-        ctx.resume()
-      }
+  const playSound = useCallback(
+    (type: 'throw' | 'hit' | 'miss' | 'reel' | 'cheer') => {
+      if (isMuted) return
+      try {
+        if (!audioCtxRef.current) {
+          const AudioCtx =
+            window.AudioContext ||
+            (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+          audioCtxRef.current = new AudioCtx()
+        }
+        const ctx = audioCtxRef.current
+        if (ctx.state === 'suspended') {
+          ctx.resume()
+        }
 
-      const now = ctx.currentTime
+        const now = ctx.currentTime
 
-      if (type === 'throw') {
-        // Meat Hook launch whoosh
-        const osc = ctx.createOscillator()
-        const gain = ctx.createGain()
-        osc.type = 'triangle'
-        osc.frequency.setValueAtTime(380, now)
-        osc.frequency.exponentialRampToValueAtTime(140, now + 0.18)
-        gain.gain.setValueAtTime(0.25, now)
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18)
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.start(now)
-        osc.stop(now + 0.2)
-      } else if (type === 'hit') {
-        // Flesh impact squish & heavy thud
-        const osc = ctx.createOscillator()
-        const gain = ctx.createGain()
-        osc.type = 'sawtooth'
-        osc.frequency.setValueAtTime(180, now)
-        osc.frequency.exponentialRampToValueAtTime(50, now + 0.25)
-        gain.gain.setValueAtTime(0.4, now)
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25)
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.start(now)
-        osc.stop(now + 0.26)
-      } else if (type === 'miss') {
-        // Empty chain retract dull ping
-        const osc = ctx.createOscillator()
-        const gain = ctx.createGain()
-        osc.type = 'sine'
-        osc.frequency.setValueAtTime(120, now)
-        osc.frequency.linearRampToValueAtTime(80, now + 0.15)
-        gain.gain.setValueAtTime(0.18, now)
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15)
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.start(now)
-        osc.stop(now + 0.16)
-      } else if (type === 'cheer') {
-        // Fresh Meat / Combo high score fanfare
-        const notes = [261.63, 329.63, 392.0, 523.25]
-        notes.forEach((freq, idx) => {
+        if (type === 'throw') {
+          // Meat Hook launch whoosh
           const osc = ctx.createOscillator()
           const gain = ctx.createGain()
           osc.type = 'triangle'
-          osc.frequency.setValueAtTime(freq, now + idx * 0.08)
-          gain.gain.setValueAtTime(0.2, now + idx * 0.08)
-          gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.22)
+          osc.frequency.setValueAtTime(380, now)
+          osc.frequency.exponentialRampToValueAtTime(140, now + 0.18)
+          gain.gain.setValueAtTime(0.25, now)
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18)
           osc.connect(gain)
           gain.connect(ctx.destination)
-          osc.start(now + idx * 0.08)
-          osc.stop(now + idx * 0.08 + 0.24)
-        })
+          osc.start(now)
+          osc.stop(now + 0.2)
+        } else if (type === 'hit') {
+          // Flesh impact squish & heavy thud
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+          osc.type = 'sawtooth'
+          osc.frequency.setValueAtTime(180, now)
+          osc.frequency.exponentialRampToValueAtTime(50, now + 0.25)
+          gain.gain.setValueAtTime(0.4, now)
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25)
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+          osc.start(now)
+          osc.stop(now + 0.26)
+        } else if (type === 'miss') {
+          // Empty chain retract dull ping
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+          osc.type = 'sine'
+          osc.frequency.setValueAtTime(120, now)
+          osc.frequency.linearRampToValueAtTime(80, now + 0.15)
+          gain.gain.setValueAtTime(0.18, now)
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15)
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+          osc.start(now)
+          osc.stop(now + 0.16)
+        } else if (type === 'cheer') {
+          // Fresh Meat / Combo high score fanfare
+          const notes = [261.63, 329.63, 392.0, 523.25]
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator()
+            const gain = ctx.createGain()
+            osc.type = 'triangle'
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08)
+            gain.gain.setValueAtTime(0.2, now + idx * 0.08)
+            gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.22)
+            osc.connect(gain)
+            gain.connect(ctx.destination)
+            osc.start(now + idx * 0.08)
+            osc.stop(now + idx * 0.08 + 0.24)
+          })
+        }
+      } catch (e) {
+        console.error('Audio synthesis failed:', e)
       }
-    } catch (e) {
-      console.error('Audio synthesis failed:', e)
-    }
-  }, [isMuted])
+    },
+    [isMuted]
+  )
 
   // Spawn Target Entity
   const spawnTarget = useCallback(() => {
@@ -236,7 +241,7 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
       points = 100
       color = fromLeft ? '#2563eb' : '#dc2626'
       accentColor = fromLeft ? '#60a5fa' : '#f87171'
-    } else if (roll < 0.50) {
+    } else if (roll < 0.5) {
       type = 'cm'
       name = 'Crystal Maiden'
       baseSpeed = 1.8
@@ -244,7 +249,7 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
       points = 150
       color = '#06b6d4'
       accentColor = '#67e8f9'
-    } else if (roll < 0.70) {
+    } else if (roll < 0.7) {
       type = 'sniper'
       name = 'Sniper'
       baseSpeed = 3.5
@@ -321,30 +326,33 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
   }, [isPlaying, isGameOver, playSound])
 
   // Reset Game
-  const startNewGame = useCallback((mode: GameMode = gameMode) => {
-    setGameMode(mode)
-    setScore(0)
-    setHooksThrown(0)
-    setHooksLanded(0)
-    setStreak(0)
-    setMaxStreak(0)
-    setLives(3)
-    setTimeLeft(60)
-    setIsGameOver(false)
-    setIsPlaying(true)
+  const startNewGame = useCallback(
+    (mode: GameMode = gameMode) => {
+      setGameMode(mode)
+      setScore(0)
+      setHooksThrown(0)
+      setHooksLanded(0)
+      setStreak(0)
+      setMaxStreak(0)
+      setLives(3)
+      setTimeLeft(60)
+      setIsGameOver(false)
+      setIsPlaying(true)
 
-    // Reset entities
-    targetsRef.current = []
-    particlesRef.current = []
-    floatingTextsRef.current = []
-    hookRef.current.state = 'IDLE'
-    hookRef.current.hookedTarget = null
+      // Reset entities
+      targetsRef.current = []
+      particlesRef.current = []
+      floatingTextsRef.current = []
+      hookRef.current.state = 'IDLE'
+      hookRef.current.hookedTarget = null
 
-    // Pre-populate river with initial targets
-    for (let i = 0; i < 4; i++) {
-      spawnTarget()
-    }
-  }, [gameMode, spawnTarget])
+      // Pre-populate river with initial targets
+      for (let i = 0; i < 4; i++) {
+        spawnTarget()
+      }
+    },
+    [gameMode, spawnTarget]
+  )
 
   // Timer Tick (Time Attack Mode)
   useEffect(() => {
@@ -586,7 +594,10 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
         }
 
         // Check if hook reached max distance or out of bounds without hit
-        if (!collided && (hook.distance >= hook.maxDistance || hook.y < 40 || hook.x < 10 || hook.x > width - 10)) {
+        if (
+          !collided &&
+          (hook.distance >= hook.maxDistance || hook.y < 40 || hook.x < 10 || hook.x > width - 10)
+        ) {
           hook.state = 'EMPTY_RETRACT'
           playSound('miss')
           setStreak(0)
@@ -849,7 +860,17 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
         cancelAnimationFrame(animFrameIdRef.current)
       }
     }
-  }, [isOpen, isPlaying, isGameOver, speedMultiplier, spawnTarget, playSound, streak, maxStreak, gameMode])
+  }, [
+    isOpen,
+    isPlaying,
+    isGameOver,
+    speedMultiplier,
+    spawnTarget,
+    playSound,
+    streak,
+    maxStreak,
+    gameMode,
+  ])
 
   // Mouse & Keyboard Handlers
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -904,7 +925,8 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
                 </span>
               </div>
               <p className="text-[11px] font-mono text-slate-400">
-                Aim with Cursor &bull; Press <kbd className="text-rose-300">Q</kbd>, <kbd className="text-rose-300">Space</kbd> or Click to Throw
+                Aim with Cursor &bull; Press <kbd className="text-rose-300">Q</kbd>,{' '}
+                <kbd className="text-rose-300">Space</kbd> or Click to Throw
               </p>
             </div>
           </div>
@@ -985,7 +1007,9 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
             <Target className="h-4 w-4 text-cyan-400" />
             <div>
               <span className="block text-[10px] text-slate-400">Hooks Landed</span>
-              <span className="text-sm font-bold text-cyan-300">{hooksLanded} / {hooksThrown}</span>
+              <span className="text-sm font-bold text-cyan-300">
+                {hooksLanded} / {hooksThrown}
+              </span>
             </div>
           </div>
 
@@ -993,7 +1017,9 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
             <Flame className="h-4 w-4 text-rose-400" />
             <div>
               <span className="block text-[10px] text-slate-400">Streak (Max)</span>
-              <span className="text-sm font-bold text-rose-300">{streak} ({maxStreak})</span>
+              <span className="text-sm font-bold text-rose-300">
+                {streak} ({maxStreak})
+              </span>
             </div>
           </div>
 
@@ -1072,7 +1098,9 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
                   Pudge Meat Hook Precision Trainer
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Train your target leading, angle prediction, and reflexes on moving Dota 2 targets across the river. Hook creeps, Sniper, Windranger, and Courier for high combo points!
+                  Train your target leading, angle prediction, and reflexes on moving Dota 2 targets
+                  across the river. Hook creeps, Sniper, Windranger, and Courier for high combo
+                  points!
                 </p>
               </div>
 
@@ -1113,7 +1141,11 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
                   Round Completed
                 </span>
                 <h3 className="text-3xl font-black text-white">
-                  {score >= 2500 ? 'Dendi Reincarnated!' : score >= 1200 ? 'Fountain Hooker' : 'River Butcher'}
+                  {score >= 2500
+                    ? 'Dendi Reincarnated!'
+                    : score >= 1200
+                      ? 'Fountain Hooker'
+                      : 'River Butcher'}
                 </h3>
               </div>
 
@@ -1129,7 +1161,9 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
                 </div>
                 <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-3">
                   <span className="block text-[10px] text-slate-400">Hooks</span>
-                  <span className="text-lg font-bold text-cyan-400">{hooksLanded}/{hooksThrown}</span>
+                  <span className="text-lg font-bold text-cyan-400">
+                    {hooksLanded}/{hooksThrown}
+                  </span>
                 </div>
                 <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-3">
                   <span className="block text-[10px] text-slate-400">Max Streak</span>
@@ -1185,7 +1219,9 @@ export const PudgeHookTrainerModal: React.FC<PudgeHookTrainerModalProps> = ({
           </div>
 
           <div className="flex items-center gap-2 text-slate-500">
-            <span>Global Shortcut: <kbd className="text-rose-400 font-bold">Alt+P</kbd></span>
+            <span>
+              Global Shortcut: <kbd className="text-rose-400 font-bold">Alt+P</kbd>
+            </span>
           </div>
         </div>
       </div>

@@ -1,11 +1,7 @@
-import React, { useState } from 'react'
-import {
-  X,
-  Send,
-  Sparkles,
-  CheckCircle2,
-  Cpu,
-} from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { X, Send, Sparkles, CheckCircle2, Cpu, AlertCircle, Clock, ShieldCheck } from 'lucide-react'
+import { useListCategoriesQuery, useSubmitAgentMutation } from '@/store/api/agentsApi'
+import type { SubmissionResponse } from '@/types/agent'
 
 interface SubmitAgentModalProps {
   isOpen: boolean
@@ -13,45 +9,137 @@ interface SubmitAgentModalProps {
   onSuccess: (newAgentName: string) => void
 }
 
+const RUNTIME_TO_TARGET: Record<string, string> = {
+  'VS Code Extension': 'ide_extension',
+  'Local CLI': 'local_cli',
+  Docker: 'docker',
+  'Cloud Web': 'cloud_saas',
+}
+
+const DEFAULT_CATEGORIES = [
+  { id: 'coding-devops', title: 'Coding & DevOps' },
+  { id: 'web-browser-automation', title: 'Web & Browser Automation' },
+  { id: 'research-data-analysis', title: 'Deep Research & Data Analysis' },
+  { id: 'sales-outreach', title: 'Sales & Outreach' },
+  { id: 'multi-agent-frameworks', title: 'Core Multi-Agent Frameworks' },
+]
+
 export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
 }) => {
+  const { data: apiCategories = [] } = useListCategoriesQuery(undefined, { skip: !isOpen })
+  const [submitAgentMutation, { isLoading: isSubmitting }] = useSubmitAgentMutation()
+
+  const categoryOptions = apiCategories.length > 0 ? apiCategories : DEFAULT_CATEGORIES
+
   const [name, setName] = useState('')
   const [tagline, setTagline] = useState('')
-  const [category, setCategory] = useState('Coding & DevOps')
+  const [descriptionMarkdown, setDescriptionMarkdown] = useState('')
+  const [categoryId, setCategoryId] = useState('coding-devops')
   const [runtime, setRuntime] = useState('Local CLI')
   const [pricing, setPricing] = useState('100% Free')
   const [primaryLlm, setPrimaryLlm] = useState('Claude 3.7 Sonnet')
+  const [websiteUrl, setWebsiteUrl] = useState('')
   const [repoUrl, setRepoUrl] = useState('')
   const [isMcpReady, setIsMcpReady] = useState(true)
   const [terminalSnippet, setTerminalSnippet] = useState('')
   const [submitterEmail, setSubmitterEmail] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [botVerified, setBotVerified] = useState(true)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [submittedResult, setSubmittedResult] = useState<SubmissionResponse | null>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
+
+  useEffect(() => {
+    if (apiCategories.length > 0 && categoryId === 'coding-devops') {
+      setCategoryId(apiCategories[0].id)
+    }
+  }, [apiCategories, categoryId])
 
   if (!isOpen) return null
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = () => {
+    setName('')
+    setTagline('')
+    setDescriptionMarkdown('')
+    setWebsiteUrl('')
+    setRepoUrl('')
+    setTerminalSnippet('')
+    setSubmitterEmail('')
+    setErrorMsg(null)
+    setSubmittedResult(null)
+  }
+
+  const handleClose = () => {
+    resetForm()
+    onClose()
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitted(true)
-      setTimeout(() => {
-        onSuccess(name)
-        onClose()
-        setSubmitted(false)
-      }, 1500)
-    }, 800)
+    setErrorMsg(null)
+
+    if (!botVerified) {
+      setErrorMsg('Please confirm the bot mitigation verification check.')
+      return
+    }
+
+    const cleanTitle = name.trim()
+    const cleanTagline = tagline.trim()
+    const cleanBrief =
+      descriptionMarkdown.trim().length >= 20
+        ? descriptionMarkdown.trim()
+        : `### ${cleanTitle}\n${cleanTagline}\n\nAutonomous agent supporting ${primaryLlm} on ${runtime}.`
+    const resolvedWebsite = websiteUrl.trim() || repoUrl.trim()
+
+    try {
+      const response = await submitAgentMutation({
+        title: cleanTitle,
+        tagline: cleanTagline,
+        summary: cleanTagline.slice(0, 120),
+        description_markdown: cleanBrief,
+        website_url: resolvedWebsite,
+        repository_url: repoUrl.trim() || undefined,
+        category_id: categoryId,
+        deployment_targets: [RUNTIME_TO_TARGET[runtime] || 'local_cli'],
+        llm_backends: [primaryLlm.trim()],
+        is_open_source: pricing === '100% Free' || pricing === 'BYOK',
+        is_mcp_compliant: isMcpReady,
+        terminal_setup_script: terminalSnippet.trim() || undefined,
+        logo_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(cleanTitle)}`,
+        submitter_email: submitterEmail.trim(),
+        bot_token: 'valid_human_token',
+      }).unwrap()
+
+      setSubmittedResult(response)
+      onSuccess(cleanTitle)
+    } catch (err: unknown) {
+      const detail =
+        err && typeof err === 'object' && 'data' in err
+          ? (err as { data?: { detail?: unknown } }).data?.detail
+          : null
+      setErrorMsg(
+        typeof detail === 'string'
+          ? detail
+          : 'Submission validation failed. Check that URLs start with https:// and fields meet length requirements.'
+      )
+    }
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
       {/* Backdrop */}
       <div
-        onClick={onClose}
+        onClick={handleClose}
         className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
         aria-hidden="true"
       />
@@ -60,8 +148,8 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
       <div className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-[#090d16] p-6 shadow-2xl z-10 space-y-5 max-h-[90vh] overflow-y-auto">
         <button
           type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1 text-slate-400 hover:text-white transition-colors"
+          onClick={handleClose}
+          className="absolute right-4 top-4 rounded-lg p-1 text-slate-400 hover:text-white transition-colors cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -75,31 +163,65 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
             Submit an Autonomous Agent
           </h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Register your agent with deliberate planning loops, tool calling, and MCP support. Verified within a 12h SLA.
+            Register your agent with deliberate planning loops, tool calling, and MCP support.
+            Verified within a {submittedResult?.sla_hours ?? 12}h SLA.
           </p>
         </div>
 
-        {submitted ? (
-          <div className="p-8 text-center space-y-3 rounded-xl border border-emerald-500/30 bg-emerald-950/20">
+        {errorMsg && (
+          <div className="flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-950/30 p-3 text-xs text-rose-300">
+            <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        {submittedResult ? (
+          <div className="p-6 text-center space-y-4 rounded-xl border border-emerald-500/30 bg-emerald-950/20">
             <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
-            <h3 className="font-bold text-base text-white">
-              Submission Received for {name}!
-            </h3>
-            <p className="text-xs text-slate-400 max-w-xs mx-auto">
-              Our automated benchmark telemetry suite is auditing your repository. We will notify you via email shortly.
-            </p>
+            <div className="space-y-1">
+              <h3 className="font-bold text-base text-white">
+                Submission Committed for {submittedResult.title}!
+              </h3>
+              <p className="text-xs text-slate-400 max-w-sm mx-auto">{submittedResult.message}</p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-3 text-left text-xs space-y-1.5 font-mono">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400">Queue Reference:</span>
+                <span className="text-white">{submittedResult.submission_id.slice(0, 8)}...</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400">Assigned Slug:</span>
+                <span className="text-cyan-400">/{submittedResult.slug}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400 flex items-center gap-1">
+                  <Clock className="h-3 w-3 text-emerald-400" /> Review SLA:
+                </span>
+                <span className="text-emerald-400 font-semibold">
+                  Within {submittedResult.sla_hours} Hours ({submittedResult.status})
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleClose}
+              className="inline-flex items-center justify-center h-8 px-4 rounded-lg bg-cyan-500 font-semibold text-slate-950 text-xs hover:brightness-110 transition-all cursor-pointer"
+            >
+              Done
+            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
             {/* Agent Name & Primary LLM */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">
-                  Agent Name *
-                </label>
+                <label className="block font-semibold text-slate-300 mb-1">Agent Name *</label>
                 <input
                   type="text"
                   required
+                  minLength={2}
                   placeholder="e.g. AgentForge"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -125,11 +247,12 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
             {/* Tagline */}
             <div>
               <label className="block font-semibold text-slate-300 mb-1">
-                Concise Tagline (Max 120 chars) *
+                Concise Summary / Tagline (Max 120 chars) *
               </label>
               <input
                 type="text"
                 required
+                minLength={5}
                 maxLength={120}
                 placeholder="e.g. Autonomous CLI refactoring agent with unified git diff generation"
                 value={tagline}
@@ -141,25 +264,22 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
             {/* Category & Runtime */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">
-                  Domain Category *
-                </label>
+                <label className="block font-semibold text-slate-300 mb-1">Domain Category *</label>
                 <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
                   className="w-full h-8 rounded-lg bg-slate-900 border border-slate-800 px-2.5 text-white focus:outline-none focus:border-cyan-500/50 cursor-pointer"
                 >
-                  <option value="Coding & DevOps">Coding & DevOps</option>
-                  <option value="Browser Automation">Browser Automation</option>
-                  <option value="Deep Research">Deep Research</option>
-                  <option value="Multi-Agent Frameworks">Multi-Agent Frameworks</option>
+                  {categoryOptions.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.title}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">
-                  Target Runtime *
-                </label>
+                <label className="block font-semibold text-slate-300 mb-1">Target Runtime *</label>
                 <select
                   value={runtime}
                   onChange={(e) => setRuntime(e.target.value)}
@@ -173,12 +293,36 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
               </div>
             </div>
 
-            {/* Pricing Model & Repository URL */}
+            {/* Website & Repository URL */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">
-                  Pricing Model *
-                </label>
+                <label className="block font-semibold text-slate-300 mb-1">Website URL *</label>
+                <input
+                  type="url"
+                  required
+                  placeholder="https://myagent.dev"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  className="w-full h-8 rounded-lg bg-slate-900 border border-slate-800 px-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-300 mb-1">GitHub Repo URL</label>
+                <input
+                  type="url"
+                  placeholder="https://github.com/org/repo"
+                  value={repoUrl}
+                  onChange={(e) => setRepoUrl(e.target.value)}
+                  className="w-full h-8 rounded-lg bg-slate-900 border border-slate-800 px-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50"
+                />
+              </div>
+            </div>
+
+            {/* Pricing & Markdown Brief */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block font-semibold text-slate-300 mb-1">Pricing Model *</label>
                 <select
                   value={pricing}
                   onChange={(e) => setPricing(e.target.value)}
@@ -193,17 +337,32 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
 
               <div>
                 <label className="block font-semibold text-slate-300 mb-1">
-                  GitHub / Source URL *
+                  Quickstart Terminal Snippet
                 </label>
                 <input
-                  type="url"
-                  required
-                  placeholder="https://github.com/org/repo"
-                  value={repoUrl}
-                  onChange={(e) => setRepoUrl(e.target.value)}
-                  className="w-full h-8 rounded-lg bg-slate-900 border border-slate-800 px-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50"
+                  type="text"
+                  placeholder="e.g. npx agent-cli init"
+                  value={terminalSnippet}
+                  onChange={(e) => setTerminalSnippet(e.target.value)}
+                  className="w-full h-8 rounded-lg bg-slate-900 border border-slate-800 px-2.5 font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50"
                 />
               </div>
+            </div>
+
+            {/* Markdown Product Brief */}
+            <div>
+              <label className="block font-semibold text-slate-300 mb-1">
+                Markdown Product Brief (Autonomous Capabilities) *
+              </label>
+              <textarea
+                required
+                minLength={20}
+                rows={2}
+                placeholder="Describe autonomous planning loops, tool calling, memory architecture, and edge cases..."
+                value={descriptionMarkdown}
+                onChange={(e) => setDescriptionMarkdown(e.target.value)}
+                className="w-full rounded-lg bg-slate-900 border border-slate-800 p-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 resize-none"
+              />
             </div>
 
             {/* MCP Toggle */}
@@ -215,7 +374,7 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
                     Model Context Protocol (MCP) Compliant
                   </span>
                   <span className="text-[11px] text-slate-400">
-                    Supports Anthropic MCP client/server tool orchestration
+                    Supports MCP client/server tool orchestration
                   </span>
                 </div>
               </div>
@@ -224,20 +383,6 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
                 checked={isMcpReady}
                 onChange={(e) => setIsMcpReady(e.target.checked)}
                 className="h-4 w-4 rounded border-slate-700 bg-slate-950 text-cyan-500 focus:ring-cyan-500 cursor-pointer"
-              />
-            </div>
-
-            {/* Quickstart Command */}
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">
-                Quickstart Setup Terminal Snippet
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. npm install -g agent-cli && agent init"
-                value={terminalSnippet}
-                onChange={(e) => setTerminalSnippet(e.target.value)}
-                className="w-full h-8 rounded-lg bg-slate-900 border border-slate-800 px-2.5 font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50"
               />
             </div>
 
@@ -256,11 +401,24 @@ export const SubmitAgentModal: React.FC<SubmitAgentModalProps> = ({
               />
             </div>
 
+            {/* Bot Mitigation Check */}
+            <label className="flex items-center gap-2 text-[11px] text-slate-300 cursor-pointer">
+              <input
+                type="checkbox"
+                required
+                checked={botVerified}
+                onChange={(e) => setBotVerified(e.target.checked)}
+                className="h-3.5 w-3.5 rounded border-slate-700 bg-slate-950 text-cyan-500"
+              />
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+              <span>I verify this agent provides genuine autonomous capabilities (anti-bot).</span>
+            </label>
+
             {/* Actions */}
             <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 className="h-8 px-3 rounded-lg border border-slate-800 text-slate-400 hover:text-white text-xs cursor-pointer"
               >
                 Cancel

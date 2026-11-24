@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   X,
   Copy,
@@ -15,8 +15,11 @@ import {
   AlertTriangle,
   CheckCircle2,
   ThumbsUp,
+  Plus,
+  FileText,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { useGetAgentQuery } from '@/store/api/agentsApi'
 import type { AgentRegistryItem } from '@/types/agent-registry'
 
 interface AgentQuickViewModalProps {
@@ -25,6 +28,9 @@ interface AgentQuickViewModalProps {
   onClose: () => void
   onToggleUpvote: (id: string) => void
   isUpvoted?: boolean
+  isStaged?: boolean
+  onToggleCompare?: (slug: string) => void
+  onOpenFullProfile?: (slug: string) => void
 }
 
 export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
@@ -33,20 +39,48 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
   onClose,
   onToggleUpvote,
   isUpvoted = false,
+  isStaged = false,
+  onToggleCompare,
+  onOpenFullProfile,
 }) => {
   const [copiedSnippet, setCopiedSnippet] = useState(false)
   const [copiedShare, setCopiedShare] = useState(false)
 
+  const { data: liveDetail } = useGetAgentQuery(agent?.slug || '', {
+    skip: !isOpen || !agent?.slug,
+  })
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
+
   if (!isOpen || !agent) return null
 
+  const quickstartText = liveDetail?.terminal_setup_script || agent.quickstartSnippet
+  const strengthsList =
+    liveDetail && liveDetail.strengths.length > 0 ? liveDetail.strengths : agent.strengths
+  const edgeCasesList =
+    liveDetail && liveDetail.known_edge_cases.length > 0
+      ? liveDetail.known_edge_cases
+      : agent.knownEdgeCases
+  const memorySummary = liveDetail?.memory_backend || agent.architecture.memoryType
+  const launchHref = agent.externalLinks.launchUrl.includes('?')
+    ? `${agent.externalLinks.launchUrl}&ref=agenthub`
+    : `${agent.externalLinks.launchUrl}?ref=agenthub`
+
   const handleCopySnippet = () => {
-    navigator.clipboard.writeText(agent.quickstartSnippet)
+    navigator.clipboard.writeText(quickstartText)
     setCopiedSnippet(true)
     setTimeout(() => setCopiedSnippet(false), 2000)
   }
 
   const handleShare = () => {
-    const url = `${window.location.origin}/?agent=${agent.slug}`
+    const url = `${window.location.origin}/?view=profile&slug=${agent.slug}`
     navigator.clipboard.writeText(url)
     setCopiedShare(true)
     setTimeout(() => setCopiedShare(false), 2000)
@@ -87,9 +121,7 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-white tracking-tight">
-                  {agent.name}
-                </h2>
+                <h2 className="text-xl font-bold text-white tracking-tight">{agent.name}</h2>
                 {agent.verified && (
                   <span title="Verified Autonomous Agent" className="text-cyan-400">
                     <ShieldCheck className="h-5 w-5 fill-cyan-400/20" />
@@ -113,15 +145,13 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
             }`}
           >
             <ThumbsUp className="h-3.5 w-3.5 text-cyan-400" />
-            <span>{agent.upvotesCount + (isUpvoted ? 1 : 0)}</span>
+            <span>{agent.upvotesCount}</span>
           </button>
         </div>
 
         {/* Tagline & Badges */}
         <div className="space-y-3">
-          <p className="text-sm text-slate-300 leading-relaxed">
-            {agent.description}
-          </p>
+          <p className="text-sm text-slate-300 leading-relaxed">{agent.description}</p>
 
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="slate" className="font-mono text-xs">
@@ -174,7 +204,7 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
             </button>
           </div>
           <pre className="overflow-x-auto rounded-lg bg-black/60 p-2.5 font-mono text-xs text-slate-200 selection:bg-cyan-500/30">
-            <code>{agent.quickstartSnippet}</code>
+            <code>{quickstartText}</code>
           </pre>
         </div>
 
@@ -203,9 +233,7 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
                 <Activity className="h-3.5 w-3.5 text-emerald-400" />
                 <span>Memory Type</span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-snug">
-                {agent.architecture.memoryType}
-              </p>
+              <p className="text-[11px] text-slate-400 leading-snug">{memorySummary}</p>
             </div>
 
             {/* Tool Execution */}
@@ -228,7 +256,7 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
               <CheckCircle2 className="h-3.5 w-3.5" /> Validated Strengths
             </span>
             <ul className="space-y-1 text-slate-400">
-              {agent.strengths.map((s, idx) => (
+              {strengthsList.map((s, idx) => (
                 <li key={idx} className="flex items-start gap-1.5">
                   <span className="text-emerald-400 font-bold">&bull;</span>
                   <span>{s}</span>
@@ -242,7 +270,7 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
               <AlertTriangle className="h-3.5 w-3.5" /> Operational Edge Cases
             </span>
             <ul className="space-y-1 text-slate-400">
-              {agent.knownEdgeCases.map((ec, idx) => (
+              {edgeCasesList.map((ec, idx) => (
                 <li key={idx} className="flex items-start gap-1.5">
                   <span className="text-amber-400 font-bold">&bull;</span>
                   <span>{ec}</span>
@@ -253,26 +281,66 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
         </div>
 
         {/* 3. Direct External Action Buttons */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-800">
-          <button
-            type="button"
-            onClick={handleShare}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:border-slate-700 hover:text-white transition-colors cursor-pointer"
-          >
-            {copiedShare ? (
-              <>
-                <Check className="h-3.5 w-3.5 text-emerald-400" />
-                <span className="text-emerald-400">Link Copied!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="h-3.5 w-3.5" />
-                <span>Share Agent</span>
-              </>
-            )}
-          </button>
-
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-800">
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleShare}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:border-slate-700 hover:text-white transition-colors cursor-pointer"
+            >
+              {copiedShare ? (
+                <>
+                  <Check className="h-3.5 w-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">Link Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="h-3.5 w-3.5" />
+                  <span>Share Agent</span>
+                </>
+              )}
+            </button>
+
+            {onToggleCompare && (
+              <button
+                type="button"
+                onClick={() => onToggleCompare(agent.slug)}
+                className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+                  isStaged
+                    ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300'
+                    : 'border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700 hover:text-white'
+                }`}
+              >
+                {isStaged ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-emerald-400" />
+                    <span>Staged</span>
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-3.5 w-3.5" />
+                    <span>Compare</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {onOpenFullProfile && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose()
+                  onOpenFullProfile(agent.slug)
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold text-cyan-300 hover:bg-cyan-500/20 hover:text-white transition-colors cursor-pointer"
+              >
+                <FileText className="h-3.5 w-3.5" />
+                <span>Full Audit</span>
+              </button>
+            )}
+
             {agent.externalLinks.repoUrl && (
               <a
                 href={agent.externalLinks.repoUrl}
@@ -281,14 +349,18 @@ export const AgentQuickViewModal: React.FC<AgentQuickViewModalProps> = ({
                 className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:border-slate-700 hover:text-white transition-colors"
               >
                 <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                  />
                 </svg>
                 <span>GitHub Repo</span>
               </a>
             )}
 
             <a
-              href={agent.externalLinks.launchUrl}
+              href={launchHref}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 px-3.5 py-1.5 text-xs font-semibold text-slate-950 hover:brightness-110 shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all cursor-pointer"

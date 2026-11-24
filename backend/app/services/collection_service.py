@@ -1,8 +1,9 @@
 from fastapi import HTTPException
+
 from app.models.agent import AgentListItemResponse
 from app.models.collection import (
-    CollectionResponse,
     AgentComparisonItem,
+    CollectionResponse,
     ComparisonMatrixResponse,
 )
 from app.repositories.agent_repository import AgentRepository
@@ -69,9 +70,7 @@ class CollectionService:
     def get_collection_by_slug(self, slug: str) -> CollectionResponse:
         col = self.collection_repo.get_by_slug(slug)
         if not col:
-            raise HTTPException(
-                status_code=404, detail=f"Collection '{slug}' not found"
-            )
+            raise HTTPException(status_code=404, detail=f"Collection '{slug}' not found")
 
         featured_agents: list[AgentListItemResponse] = []
         for agent_id in col.featured_agent_ids:
@@ -132,9 +131,7 @@ class CollectionService:
             if not agent:
                 agent = self.agent_repo.get_by_id(slug)
             if not agent:
-                raise HTTPException(
-                    status_code=404, detail=f"Agent '{slug}' not found"
-                )
+                raise HTTPException(status_code=404, detail=f"Agent '{slug}' not found")
 
             category = self.category_repo.get_by_id(agent.category_id)
             cat_title = category.title if category else "General"
@@ -177,4 +174,3 @@ class CollectionService:
             comparison_parameters=comparison_params,
             is_cross_category=(len(category_ids) > 1),
         )
-

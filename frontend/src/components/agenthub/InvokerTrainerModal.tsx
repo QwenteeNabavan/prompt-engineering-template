@@ -193,7 +193,9 @@ class InvokerSoundFX {
 
   private getContext(): AudioContext | null {
     if (!this.ctx && typeof window !== 'undefined') {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
       if (AudioCtx) {
         this.ctx = new AudioCtx()
       }
@@ -310,7 +312,10 @@ class InvokerSoundFX {
 const sfx = new InvokerSoundFX()
 
 // SVG Spell Icon Renderer
-const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId, className = 'w-16 h-16' }) => {
+const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({
+  spellId,
+  className = 'w-16 h-16',
+}) => {
   switch (spellId) {
     case 'cold_snap':
       return (
@@ -325,10 +330,23 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
           <rect width="64" height="64" rx="12" fill="#082f49" />
           <circle cx="32" cy="32" r="24" fill="url(#csGrad)" opacity="0.35" />
           {/* Diamond Ice Shard */}
-          <polygon points="32,8 44,28 32,56 20,28" fill="#e0f2fe" stroke="#38bdf8" strokeWidth="2" />
+          <polygon
+            points="32,8 44,28 32,56 20,28"
+            fill="#e0f2fe"
+            stroke="#38bdf8"
+            strokeWidth="2"
+          />
           <polygon points="32,16 38,28 32,48 26,28" fill="#38bdf8" />
           {/* Freezing Ring */}
-          <circle cx="32" cy="28" r="16" fill="none" stroke="#67e8f9" strokeWidth="1.5" strokeDasharray="3 3" />
+          <circle
+            cx="32"
+            cy="28"
+            r="16"
+            fill="none"
+            stroke="#67e8f9"
+            strokeWidth="1.5"
+            strokeDasharray="3 3"
+          />
         </svg>
       )
     case 'ghost_walk':
@@ -344,10 +362,21 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
           <rect width="64" height="64" rx="12" fill="#1e1b4b" />
           <circle cx="32" cy="32" r="24" fill="url(#gwGrad)" opacity="0.4" />
           {/* Ethereal Eye / Cloak */}
-          <path d="M12,32 Q32,14 52,32 Q32,50 12,32 Z" fill="none" stroke="#a855f7" strokeWidth="2.5" />
+          <path
+            d="M12,32 Q32,14 52,32 Q32,50 12,32 Z"
+            fill="none"
+            stroke="#a855f7"
+            strokeWidth="2.5"
+          />
           <circle cx="32" cy="32" r="8" fill="#c084fc" opacity="0.9" />
           <circle cx="32" cy="32" r="3" fill="#ffffff" />
-          <path d="M22,24 Q32,10 42,24" fill="none" stroke="#22d3ee" strokeWidth="1.5" strokeDasharray="2 2" />
+          <path
+            d="M22,24 Q32,10 42,24"
+            fill="none"
+            stroke="#22d3ee"
+            strokeWidth="1.5"
+            strokeDasharray="2 2"
+          />
         </svg>
       )
     case 'ice_wall':
@@ -358,18 +387,40 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
           <polygon points="12,52 18,20 24,52" fill="#38bdf8" stroke="#7dd3fc" strokeWidth="1" />
           <polygon points="22,52 30,12 38,52" fill="#0284c7" stroke="#38bdf8" strokeWidth="1.5" />
           <polygon points="36,52 44,18 52,52" fill="#0ea5e9" stroke="#bae6fd" strokeWidth="1" />
-          <line x1="8" y1="52" x2="56" y2="52" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+          <line
+            x1="8"
+            y1="52"
+            x2="56"
+            y2="52"
+            stroke="#f97316"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
         </svg>
       )
     case 'emp':
       return (
         <svg viewBox="0 0 64 64" className={className}>
           <rect width="64" height="64" rx="12" fill="#3b0764" />
-          <circle cx="32" cy="32" r="22" fill="none" stroke="#d946ef" strokeWidth="2" strokeDasharray="6 3" />
+          <circle
+            cx="32"
+            cy="32"
+            r="22"
+            fill="none"
+            stroke="#d946ef"
+            strokeWidth="2"
+            strokeDasharray="6 3"
+          />
           <circle cx="32" cy="32" r="14" fill="#a21caf" opacity="0.6" />
           <circle cx="32" cy="32" r="7" fill="#f0abfc" />
           {/* Lightning Arcs */}
-          <path d="M24,14 L30,26 L26,30 L38,40 L34,44 L40,52" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
+          <path
+            d="M24,14 L30,26 L26,30 L38,40 L34,44 L40,52"
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </svg>
       )
     case 'tornado':
@@ -388,8 +439,21 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
         <svg viewBox="0 0 64 64" className={className}>
           <rect width="64" height="64" rx="12" fill="#422006" />
           {/* Radiant Sword / Surge */}
-          <polygon points="32,8 37,28 32,54 27,28" fill="#facc15" stroke="#fef08a" strokeWidth="1.5" />
-          <circle cx="32" cy="24" r="16" fill="none" stroke="#d946ef" strokeWidth="1.5" opacity="0.75" />
+          <polygon
+            points="32,8 37,28 32,54 27,28"
+            fill="#facc15"
+            stroke="#fef08a"
+            strokeWidth="1.5"
+          />
+          <circle
+            cx="32"
+            cy="24"
+            r="16"
+            fill="none"
+            stroke="#d946ef"
+            strokeWidth="1.5"
+            opacity="0.75"
+          />
           <circle cx="32" cy="24" r="10" fill="none" stroke="#fbbf24" strokeWidth="2" />
         </svg>
       )
@@ -407,7 +471,15 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
             </linearGradient>
           </defs>
           <circle cx="32" cy="14" r="10" fill="#fef08a" stroke="#f59e0b" strokeWidth="2" />
-          <circle cx="32" cy="54" r="14" fill="none" stroke="#f97316" strokeWidth="2" strokeDasharray="4 2" />
+          <circle
+            cx="32"
+            cy="54"
+            r="14"
+            fill="none"
+            stroke="#f97316"
+            strokeWidth="2"
+            strokeDasharray="4 2"
+          />
         </svg>
       )
     case 'forge_spirit':
@@ -415,7 +487,12 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
         <svg viewBox="0 0 64 64" className={className}>
           <rect width="64" height="64" rx="12" fill="#1c1917" />
           {/* Fiery Entity Face */}
-          <polygon points="32,10 46,38 32,54 18,38" fill="#ea580c" stroke="#f97316" strokeWidth="1.5" />
+          <polygon
+            points="32,10 46,38 32,54 18,38"
+            fill="#ea580c"
+            stroke="#f97316"
+            strokeWidth="1.5"
+          />
           <circle cx="26" cy="30" r="3" fill="#38bdf8" />
           <circle cx="38" cy="30" r="3" fill="#38bdf8" />
           <polygon points="32,36 36,44 28,44" fill="#fbbf24" />
@@ -426,8 +503,20 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
         <svg viewBox="0 0 64 64" className={className}>
           <rect width="64" height="64" rx="12" fill="#2d0606" />
           {/* Blazing Meteor Tail */}
-          <path d="M12,12 L36,36" stroke="#f97316" strokeWidth="6" strokeLinecap="round" opacity="0.6" />
-          <path d="M20,10 L40,30" stroke="#facc15" strokeWidth="3" strokeLinecap="round" opacity="0.8" />
+          <path
+            d="M12,12 L36,36"
+            stroke="#f97316"
+            strokeWidth="6"
+            strokeLinecap="round"
+            opacity="0.6"
+          />
+          <path
+            d="M20,10 L40,30"
+            stroke="#facc15"
+            strokeWidth="3"
+            strokeLinecap="round"
+            opacity="0.8"
+          />
           {/* Core Planetoid */}
           <circle cx="42" cy="42" r="13" fill="#b91c1c" stroke="#ef4444" strokeWidth="2" />
           <circle cx="40" cy="40" r="8" fill="#f97316" />
@@ -439,9 +528,27 @@ const SpellIcon: React.FC<{ spellId: string; className?: string }> = ({ spellId,
         <svg viewBox="0 0 64 64" className={className}>
           <rect width="64" height="64" rx="12" fill="#042f2e" />
           {/* Tri-Element Shockwaves */}
-          <path d="M14,48 A24,24 0 0,1 48,14" fill="none" stroke="#06b6d4" strokeWidth="3" strokeLinecap="round" />
-          <path d="M22,50 A20,20 0 0,1 50,22" fill="none" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" />
-          <path d="M30,52 A16,16 0 0,1 52,30" fill="none" stroke="#f59e0b" strokeWidth="3" strokeLinecap="round" />
+          <path
+            d="M14,48 A24,24 0 0,1 48,14"
+            fill="none"
+            stroke="#06b6d4"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M22,50 A20,20 0 0,1 50,22"
+            fill="none"
+            stroke="#a855f7"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M30,52 A16,16 0 0,1 52,30"
+            fill="none"
+            stroke="#f59e0b"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
           <circle cx="20" cy="44" r="5" fill="#10b981" />
         </svg>
       )
@@ -498,23 +605,20 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
   }, [])
 
   // Save high score
-  const updateHighScore = useCallback(
-    (diff: Difficulty, newScore: number) => {
-      setHighScores((prev) => {
-        if (newScore > prev[diff]) {
-          const updated = { ...prev, [diff]: newScore }
-          try {
-            localStorage.setItem('agenthub_invoker_highscores', JSON.stringify(updated))
-          } catch {
-            // ignore
-          }
-          return updated
+  const updateHighScore = useCallback((diff: Difficulty, newScore: number) => {
+    setHighScores((prev) => {
+      if (newScore > prev[diff]) {
+        const updated = { ...prev, [diff]: newScore }
+        try {
+          localStorage.setItem('agenthub_invoker_highscores', JSON.stringify(updated))
+        } catch {
+          // ignore
         }
-        return prev
-      })
-    },
-    []
-  )
+        return updated
+      }
+      return prev
+    })
+  }, [])
 
   const activeSpell = INVOKER_SPELLS[currentSpellIndex]
   const config = DIFFICULTY_CONFIG[difficulty]
@@ -592,7 +696,10 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
       setTotalAttempts((prev) => prev + 1)
       setCorrectAttempts((prev) => prev + 1)
 
-      const timeBonus = Math.max(0, Math.round(((config.timeLimitMs - elapsed) / config.timeLimitMs) * 150))
+      const timeBonus = Math.max(
+        0,
+        Math.round(((config.timeLimitMs - elapsed) / config.timeLimitMs) * 150)
+      )
       const streakMultiplier = 1 + streak * 0.15
       const gained = Math.round((100 * config.pointMultiplier + timeBonus) * streakMultiplier)
 
@@ -610,7 +717,15 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
 
       pickNextSpell()
     },
-    [soundEnabled, config.timeLimitMs, config.pointMultiplier, streak, difficulty, updateHighScore, pickNextSpell]
+    [
+      soundEnabled,
+      config.timeLimitMs,
+      config.pointMultiplier,
+      streak,
+      difficulty,
+      updateHighScore,
+      pickNextSpell,
+    ]
   )
 
   // Validate orbs against a target spell
@@ -785,7 +900,11 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
               className="p-2 rounded-lg border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
               title={soundEnabled ? 'Mute Audio' : 'Unmute Audio'}
             >
-              {soundEnabled ? <Volume2 className="h-4 w-4 text-cyan-400" /> : <VolumeX className="h-4 w-4" />}
+              {soundEnabled ? (
+                <Volume2 className="h-4 w-4 text-cyan-400" />
+              ) : (
+                <VolumeX className="h-4 w-4" />
+              )}
             </button>
             <button
               type="button"
@@ -814,8 +933,8 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
                     ? d === 'novice'
                       ? 'bg-emerald-500 text-slate-950 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                       : d === 'magus'
-                      ? 'bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
-                      : 'bg-rose-500 text-white shadow-[0_0_12px_rgba(244,63,94,0.3)]'
+                        ? 'bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                        : 'bg-rose-500 text-white shadow-[0_0_12px_rgba(244,63,94,0.3)]'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800'
                 }`}
               >
@@ -843,7 +962,9 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
           <div className="flex flex-col rounded-xl border border-slate-800/80 bg-slate-900/50 p-2.5">
             <span className="text-slate-400 text-[10px] uppercase">Streak</span>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <Flame className={`h-4 w-4 ${streak > 2 ? 'text-amber-400 animate-bounce' : 'text-slate-500'}`} />
+              <Flame
+                className={`h-4 w-4 ${streak > 2 ? 'text-amber-400 animate-bounce' : 'text-slate-500'}`}
+              />
               <span className="text-base font-bold text-white">{streak}x</span>
               <span className="text-[10px] text-slate-500 ml-auto">Max: {bestStreak}</span>
             </div>
@@ -890,8 +1011,8 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
             flashSuccess
               ? 'border-emerald-500 bg-emerald-950/20 shadow-[0_0_40px_rgba(16,185,129,0.3)]'
               : shakeChamber
-              ? 'border-rose-500 bg-rose-950/20 animate-shake shadow-[0_0_40px_rgba(244,63,94,0.3)]'
-              : 'border-slate-800 bg-slate-950/80'
+                ? 'border-rose-500 bg-rose-950/20 animate-shake shadow-[0_0_40px_rgba(244,63,94,0.3)]'
+                : 'border-slate-800 bg-slate-950/80'
           }`}
           style={{
             boxShadow: isPlaying ? `0 0 30px ${activeSpell.glowColor}` : undefined,
@@ -905,8 +1026,8 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
                   timerProgress > 50
                     ? 'bg-gradient-to-r from-cyan-500 to-emerald-400'
                     : timerProgress > 25
-                    ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
-                    : 'bg-gradient-to-r from-rose-600 to-rose-400 animate-pulse'
+                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
+                      : 'bg-gradient-to-r from-rose-600 to-rose-400 animate-pulse'
                 }`}
                 style={{ width: `${timerProgress}%` }}
               />
@@ -926,7 +1047,11 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
             /* Idle / Game Over Start Screen */
             <div className="flex flex-col items-center justify-center py-6 text-center space-y-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-500/40 bg-purple-950/40 text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
-                {isGameOver ? <ShieldAlert className="h-8 w-8 text-rose-400" /> : <Trophy className="h-8 w-8 text-amber-400" />}
+                {isGameOver ? (
+                  <ShieldAlert className="h-8 w-8 text-rose-400" />
+                ) : (
+                  <Trophy className="h-8 w-8 text-amber-400" />
+                )}
               </div>
 
               <div className="space-y-1">
@@ -1005,8 +1130,8 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
                           orbKey === 'Q'
                             ? 'bg-cyan-950/80 border-cyan-500 text-cyan-300 shadow-[0_0_8px_rgba(6,182,212,0.4)]'
                             : orbKey === 'W'
-                            ? 'bg-purple-950/80 border-purple-500 text-purple-300 shadow-[0_0_8px_rgba(168,85,247,0.4)]'
-                            : 'bg-amber-950/80 border-amber-500 text-amber-300 shadow-[0_0_8px_rgba(245,158,11,0.4)]'
+                              ? 'bg-purple-950/80 border-purple-500 text-purple-300 shadow-[0_0_8px_rgba(168,85,247,0.4)]'
+                              : 'bg-amber-950/80 border-amber-500 text-amber-300 shadow-[0_0_8px_rgba(245,158,11,0.4)]'
                         }`}
                       >
                         {orbKey}
@@ -1037,7 +1162,10 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
             <span>
               {currentInvokedCandidate ? (
                 <span className="text-white font-bold">
-                  Forms: <span style={{ color: currentInvokedCandidate.accentColor }}>{currentInvokedCandidate.name}</span>
+                  Forms:{' '}
+                  <span style={{ color: currentInvokedCandidate.accentColor }}>
+                    {currentInvokedCandidate.name}
+                  </span>
                 </span>
               ) : (
                 'Queue 3 elements'
@@ -1058,8 +1186,8 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
                     isQ
                       ? 'border-cyan-400 bg-gradient-to-b from-cyan-900/60 to-cyan-950/90 shadow-[0_0_20px_rgba(6,182,212,0.5)] text-cyan-300'
                       : isW
-                      ? 'border-purple-400 bg-gradient-to-b from-purple-900/60 to-purple-950/90 shadow-[0_0_20px_rgba(168,85,247,0.5)] text-purple-300'
-                      : 'border-amber-400 bg-gradient-to-b from-amber-900/60 to-amber-950/90 shadow-[0_0_20px_rgba(245,158,11,0.5)] text-amber-300'
+                        ? 'border-purple-400 bg-gradient-to-b from-purple-900/60 to-purple-950/90 shadow-[0_0_20px_rgba(168,85,247,0.5)] text-purple-300'
+                        : 'border-amber-400 bg-gradient-to-b from-amber-900/60 to-amber-950/90 shadow-[0_0_20px_rgba(245,158,11,0.5)] text-amber-300'
                   }`}
                 >
                   <span className="font-mono text-xl sm:text-2xl font-black">{orb}</span>
@@ -1115,15 +1243,17 @@ export const InvokerTrainerModal: React.FC<InvokerTrainerModalProps> = ({ isOpen
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pt-1">
           <div className="flex items-center gap-2">
             <span>Shortcuts:</span>
-            <kbd className="px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-300">Q / W / E</kbd>
+            <kbd className="px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-300">
+              Q / W / E
+            </kbd>
             <span>Orbs</span>
-            <kbd className="px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-300">R / Space</kbd>
+            <kbd className="px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-300">
+              R / Space
+            </kbd>
             <span>Invoke</span>
           </div>
 
-          <div className="text-slate-500">
-            Dota 2 Invoker Spell Knowledge Practice
-          </div>
+          <div className="text-slate-500">Dota 2 Invoker Spell Knowledge Practice</div>
         </div>
       </div>
     </div>

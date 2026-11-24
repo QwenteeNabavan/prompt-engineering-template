@@ -1,14 +1,8 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import {
-  useListCollectionsQuery,
-  useCompareAgentsQuery,
-} from '@/store/api/agentsApi'
-import {
-  setComparisonSlugs,
-  removeAgentFromCompare,
-} from '@/store/slices/compareSlice'
+import { useListCollectionsQuery, useCompareAgentsQuery } from '@/store/api/agentsApi'
+import { setComparisonSlugs, removeAgentFromCompare } from '@/store/slices/compareSlice'
 import { openAgentProfile, setActiveView } from '@/store/slices/appSlice'
 import {
   ArrowLeftRight,
@@ -25,9 +19,7 @@ import {
 
 export const ComparePage: React.FC = () => {
   const dispatch = useDispatch()
-  const stagedSlugs = useSelector(
-    (state: RootState) => state.compare.stagedAgentSlugs
-  )
+  const stagedSlugs = useSelector((state: RootState) => state.compare.stagedAgentSlugs)
 
   const [copiedMarkdown, setCopiedMarkdown] = useState(false)
 
@@ -111,9 +103,7 @@ export const ComparePage: React.FC = () => {
           </div>
         )}
 
-        {isMatrixLoading && (
-          <div className="h-96 rounded-3xl bg-card border animate-pulse p-8" />
-        )}
+        {isMatrixLoading && <div className="h-96 rounded-3xl bg-card border animate-pulse p-8" />}
 
         {isMatrixError && (
           <div className="p-6 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm flex items-center gap-3">
@@ -169,10 +159,7 @@ export const ComparePage: React.FC = () => {
                       Engineering Parameter
                     </th>
                     {matrixData.agents.map((agent) => (
-                      <th
-                        key={agent.id}
-                        className="p-4 sm:p-6 text-foreground align-top border-l"
-                      >
+                      <th key={agent.id} className="p-4 sm:p-6 text-foreground align-top border-l">
                         <div className="space-y-2">
                           <div className="flex items-center gap-3">
                             <img
@@ -184,9 +171,7 @@ export const ComparePage: React.FC = () => {
                               }}
                             />
                             <div>
-                              <h4 className="font-bold text-base text-foreground">
-                                {agent.title}
-                              </h4>
+                              <h4 className="font-bold text-base text-foreground">{agent.title}</h4>
                               <span className="text-xs text-muted-foreground font-mono">
                                 {agent.category_title}
                               </span>
@@ -215,9 +200,7 @@ export const ComparePage: React.FC = () => {
                 <tbody className="divide-y text-xs sm:text-sm">
                   {/* Parameter 1: Execution Autonomy */}
                   <tr className="hover:bg-muted/20">
-                    <td className="p-4 sm:p-6 font-semibold text-foreground">
-                      Degree of Autonomy
-                    </td>
+                    <td className="p-4 sm:p-6 font-semibold text-foreground">Degree of Autonomy</td>
                     {matrixData.agents.map((a) => (
                       <td key={a.id} className="p-4 sm:p-6 border-l">
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary font-semibold text-xs capitalize">
@@ -290,8 +273,8 @@ export const ComparePage: React.FC = () => {
                             a.token_overhead_tier === 'low'
                               ? 'bg-emerald-500/10 text-emerald-500'
                               : a.token_overhead_tier === 'moderate'
-                              ? 'bg-amber-500/10 text-amber-500'
-                              : 'bg-rose-500/10 text-rose-500'
+                                ? 'bg-amber-500/10 text-amber-500'
+                                : 'bg-rose-500/10 text-rose-500'
                           }`}
                         >
                           {a.token_overhead_tier} Overhead
@@ -302,11 +285,12 @@ export const ComparePage: React.FC = () => {
 
                   {/* Parameter 5: Maintenance Cadence */}
                   <tr className="hover:bg-muted/20">
-                    <td className="p-4 sm:p-6 font-semibold text-foreground">
-                      Community Cadence
-                    </td>
+                    <td className="p-4 sm:p-6 font-semibold text-foreground">Community Cadence</td>
                     {matrixData.agents.map((a) => (
-                      <td key={a.id} className="p-4 sm:p-6 border-l font-mono text-xs text-muted-foreground">
+                      <td
+                        key={a.id}
+                        className="p-4 sm:p-6 border-l font-mono text-xs text-muted-foreground"
+                      >
                         {a.maintenance_cadence.replace('_', ' ')}
                       </td>
                     ))}
@@ -363,11 +347,10 @@ export const ComparePage: React.FC = () => {
             <BookOpen className="w-4 h-4" />
             <span>Curated Editorial Roundups</span>
           </div>
-          <h2 className="text-2xl font-black text-foreground">
-            Explore Curated Agent Collections
-          </h2>
+          <h2 className="text-2xl font-black text-foreground">Explore Curated Agent Collections</h2>
           <p className="text-sm text-muted-foreground">
-            Pre-assembled thematic evaluations ready to stage into the comparison matrix with a single click.
+            Pre-assembled thematic evaluations ready to stage into the comparison matrix with a
+            single click.
           </p>
         </div>
 
@@ -383,9 +366,7 @@ export const ComparePage: React.FC = () => {
                   <span className="text-xs font-mono font-semibold uppercase text-primary">
                     Editorial Roundup #{col.display_order}
                   </span>
-                  <h3 className="text-xl font-bold text-foreground">
-                    {col.title}
-                  </h3>
+                  <h3 className="text-xl font-bold text-foreground">{col.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {col.editorial_summary}
                   </p>
@@ -428,4 +409,3 @@ export const ComparePage: React.FC = () => {
     </div>
   )
 }
-

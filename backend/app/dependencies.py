@@ -1,18 +1,17 @@
 from functools import lru_cache
+
 from fastapi import Depends
 
-from app.repositories.category_repository import CategoryRepository
 from app.repositories.agent_repository import AgentRepository
-from app.repositories.upvote_repository import UpvoteRepository
+from app.repositories.category_repository import CategoryRepository
 from app.repositories.collection_repository import CollectionRepository
 from app.repositories.review_repository import ReviewRepository
-
+from app.repositories.upvote_repository import UpvoteRepository
 from app.services.agent_service import AgentService
-from app.services.submission_service import SubmissionService
 from app.services.collection_service import CollectionService
-from app.services.sync_service import SyncService
 from app.services.review_service import ReviewService
-
+from app.services.submission_service import SubmissionService
+from app.services.sync_service import SyncService
 from app.utils.paths import get_data_dir
 
 

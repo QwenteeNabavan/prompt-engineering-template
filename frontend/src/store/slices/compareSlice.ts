@@ -21,9 +21,7 @@ export const compareSlice = createSlice({
       }
     },
     removeAgentFromCompare(state, action: PayloadAction<string>) {
-      state.stagedAgentSlugs = state.stagedAgentSlugs.filter(
-        (s) => s !== action.payload
-      )
+      state.stagedAgentSlugs = state.stagedAgentSlugs.filter((s) => s !== action.payload)
     },
     clearComparison(state) {
       state.stagedAgentSlugs = []
@@ -34,12 +32,7 @@ export const compareSlice = createSlice({
   },
 })
 
-export const {
-  addAgentToCompare,
-  removeAgentFromCompare,
-  clearComparison,
-  setComparisonSlugs,
-} = compareSlice.actions
+export const { addAgentToCompare, removeAgentFromCompare, clearComparison, setComparisonSlugs } =
+  compareSlice.actions
 
 export default compareSlice.reducer
-

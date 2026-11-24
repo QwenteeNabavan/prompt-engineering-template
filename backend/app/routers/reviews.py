@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, status
+
+from app.dependencies import get_review_service
 from app.models.review import ReviewCreateRequest, ReviewResponse
 from app.services.review_service import ReviewService
-from app.dependencies import get_review_service
 
 router = APIRouter(prefix="/agents", tags=["reviews"])
 

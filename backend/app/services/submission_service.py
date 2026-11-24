@@ -1,7 +1,9 @@
-from datetime import datetime
 import re
 import uuid
+from datetime import datetime
+
 from fastapi import HTTPException
+
 from app.models.agent import AgentInDb
 from app.models.submission import (
     SubmissionCreateRequest,
@@ -32,9 +34,7 @@ class SubmissionService:
             suffix += 1
         return candidate
 
-    def submit_agent(
-        self, payload: SubmissionCreateRequest
-    ) -> SubmissionResponse:
+    def submit_agent(self, payload: SubmissionCreateRequest) -> SubmissionResponse:
         # 1. Verify Category exists
         category = self.category_repo.get_by_id(payload.category_id)
         if not category:
@@ -106,4 +106,3 @@ class SubmissionService:
             submitted_at=new_agent.created_at,
             message="Submission received and committed to moderation queue. Standard review turnaround is within 12 hours.",
         )
-

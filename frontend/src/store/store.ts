@@ -9,8 +9,7 @@ export const store = configureStore({
     compare: compareReducer,
     [agentsApi.reducerPath]: agentsApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(agentsApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(agentsApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

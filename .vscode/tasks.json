@@ -2,22 +2,32 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Install backend dependencies",
-      "type": "shell",
-      "command": "uv sync",
-      "options": {
-        "cwd": "${workspaceFolder}/backend"
+      "label": "Run project (Backend + Frontend)",
+      "dependsOn": ["Run backend", "Run frontend"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
       },
       "problemMatcher": []
     },
     {
-      "label": "Install frontend dependencies",
+      "label": "Run backend",
       "type": "shell",
-      "command": "npm install",
+      "command": "uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8001",
       "options": {
-        "cwd": "${workspaceFolder}/frontend"
+        "cwd": "${workspaceFolder}/backend"
       },
-      "problemMatcher": []
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Uvicorn running on"
+        }
+      }
     },
     {
       "label": "Run frontend",
@@ -38,6 +48,24 @@
           "endsPattern": "Local:"
         }
       }
+    },
+    {
+      "label": "Install backend dependencies",
+      "type": "shell",
+      "command": "uv sync",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install frontend dependencies",
+      "type": "shell",
+      "command": "npm install",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "problemMatcher": []
     }
   ]
 }

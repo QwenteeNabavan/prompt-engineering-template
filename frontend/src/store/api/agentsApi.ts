@@ -37,8 +37,7 @@ export const agentsApi = createApi({
         if (params?.q) searchParams.set('q', params.q)
         if (params?.category && params.category !== 'all')
           searchParams.set('category', params.category)
-        if (params?.runtime && params.runtime !== 'all')
-          searchParams.set('runtime', params.runtime)
+        if (params?.runtime && params.runtime !== 'all') searchParams.set('runtime', params.runtime)
         if (params?.monetization && params.monetization !== 'all')
           searchParams.set('monetization', params.monetization)
         if (params?.sort) searchParams.set('sort', params.sort)
@@ -61,10 +60,7 @@ export const agentsApi = createApi({
     getAlternatives: builder.query<AgentListItem[], string>({
       query: (slug) => `/agents/${slug}/alternatives`,
     }),
-    toggleUpvote: builder.mutation<
-      UpvoteResponse,
-      { agentId: string; fingerprint?: string }
-    >({
+    toggleUpvote: builder.mutation<UpvoteResponse, { agentId: string; fingerprint?: string }>({
       query: ({ agentId, fingerprint }) => ({
         url: `/agents/${agentId}/upvote`,
         method: 'POST',
@@ -86,9 +82,7 @@ export const agentsApi = createApi({
     }),
     getCollection: builder.query<Collection, string>({
       query: (slug) => `/collections/${slug}`,
-      providesTags: (_result, _error, slug) => [
-        { type: 'Collection', id: slug },
-      ],
+      providesTags: (_result, _error, slug) => [{ type: 'Collection', id: slug }],
     }),
     compareAgents: builder.query<ComparisonMatrixResponse, string[]>({
       query: (slugs) => `/collections/compare/matrix?agents=${slugs.join(',')}`,
@@ -106,9 +100,7 @@ export const agentsApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: (_result, _error, { slug }) => [
-        { type: 'Review', id: slug },
-      ],
+      invalidatesTags: (_result, _error, { slug }) => [{ type: 'Review', id: slug }],
     }),
   }),
 })

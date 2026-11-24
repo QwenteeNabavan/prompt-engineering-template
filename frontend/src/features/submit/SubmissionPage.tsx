@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {
-  useListCategoriesQuery,
-  useSubmitAgentMutation,
-} from '@/store/api/agentsApi'
+import { useListCategoriesQuery, useSubmitAgentMutation } from '@/store/api/agentsApi'
 import { setActiveView } from '@/store/slices/appSlice'
 import type { SubmissionResponse } from '@/types/agent'
 import {
@@ -63,16 +60,12 @@ export const SubmissionPage: React.FC = () => {
 
   const handleToggleRuntime = (runtimeId: string) => {
     setDeploymentTargets((prev) =>
-      prev.includes(runtimeId)
-        ? prev.filter((r) => r !== runtimeId)
-        : [...prev, runtimeId]
+      prev.includes(runtimeId) ? prev.filter((r) => r !== runtimeId) : [...prev, runtimeId]
     )
   }
 
   const handleToggleLlm = (llm: string) => {
-    setLlmBackends((prev) =>
-      prev.includes(llm) ? prev.filter((l) => l !== llm) : [...prev, llm]
-    )
+    setLlmBackends((prev) => (prev.includes(llm) ? prev.filter((l) => l !== llm) : [...prev, llm]))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -110,7 +103,8 @@ export const SubmissionPage: React.FC = () => {
         is_mcp_compliant: isMcpCompliant,
         hardware_requirements: hardwareRequirements || undefined,
         terminal_setup_script: terminalSetupScript || undefined,
-        logo_url: logoUrl || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + encodeURIComponent(title),
+        logo_url:
+          logoUrl || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + encodeURIComponent(title),
         submitter_email: submitterEmail,
         bot_token: 'valid_human_token',
       }).unwrap()
@@ -119,9 +113,7 @@ export const SubmissionPage: React.FC = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err: any) {
       console.error('Submission failed:', err)
-      setErrorMsg(
-        err?.data?.detail || 'Submission validation failed. Please review your fields.'
-      )
+      setErrorMsg(err?.data?.detail || 'Submission validation failed. Please review your fields.')
     }
   }
 
@@ -138,9 +130,7 @@ export const SubmissionPage: React.FC = () => {
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-500">
               Record Committed to Pending Queue
             </span>
-            <h2 className="text-3xl font-black text-foreground">
-              Submission Received!
-            </h2>
+            <h2 className="text-3xl font-black text-foreground">Submission Received!</h2>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
               {submittedData.message}
             </p>
@@ -164,9 +154,7 @@ export const SubmissionPage: React.FC = () => {
               <span className="text-muted-foreground flex items-center gap-1.5 font-semibold text-primary">
                 <Clock className="w-4 h-4" /> Review SLA:
               </span>
-              <span className="font-bold text-foreground">
-                Guaranteed within 12 Hours
-              </span>
+              <span className="font-bold text-foreground">Guaranteed within 12 Hours</span>
             </div>
           </div>
 
@@ -242,9 +230,7 @@ export const SubmissionPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-foreground">
-                Agent Title *
-              </label>
+              <label className="text-xs font-semibold text-foreground">Agent Title *</label>
               <input
                 type="text"
                 required
@@ -256,9 +242,7 @@ export const SubmissionPage: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-foreground">
-                Domain Category *
-              </label>
+              <label className="text-xs font-semibold text-foreground">Domain Category *</label>
               <select
                 required
                 value={categoryId}
@@ -276,9 +260,7 @@ export const SubmissionPage: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-foreground">
-              Extended Tagline *
-            </label>
+            <label className="text-xs font-semibold text-foreground">Extended Tagline *</label>
             <input
               type="text"
               required
@@ -292,7 +274,9 @@ export const SubmissionPage: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold">
               <label className="text-foreground">Preview Summary (Capped at 120 chars) *</label>
-              <span className={`${summary.length > 120 ? 'text-destructive font-bold' : 'text-muted-foreground font-mono'}`}>
+              <span
+                className={`${summary.length > 120 ? 'text-destructive font-bold' : 'text-muted-foreground font-mono'}`}
+              >
                 {summary.length}/120
               </span>
             </div>
@@ -323,9 +307,7 @@ export const SubmissionPage: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-foreground">
-                GitHub Repository URL
-              </label>
+              <label className="text-xs font-semibold text-foreground">GitHub Repository URL</label>
               <input
                 type="url"
                 value={repositoryUrl}
@@ -365,7 +347,9 @@ export const SubmissionPage: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-foreground">Supported Foundation Models</label>
+            <label className="text-xs font-semibold text-foreground">
+              Supported Foundation Models
+            </label>
             <div className="flex flex-wrap gap-2">
               {availableLlms.map((llm) => (
                 <label
@@ -514,8 +498,8 @@ export const SubmissionPage: React.FC = () => {
               className="w-4 h-4 rounded text-primary focus:ring-primary"
             />
             <span className="flex items-center gap-1.5 font-medium">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              I confirm this project features genuine autonomous capabilities and meets directory standards.
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />I confirm this project features
+              genuine autonomous capabilities and meets directory standards.
             </span>
           </label>
 
@@ -531,4 +515,3 @@ export const SubmissionPage: React.FC = () => {
     </div>
   )
 }
-

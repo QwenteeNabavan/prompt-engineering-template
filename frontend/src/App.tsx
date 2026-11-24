@@ -1,7 +1,19 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import { syncFromUrl, openTetris, closeTetris, closeHardestGame, openInvoker, closeInvoker, openPudge, closePudge, closeFeaturesMenu, setSearchQuery, type ActiveView } from '@/store/slices/appSlice'
+import {
+  syncFromUrl,
+  openTetris,
+  closeTetris,
+  closeHardestGame,
+  openInvoker,
+  closeInvoker,
+  openPudge,
+  closePudge,
+  closeFeaturesMenu,
+  setSearchQuery,
+  type ActiveView,
+} from '@/store/slices/appSlice'
 import { setComparisonSlugs } from '@/store/slices/compareSlice'
 import { Navbar } from '@/components/layout/Navbar'
 import { StagingDock } from '@/components/compare/StagingDock'
@@ -14,12 +26,16 @@ import { HardestGameModal } from '@/components/agenthub/HardestGameModal'
 import { InvokerTrainerModal } from '@/components/agenthub/InvokerTrainerModal'
 import { PudgeHookTrainerModal } from '@/components/agenthub/PudgeHookTrainerModal'
 import { ArcadePage } from '@/features/arcade/ArcadePage'
+import { TastyDropPage } from '@/features/tastydrop/TastyDropPage'
 import { FeaturesMenuDrawer } from '@/components/layout/FeaturesMenuDrawer'
 
 function App() {
   const dispatch = useDispatch()
   const appState = useSelector((state: RootState) => state.app)
   const stagedSlugs = useSelector((state: RootState) => state.compare.stagedAgentSlugs)
+
+  // Feature flag to temporarily hide arcades and mini-games
+  const SHOW_ARCADE = false
 
   const isPopstateRef = useRef(false)
   const prevViewRef = useRef(appState.activeView)
@@ -39,8 +55,22 @@ function App() {
       const sort = params.get('sort')
 
       let targetView: ActiveView = 'directory'
-      if (viewParam && ['directory', 'profile', 'compare', 'collections', 'submit', 'arcade'].includes(viewParam)) {
-        targetView = viewParam
+      if (
+        viewParam &&
+        [
+          'directory',
+          'profile',
+          'compare',
+          'collections',
+          'submit',
+          'arcade',
+          'tastydrop',
+        ].includes(viewParam)
+      ) {
+        targetView =
+          !SHOW_ARCADE && (viewParam === 'arcade' || viewParam === 'tastydrop')
+            ? 'directory'
+            : viewParam
       } else if (slug) {
         targetView = 'profile'
       } else if (collection) {
@@ -64,7 +94,10 @@ function App() {
       )
 
       if (agentsParam) {
-        const slugs = agentsParam.split(',').map((s) => s.trim()).filter(Boolean)
+        const slugs = agentsParam
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
         dispatch(setComparisonSlugs(slugs))
       }
     }
@@ -80,9 +113,8 @@ function App() {
     // Tetris: Alt+T or Shift+T (outside inputs)
     // Invoker Trainer: Alt+I or Shift+I (outside inputs)
     const handleGameShortcuts = (e: KeyboardEvent) => {
-      const isInput = ['INPUT', 'TEXTAREA'].includes(
-        (e.target as HTMLElement)?.tagName
-      )
+      if (!SHOW_ARCADE) return
+      const isInput = ['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)
       if (
         (e.altKey && e.key.toLowerCase() === 't') ||
         (e.shiftKey && e.key.toLowerCase() === 't' && !isInput)
@@ -135,14 +167,18 @@ function App() {
       if (appState.searchQuery.trim()) params.set('q', appState.searchQuery.trim())
       if (appState.selectedCategory !== 'all') params.set('category', appState.selectedCategory)
       if (appState.selectedRuntime !== 'all') params.set('runtime', appState.selectedRuntime)
-      if (appState.selectedMonetization !== 'all') params.set('monetization', appState.selectedMonetization)
+      if (appState.selectedMonetization !== 'all')
+        params.set('monetization', appState.selectedMonetization)
       if (appState.sortBy !== 'trending') params.set('sort', appState.sortBy)
     }
 
     const newQueryString = params.toString()
     const targetUrl = newQueryString ? `?${newQueryString}` : window.location.pathname
 
-    if (`?${newQueryString}` !== window.location.search && !(newQueryString === '' && window.location.search === '')) {
+    if (
+      `?${newQueryString}` !== window.location.search &&
+      !(newQueryString === '' && window.location.search === '')
+    ) {
       const isViewChange = prevViewRef.current !== appState.activeView
       prevViewRef.current = appState.activeView
 
@@ -166,7 +202,14 @@ function App() {
 
   return (
     <>
-      {appState.activeView === 'directory' ? (
+      {SHOW_ARCADE && appState.activeView === 'tastydrop' ? (
+        <div className="min-h-screen bg-[#070b14] text-foreground flex flex-col">
+          <Navbar />
+          <TastyDropPage />
+        </div>
+      ) : appState.activeView === 'directory' ||
+        (!SHOW_ARCADE &&
+          (appState.activeView === 'arcade' || appState.activeView === 'tastydrop')) ? (
         <AgentHubDashboard />
       ) : (
         <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
@@ -177,7 +220,7 @@ function App() {
             {appState.activeView === 'compare' && <ComparePage />}
             {appState.activeView === 'collections' && <ComparePage />}
             {appState.activeView === 'submit' && <SubmissionPage />}
-            {appState.activeView === 'arcade' && <ArcadePage />}
+            {SHOW_ARCADE && appState.activeView === 'arcade' && <ArcadePage />}
           </main>
 
           <StagingDock />
@@ -185,63 +228,69 @@ function App() {
           <footer className="border-t py-8 text-center text-xs text-muted-foreground">
             <div className="container max-w-7xl mx-auto px-4 space-y-2">
               <p className="font-semibold text-foreground">
-                AgentHub — Standardized Directory & Technical Benchmark for Autonomous AI Agents
+                AgentHub v1.1 — Standardized Directory & Technical Benchmark for Autonomous AI
+                Agents
               </p>
               <p>
-                Operating with dynamic time-decay discovery algorithms, verified telemetry, and deduplicated community audits.
+                Operating with dynamic time-decay discovery algorithms, verified telemetry, and
+                deduplicated community audits.
               </p>
             </div>
           </footer>
         </div>
       )}
 
-      {/* Global Embedded Tetris Mini-Game Popup */}
-      <TetrisModal
-        isOpen={appState.isTetrisOpen}
-        onClose={() => dispatch(closeTetris())}
-      />
-
-      {/* Global The World's Hardest Game Secret Easter Egg Modal */}
-      <HardestGameModal
-        isOpen={appState.isHardestGameOpen}
-        onClose={() => {
-          dispatch(closeHardestGame())
-          if (appState.searchQuery.trim().toLowerCase() === 'game') {
-            dispatch(setSearchQuery(''))
-          }
-        }}
-      />
-
-      {/* Global Invoker Spell Knowledge Trainer Modal */}
-      <InvokerTrainerModal
-        isOpen={appState.isInvokerOpen}
-        onClose={() => {
-          dispatch(closeInvoker())
-          if (['invoker', 'dota', 'spell'].includes(appState.searchQuery.trim().toLowerCase())) {
-            dispatch(setSearchQuery(''))
-          }
-        }}
-      />
-
-      {/* Global Dota 2 Pudge Meat Hook Precision Trainer Modal */}
-      <PudgeHookTrainerModal
-        isOpen={appState.isPudgeOpen}
-        onClose={() => {
-          dispatch(closePudge())
-          if (['pudge', 'hook', 'meat', 'fresh meat'].includes(appState.searchQuery.trim().toLowerCase())) {
-            dispatch(setSearchQuery(''))
-          }
-        }}
-      />
+      {/* Global Embedded Mini-Game Popups (Hidden when SHOW_ARCADE = false) */}
+      {SHOW_ARCADE && (
+        <>
+          <TetrisModal isOpen={appState.isTetrisOpen} onClose={() => dispatch(closeTetris())} />
+          <HardestGameModal
+            isOpen={appState.isHardestGameOpen}
+            onClose={() => {
+              dispatch(closeHardestGame())
+              if (appState.searchQuery.trim().toLowerCase() === 'game') {
+                dispatch(setSearchQuery(''))
+              }
+            }}
+          />
+          <InvokerTrainerModal
+            isOpen={appState.isInvokerOpen}
+            onClose={() => {
+              dispatch(closeInvoker())
+              if (
+                ['invoker', 'dota', 'spell'].includes(appState.searchQuery.trim().toLowerCase())
+              ) {
+                dispatch(setSearchQuery(''))
+              }
+            }}
+          />
+          <PudgeHookTrainerModal
+            isOpen={appState.isPudgeOpen}
+            onClose={() => {
+              dispatch(closePudge())
+              if (
+                ['pudge', 'hook', 'meat', 'fresh meat'].includes(
+                  appState.searchQuery.trim().toLowerCase()
+                )
+              ) {
+                dispatch(setSearchQuery(''))
+              }
+            }}
+          />
+        </>
+      )}
 
       {/* Global Categorized Features & Navigation Menu Drawer */}
       <FeaturesMenuDrawer
         isOpen={appState.isFeaturesMenuOpen}
         onClose={() => dispatch(closeFeaturesMenu())}
         onOpenSearch={() => {
-          // If on directory, focus search or open command modal
-          const input = document.querySelector('input[placeholder*="Пошук"]') as HTMLInputElement
-          if (input) input.focus()
+          if (appState.activeView !== 'directory') {
+            dispatch(syncFromUrl({ activeView: 'directory' }))
+          }
+          setTimeout(() => {
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))
+          }, 50)
         }}
         onOpenSubmit={() => {
           dispatch(syncFromUrl({ activeView: 'submit' }))

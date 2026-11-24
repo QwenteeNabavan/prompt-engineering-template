@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -21,4 +22,3 @@ class UpvoteResponse(BaseModel):
     upvotes_count: int
     has_upvoted: bool
     message: str
-
