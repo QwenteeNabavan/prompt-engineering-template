@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# === [DEMO-06B] Deterministic Frontend Hook: PostToolUse Prettier + Stop Gate ===
 """Antigravity lifecycle hook script for frontend linting, formatting, and type-checking.
 
 - PostToolUse: Auto-formats modified frontend source files with Prettier.

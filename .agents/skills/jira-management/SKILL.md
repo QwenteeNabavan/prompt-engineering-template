@@ -5,6 +5,7 @@ description: >-
   creating, updating, commenting, transitioning, or archiving tasks/epics/subtasks via the Atlassian MCP server).
 ---
 
+<!-- [DEMO-03B] Progressive Disclosure Skill: Jira Cloud OAuth MCP Workflows -->
 # AgentHub Jira Management Skill
 
 This skill provides a standardized workflow and pre-configured project metadata for managing tasks in **Jira Cloud** using the **Atlassian MCP v2** server (`https://mcp.atlassian.com/v2/mcp`).

@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge'
 export const Navbar: React.FC = () => {
   const dispatch = useDispatch()
   const searchQuery = useSelector((state: RootState) => state.app.searchQuery)
-  const SHOW_ARCADE = false
 
   const handleSearchChange = (q: string) => {
     dispatch(setSearchQuery(q))
@@ -24,7 +23,6 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Left: Minimal Brand Logotype */}
         <a
           href="/"
           onClick={handleLogoClick}
@@ -51,12 +49,9 @@ export const Navbar: React.FC = () => {
           </div>
         </a>
 
-        {/* Center: Clean & Empty for Minimalist Spacing */}
         <div className="hidden md:block flex-1" />
 
-        {/* Right: Simplified Search, Submit & Menu Button */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Simplified Search moved to the right */}
           <div className="relative flex items-center">
             <Search className="absolute left-2.5 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
             <input
@@ -78,7 +73,6 @@ export const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Submit Agent Button */}
           <button
             type="button"
             onClick={() => dispatch(setActiveView('submit'))}
@@ -88,23 +82,6 @@ export const Navbar: React.FC = () => {
             <span>Submit</span>
           </button>
 
-          {/* TastyDrop Simulator Quick Link */}
-          {SHOW_ARCADE && (
-            <button
-              type="button"
-              onClick={() => dispatch(setActiveView('tastydrop'))}
-              className="group relative inline-flex h-8 items-center gap-1.5 rounded-lg border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-yellow-500/5 px-2.5 text-xs font-bold text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)] hover:border-amber-400 hover:shadow-[0_0_18px_rgba(245,158,11,0.35)] transition-all active:scale-98 cursor-pointer"
-              title="TastyDrop — Симулятор кейсів та апгрейдер"
-            >
-              <span className="text-sm">🍔</span>
-              <span className="hidden sm:inline">TastyDrop</span>
-              <span className="rounded bg-amber-500/20 px-1 py-0 font-mono text-[10px] text-amber-200 border border-amber-500/30">
-                500🪙
-              </span>
-            </button>
-          )}
-
-          {/* Features Menu Button */}
           <button
             type="button"
             onClick={() => dispatch(openFeaturesMenu())}
@@ -114,7 +91,7 @@ export const Navbar: React.FC = () => {
             <Menu className="h-4 w-4 text-cyan-400 group-hover:scale-110 transition-transform" />
             <span className="font-semibold hidden xs:inline">Меню</span>
             <span className="flex h-4 items-center justify-center rounded-full bg-cyan-500/20 px-1.5 font-mono text-[10px] font-bold text-cyan-300 border border-cyan-500/30">
-              5
+              4
             </span>
           </button>
         </div>

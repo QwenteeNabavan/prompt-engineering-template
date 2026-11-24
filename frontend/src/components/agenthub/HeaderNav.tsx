@@ -7,7 +7,6 @@ import { openFeaturesMenu } from '@/store/slices/appSlice'
 interface HeaderNavProps {
   onOpenSearch?: () => void
   onOpenSubmit: () => void
-  onOpenTetris?: () => void
   activeNavTab?: string
   onNavTabChange?: (tab: string) => void
   totalAgentsCount?: number

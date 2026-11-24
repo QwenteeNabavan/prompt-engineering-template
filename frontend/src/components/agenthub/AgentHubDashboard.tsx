@@ -9,7 +9,6 @@ import { CommandMenuModal } from './CommandMenuModal'
 import { SubmitAgentModal } from './SubmitAgentModal'
 import { StagingDock } from '@/components/compare/StagingDock'
 import { ComparePage } from '@/features/compare/ComparePage'
-import { ArcadePage } from '@/features/arcade/ArcadePage'
 import { MOCK_AGENTS } from '@/data/mockAgents'
 import {
   useListAgentsQuery,
@@ -29,10 +28,6 @@ import { Search, Sparkles, Terminal } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import {
-  openTetris,
-  openHardestGame,
-  openInvoker,
-  openPudge,
   setActiveView,
   setSearchQuery as setReduxSearchQuery,
   openAgentProfile,
@@ -126,13 +121,12 @@ export const AgentHubDashboard: React.FC = () => {
   const dispatch = useDispatch()
   const searchQuery = useSelector((state: RootState) => state.app.searchQuery)
   const stagedSlugs = useSelector((state: RootState) => state.compare.stagedAgentSlugs)
-  const SHOW_ARCADE = false
 
   const setSearchQuery = (q: string) => {
     dispatch(setReduxSearchQuery(q))
   }
 
-  // RTK Query hooks connected to FastAPI backend
+  // #region ★ [DEMO-12] RTK Query Live Data + 250ms Debounce + Fuse.js Fuzzy Search
   const { data: apiCategories = [] } = useListCategoriesQuery()
   const {
     data: apiAgents,
@@ -151,6 +145,7 @@ export const AgentHubDashboard: React.FC = () => {
     }, 250)
     return () => clearTimeout(timer)
   }, [searchQuery])
+  // #endregion
 
   // Local upvotes state persisted in localStorage
   const [upvotedIds, setUpvotedIds] = useState<Record<string, boolean>>(() => {
@@ -178,7 +173,6 @@ export const AgentHubDashboard: React.FC = () => {
   const [mcpOnly, setMcpOnly] = useState(false)
   const [selectedSort, setSelectedSort] = useState<SortOption>('trending')
 
-  // Notification Toast for submission / comparison
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   const showToast = (msg: string) => {
@@ -196,7 +190,6 @@ export const AgentHubDashboard: React.FC = () => {
     if (isAgentsLoading) {
       return []
     }
-    // Offline fallback: adjust mock counts for local upvote toggles
     return MOCK_AGENTS.map((m) => ({
       ...m,
       upvotesCount: m.upvotesCount + (upvotedIds[m.id] ? 1 : 0),
@@ -240,19 +233,6 @@ export const AgentHubDashboard: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  // Trigger Easter Egg games when SHOW_ARCADE is enabled
-  useEffect(() => {
-    if (!SHOW_ARCADE) return
-    const q = searchQuery.trim().toLowerCase()
-    if (q === 'game') {
-      dispatch(openHardestGame())
-    } else if (['invoker', 'dota', 'spell'].includes(q)) {
-      dispatch(openInvoker())
-    } else if (['pudge', 'hook', 'meat', 'fresh meat'].includes(q)) {
-      dispatch(openPudge())
-    }
-  }, [searchQuery, dispatch, SHOW_ARCADE])
-
   // Handle Toggle Upvote via FastAPI backend mutation (with localStorage persistence)
   const handleToggleUpvote = async (agentId: string) => {
     const prevUpvoted = !!upvotedIds[agentId]
@@ -281,7 +261,6 @@ export const AgentHubDashboard: React.FC = () => {
         return synced
       })
     } catch (err) {
-      // Rollback optimistic toggle on network error
       setUpvotedIds((curr) => ({ ...curr, [agentId]: prevUpvoted }))
       console.error('Failed to toggle upvote:', err)
     }
@@ -328,7 +307,6 @@ export const AgentHubDashboard: React.FC = () => {
       return true
     })
 
-    // Preserve Fuse relevance order when a search query is active and default sort is selected
     if (q && selectedSort === 'trending') {
       return filtered
     }
@@ -375,10 +353,6 @@ export const AgentHubDashboard: React.FC = () => {
   }
 
   const handleNavTabChange = (tab: string) => {
-    if (tab === 'arcade') {
-      dispatch(setActiveView('arcade'))
-      return
-    }
     if (tab === 'compare') {
       dispatch(setActiveView('compare'))
       return
@@ -398,7 +372,6 @@ export const AgentHubDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-300 font-sans">
-      {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-xl border border-cyan-500/40 bg-slate-900/95 px-4 py-2.5 text-xs text-white shadow-2xl backdrop-blur-md animate-in slide-in-from-bottom-2">
           <Sparkles className="h-4 w-4 text-cyan-400" />
@@ -406,7 +379,6 @@ export const AgentHubDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Global Navigation Header */}
       <HeaderNav
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenSubmit={() => setIsSubmitOpen(true)}
@@ -418,20 +390,15 @@ export const AgentHubDashboard: React.FC = () => {
         onGoHome={handleGoHome}
       />
 
-      {/* Main Views */}
       {activeNavTab === 'explore' ? (
         <>
-          {/* Hero & Live Telemetry Metrics Section */}
           <HeroTelemetry
             verifiedCount={catalogAgents.length || 9}
             openSourceCount={openSourceCount || 8}
             mcpReadyCount={mcpReadyCount || 7}
-            enableEasterEgg={SHOW_ARCADE}
           />
 
-          {/* Main Container */}
           <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-            {/* Faceted Filter Bar & Controls */}
             <FilterBar
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -450,7 +417,6 @@ export const AgentHubDashboard: React.FC = () => {
               onResetFilters={handleResetFilters}
             />
 
-            {/* Agent Cards Grid */}
             <section className="space-y-4">
               {isAgentsLoading && catalogAgents.length === 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
@@ -462,7 +428,6 @@ export const AgentHubDashboard: React.FC = () => {
                   ))}
                 </div>
               ) : filteredAgents.length === 0 ? (
-                /* Empty State */
                 <div className="flex flex-col items-center justify-center p-16 text-center rounded-2xl border border-slate-800 bg-slate-900/40 space-y-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 text-slate-400">
                     <Search className="h-6 w-6" />
@@ -483,7 +448,6 @@ export const AgentHubDashboard: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                /* Responsive Grid of Compact Agent Cards */
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                   {filteredAgents.map((agent) => (
                     <AgentCard
@@ -501,20 +465,14 @@ export const AgentHubDashboard: React.FC = () => {
             </section>
           </main>
         </>
-      ) : activeNavTab === 'arcade' ? (
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <ArcadePage />
-        </main>
       ) : (
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <ComparePage />
         </main>
       )}
 
-      {/* Floating Comparison Dock */}
       <StagingDock />
 
-      {/* Footer */}
       <footer className="border-t border-slate-800/80 mt-20 py-10 bg-slate-950/60 text-xs text-slate-500">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -545,7 +503,6 @@ export const AgentHubDashboard: React.FC = () => {
         </div>
       </footer>
 
-      {/* Quick View Sheet / Modal */}
       <AgentQuickViewModal
         agent={selectedAgentForPreview}
         isOpen={!!selectedAgentForPreview}
@@ -559,7 +516,6 @@ export const AgentHubDashboard: React.FC = () => {
         onOpenFullProfile={(slug) => dispatch(openAgentProfile(slug))}
       />
 
-      {/* Command Palette (Cmd+K) Modal */}
       <CommandMenuModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
@@ -568,13 +524,8 @@ export const AgentHubDashboard: React.FC = () => {
           setPreviewSlug(agent.slug)
           setIsSearchOpen(false)
         }}
-        onOpenTetris={SHOW_ARCADE ? () => dispatch(openTetris()) : undefined}
-        onOpenHardestGame={SHOW_ARCADE ? () => dispatch(openHardestGame()) : undefined}
-        onOpenInvoker={SHOW_ARCADE ? () => dispatch(openInvoker()) : undefined}
-        onOpenPudge={SHOW_ARCADE ? () => dispatch(openPudge()) : undefined}
       />
 
-      {/* Submit Agent Intake Modal */}
       <SubmitAgentModal
         isOpen={isSubmitOpen}
         onClose={() => setIsSubmitOpen(false)}

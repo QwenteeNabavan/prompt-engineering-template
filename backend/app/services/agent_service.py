@@ -31,6 +31,7 @@ class AgentService:
         self.category_repo = category_repo
         self.upvote_repo = upvote_repo
 
+    # === [DEMO-09] Dynamic Exponential Time-Decay Ranking Algorithm ===
     def calculate_ranking_score(self, agent: AgentInDb) -> float:
         """Dynamic exponential time-decay ranking algorithm:
 

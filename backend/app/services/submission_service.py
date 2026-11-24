@@ -34,6 +34,7 @@ class SubmissionService:
             suffix += 1
         return candidate
 
+    # === [DEMO-10] Submission Intake: Pydantic Validation, XSS Sanitization & 12h SLA ===
     def submit_agent(self, payload: SubmissionCreateRequest) -> SubmissionResponse:
         # 1. Verify Category exists
         category = self.category_repo.get_by_id(payload.category_id)

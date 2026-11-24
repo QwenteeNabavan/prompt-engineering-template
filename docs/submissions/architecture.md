@@ -2,30 +2,27 @@
 
 ## Overview
 
-The Community Submission Portal manages the intake pipeline for new AI agents. It ensures incoming submissions are verified through client-side validation, background bot mitigation, server schema sanitization, and structured storage under a `pending` moderation lifecycle.
+The Community Submission Portal (`SubmissionPage.tsx` and `SubmitAgentModal.tsx`) manages contributor intake through client validation, bot mitigation verification, Pydantic v2 schema checks, XSS Markdown sanitization, and persistence into `backend/data/agents.json` with `lifecycle_state = "pending"` and a 12-hour review SLA.
 
 ```mermaid
 sequenceDiagram
   autonumber
-  participant Contributor as Contributor / Maintainer
-  participant UI as Submission Page (/submit)
-  participant BotDefense as Bot Mitigation (Turnstile)
-  participant API as API Layer (/api/submissions)
-  participant Storage as Asset Storage (S3 / Blob)
-  participant DB as Database (agents table)
+  participant Maintainer as Contributor / Maintainer
+  participant UI as React Form (SubmissionPage / SubmitAgentModal)
+  participant RTK as RTK Query (useSubmitAgentMutation)
+  participant Router as FastAPI (/api/submissions)
+  participant Service as SubmissionService
+  participant Store as JSON Store (backend/data/agents.json)
 
-  Contributor->>UI: Fills form & uploads square logo
-  UI->>BotDefense: Request background verification token
-  BotDefense-->>UI: Verification token
-  UI->>API: POST /api/submissions with payload & token
-  API->>BotDefense: Verify token authenticity
-  API->>API: Validate Pydantic/Zod schema & sanitize Markdown
-  API->>Storage: Store and optimize brand logo image
-  Storage-->>API: Secure asset CDN URL
-  API->>DB: INSERT into agents (lifecycle_state='pending', ...)
-  DB-->>API: agent_id, slug, created_at
-  API-->>UI: 201 Created (reference ID, 12h SLA timestamp)
-  UI-->>Contributor: Render SLA Confirmation Screen
+  Maintainer->>UI: Fills metadata, telemetry, brief & anti-bot check
+  UI->>RTK: submitAgentMutation(payload)
+  RTK->>Router: POST /api/submissions
+  Router->>Service: Validate Pydantic schema & bot_token
+  Service->>Service: Strip <script>/<iframe>/<style> XSS tags & generate unique slug
+  Service->>Store: Append AgentInDb (lifecycle_state="pending")
+  Store-->>Service: Persisted record
+  Service-->>UI: 201 Created (submission_id, slug, sla_hours=12)
+  UI-->>Maintainer: Render 12h SLA Confirmation Card
 ```
 
 ---
@@ -34,54 +31,24 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-  [*] --> Pending: Form Submission Committed
-  Pending --> Approved: Moderator Verifies Specs & Health (<12h SLA)
-  Pending --> Rejected: Spam, Trivial Wrapper, or Invalid Links
-  Approved --> Archived: Nightly Cron Detects Upstream GitHub Repo Archival
-  Approved --> [*]
-  Rejected --> [*]
+  [*] --> pending: POST /api/submissions
+  pending --> approved: Technical Audit Passed (<12h SLA)
+  pending --> rejected: Spam / Non-Autonomous Wrapper
+  approved --> archived: SyncService Detects Archived GitHub Repo
 ```
 
 ---
 
-## Data Validation & Schema
+## Schema Validation & Security (`SubmissionCreateRequest`)
 
-### Input Payload (`AgentSubmissionSchema`)
-
-```typescript
-interface AgentSubmissionPayload {
-  title: string;              // 3..150 chars, trimmed
-  tagline: string;            // 10..255 chars
-  summary: string;            // <= 120 chars (for directory card preview)
-  description_markdown: string; // Markdown product brief, sanitized against XSS
-  website_url: string;        // Valid HTTPS URL
-  repository_url?: string;    // Valid HTTPS Git repository URL
-  category_id: string;        // UUID referencing categories table
-  deployment_targets: Array<"cloud" | "cli" | "docker" | "ide_extension">;
-  llm_backends: string[];     // e.g. ["claude-3-5-sonnet", "gpt-4o", "llama-3"]
-  framework?: string;         // e.g. "LangGraph", "CrewAI", "AutoGen", "Custom"
-  is_open_source: boolean;
-  is_mcp_compliant: boolean;
-  hardware_requirements?: string;
-  terminal_setup_script?: string;
-  submitter_email: string;    // Valid email format
-  turnstile_token: string;    // Cloudflare Turnstile token for verification
-}
-```
-
-### Security & Sanitization
-
-1. **Bot Mitigation**: Submissions require a valid Turnstile token checked against the provider verification endpoint. Rapid repeated submissions from the same IP are rate-limited via a token-bucket algorithm (maximum 5 submissions per hour per IP).
-2. **Markdown XSS Cleansing**: Body text is sanitized via HTML sanitizers (e.g. DOMPurify or `bleach`) stripping unsafe scripts, iframes, and raw HTML attributes before storage.
-3. **Asset Processing**: Uploaded logos are checked for MIME type (`image/png`, `image/webp`, `image/svg+xml`), scanned for malicious payload chunks, resized/compressed to standard 256x256 WebP, and stored in object storage.
+- **Field Constraints**: `title` (2–150 chars), `tagline` (5–255 chars), `summary` (≤ 120 chars), `description_markdown` (≥ 20 chars), valid `http(s)://` URLs for `website_url` / `repository_url`, regex-validated `submitter_email`, and verified `category_id` (UUID or category slug).
+- **Bot Mitigation**: Rejects automated abuse tokens (`bot_token == "bot_fail"` → `403 Forbidden`).
+- **XSS Sanitization**: `SubmissionService.submit_agent` strips `<script>`, `<iframe>`, and `<style>` blocks from `description_markdown` prior to persistence.
 
 ---
 
 ## API Surface
 
-| Method | Endpoint | Request Body | Response Code | Description |
-|--------|----------|--------------|---------------|-------------|
-| `POST` | `/api/submissions` | `AgentSubmissionPayload` | `201 Created` / `400` / `422` | Submit new agent for moderation review |
-| `POST` | `/api/submissions/upload-logo` | `multipart/form-data` | `200 OK` (returns CDN URI) | Pre-upload and validate logo asset |
-| `GET` | `/api/submissions/{id}/status` | None | `200 OK` (`pending` / `approved` / `rejected`) | Check submission status via token/ID |
-
+| Method | Endpoint | Request Schema | Response | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `POST` | `/api/submissions` | `SubmissionCreateRequest` | `201 Created` (`SubmissionResponse`) | Commit a new agent to the `pending` moderation queue with 12h SLA |

@@ -1,82 +1,47 @@
-# Curated Collections & Comparisons — Architecture
+# Curated Collections & Side-by-Side Comparisons — Architecture
 
 ## Overview
 
-The Collections & Comparisons feature drives structured discovery and deep comparative analysis. It provides editorial curation backed by relational models, and an interactive client-side staging dock coupled with an engineering telemetry matrix.
+The Collections & Comparisons feature (`ComparePage.tsx`, `StagingDock.tsx`, `CollectionService`) combines curated editorial roundups (`backend/data/collections.json`) with an interactive 2–3 agent side-by-side matrix across 5 standardized engineering benchmark dimensions.
 
 ```mermaid
 flowchart LR
-  User([User / Browser])
-  StagingDock[Comparison Staging Dock / 2-3 Agents]
-  MatrixView[Comparative Matrix Component]
-  API[API Layer /collections & /agents/compare]
-  DB[(PostgreSQL / Supabase)]
+  User(["User / Browser"])
+  Dock["StagingDock (compareSlice: 2–3 slugs)"]
+  CompareUI["ComparePage (?view=compare&agents=a,b)"]
+  Router["FastAPI (/api/collections)"]
+  Service["CollectionService"]
+  Store[("collections.json & agents.json")]
 
-  User -->|Selects 2-3 Agents| StagingDock
-  StagingDock -->|Synchronizes ?agents=slug1,slug2| MatrixView
-  MatrixView -->|Query Telemetry| API
-  API -->|Fetch Agents & Benchmark Metrics| DB
-  DB -->>API: Structured Engineering Telemetry
-  API -->>MatrixView: Comparative DTO Payload
-  MatrixView -->>User: Renders Side-by-Side Matrix
+  User -->|"Stages 2–3 Agents or Loads Roundup"| Dock
+  Dock -->|"Syncs URL ?agents=slug1,slug2"| CompareUI
+  CompareUI -->|"useCompareAgentsQuery"| Router
+  Router --> Service
+  Service --> Store
+  Store --> Service
+  Service -->|"ComparisonMatrixResponse"| CompareUI
 ```
 
 ---
 
-## Data Schema & Storage
+## 5 Standardized Engineering Benchmark Parameters
 
-### 1. `collections` Table
+| # | Parameter | `AgentInDb` Field(s) | Values / Examples |
+| :--- | :--- | :--- | :--- |
+| **1** | **Degree of Execution Autonomy** | `autonomy_level` | `fully_autonomous`, `semi_autonomous`, `copilot` |
+| **2** | **Vector Memory & RAG Integration** | `has_vector_rag`, `memory_backend` | `true` (`Chroma`, `FAISS`, `Tree-sitter Graph`) / `false` |
+| **3** | **Multimodal Asset Handling** | `multimodal_capabilities` | `screenshots`, `browser_dom`, `file_diffs`, `pdf_parsing` |
+| **4** | **Estimated Token Consumption Overhead** | `token_overhead_tier` | `low`, `moderate`, `heavy` |
+| **5** | **Community Maintenance Cadence** | `maintenance_cadence` | `weekly_releases`, `monthly_releases`, `infrequent` |
 
-Stores editorial industry roundups and curated groupings.
-
-```sql
-CREATE TABLE collections (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    slug VARCHAR(100) NOT NULL UNIQUE,
-    title VARCHAR(150) NOT NULL,
-    editorial_summary TEXT NOT NULL,
-    content_markdown TEXT NOT NULL,
-    featured_agent_ids UUID[] NOT NULL DEFAULT '{}',
-    is_published BOOLEAN NOT NULL DEFAULT false,
-    display_order INTEGER NOT NULL DEFAULT 0,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE INDEX idx_collections_slug ON collections(slug);
-```
-
-### 2. Engineering Benchmark Telemetry Attributes (in `agents` or extension)
-
-To power the 5 comparison dimensions, agent records include validated technical telemetry:
-
-| Parameter | Type | Schema Attribute | Notes |
-|-----------|------|------------------|-------|
-| **Autonomy Level** | `VARCHAR(30)` | `autonomy_level` | `fully_autonomous`, `semi_autonomous_approval`, `copilot_suggestive` |
-| **Vector Memory / RAG** | `BOOLEAN` + `TEXT` | `has_vector_rag`, `memory_backend` | Native chroma/pgvector/milvus or ephemeral context |
-| **Multimodal Handling** | `TEXT[]` | `multimodal_capabilities` | e.g. `['screenshots', 'dom_inspection', 'file_uploads', 'audio']` |
-| **Token Overhead Tier** | `VARCHAR(20)` | `token_overhead_tier` | `low` (<2k tokens/step), `moderate` (2k-10k), `heavy` (>10k tokens/step) |
-| **Maintenance Cadence** | `VARCHAR(30)` | `maintenance_cadence` | Computed from GitHub API: `weekly_releases`, `monthly_releases`, `infrequent` |
-
----
-
-## Client-Side Staging Architecture
-
-### URL State & Staging Redux Slice
-
-- **URL-First Synchronization**: The active comparison matrix is driven primarily by URL query params: `/compare?agents=slug-a,slug-b,slug-c`. This ensures comparisons can be directly bookmarked, emailed, or shared in technical evaluations.
-- **Client Dock (`compareSlice`)**:
-  - Maintains array `stagedAgentSlugs: string[]` (max length 3).
-  - Floating bottom drawer displays currently staged agents with remove buttons and a "Compare Now" trigger.
-  - Rejects addition of a 4th agent with an instructional toast: "Maximum 3 agents can be compared simultaneously."
+`CollectionService.compare_agents` also computes `is_cross_category: bool` to surface a contextual warning banner when comparing agents across different functional domains, and `ComparePage.tsx` supports one-click export as a Markdown Architecture Decision Record (ADR) table.
 
 ---
 
 ## API Surface
 
 | Method | Endpoint | Query Parameters | Description |
-|--------|----------|------------------|-------------|
-| `GET` | `/api/collections` | `limit`, `offset` | List published curated collections |
-| `GET` | `/api/collections/{slug}` | None | Detailed collection view with member agent previews |
-| `GET` | `/api/agents/compare` | `slugs=slug1,slug2,slug3` | Fetches normalized side-by-side benchmark telemetry for 2 or 3 agents |
-
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/collections` | — | List curated collections hydrated with `featured_agents` |
+| `GET` | `/api/collections/{slug}` | — | Fetch single curated collection by slug |
+| `GET` | `/api/collections/compare/matrix` | `agents=slug1,slug2[,slug3]` | Return normalized 5-parameter comparison matrix for 2–3 agents |

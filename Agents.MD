@@ -1,29 +1,37 @@
-# Project agents guide
+<!-- [DEMO-01] Single Source of Truth for AI Coding Agents (Agents.MD) -->
+# AgentHub — Project Agents Guide
 
-This repository is a full-stack boilerplate: **FastAPI** backend and **React (TypeScript)** frontend.
+This repository is the **AgentHub** autonomous AI agent directory and technical benchmarking platform (**FastAPI** backend + **React 19 / TypeScript** frontend). This file is the **Single Source of Truth**; [`Claude.md`](./Claude.md) points here.
 
-## Layout
+## 1. Architecture & Layout
 
-- `backend/` — API with layered architecture (`types`, `models`, `repositories`, `services`, `routers`, `utils`). Data is stored in JSON files under `backend/data/` (one file per entity, contents are a JSON array). Uses **uv**, **Pydantic**, and FastAPI dependency injection (routers depend on services; services use repositories).
-- `frontend/` — **React + TypeScript**, **shadcn/ui**, **Redux Toolkit** (RTK Query for API, slices for UI state). No authentication.
-- `docs/` — Feature documentation organized with one folder per feature for the entire app (`docs/<feature>/`), containing business requirements, architecture, and test cases.
+- `backend/` — Layered FastAPI API (`routers` → `services` → `repositories` → `data/*.json`), managed with **uv** and **Pydantic v2** dependency injection. Persistence uses root-level JSON arrays in `backend/data/`.
+- `frontend/` — **React 19 + TypeScript (Vite)**, **Tailwind CSS v4**, **shadcn/ui**, **Redux Toolkit** (RTK Query for server state, slices for UI state), and **Fuse.js** (250ms debounced fuzzy search).
+- `docs/` — Consolidated full-stack feature documentation (`docs/<feature>/`: `business-requirements.md`, `architecture.md`, `test-cases.md`), one folder per feature (`agents`, `submissions`, `comparisons`).
+- `.agents/` — Agent harness customizations:
+  - `rules/` — Path-scoped constraints (`backend-rules.md`, `frontend-rules.md`, `cross-verification.md`, `code-style.md`, `safety-and-persistence.md`, `testing-and-verification.md`).
+  - `skills/` — On-demand procedural workflows (`agenthub-agent-audit`, `backend-development`, `frontend-development`, `fullstack-verification`, `jira-management`).
+  - `hooks/` & `hooks.json` — Deterministic `PostToolUse`, `Stop`, and Git `pre-commit` guards.
+  - `mcp_config.json` — Remote Atlassian Jira MCP v2 (`https://mcp.atlassian.com/v2/mcp`) via OAuth 2.0.
 
-## Current scope
+## 2. Core Features
 
-**AgentHub**: Autonomous AI agent directory and technical benchmarking platform. Features:
-- **Agents**: Directory with debounced fuzzy search, multi-faceted filtering, detailed technical audit profiles, and time-decay ranking.
-- **Submissions**: Contributor intake portal with schema validation, bot mitigation, and 12h review SLA.
-- **Comparisons**: Curated roundups and side-by-side comparative matrix across 5 standardized engineering parameters.
+- **Agents (`docs/agents/`)**: Searchable catalog across 5 categories, runtime/pricing/MCP filters, detailed technical audit profiles, deduplicated fingerprint upvotes, and exponential time-decay ranking:
+  $$\text{Score} = \frac{\text{Upvotes}_{7\text{d}} + 1}{(\text{Age}_{\text{hours}} + 2)^{1.5}}$$
+- **Submissions (`docs/submissions/`)**: Maintainer intake portal with Pydantic v2 schema validation, XSS sanitization, bot mitigation, and a 12-hour review SLA (`pending` queue).
+- **Comparisons (`docs/comparisons/`)**: Curated industry roundups and side-by-side matrix across 5 standardized engineering parameters, exportable as Markdown ADR tables.
 
-## Working conventions
+## 3. Development & Quality Commands
 
-- Add new features under the same layer folders on the backend and under `src/features/` on the frontend.
-- Document each feature under `docs/<feature>/` (consolidated full-stack documentation).
-- Keep AI assistant entry points minimal: this file is the source of truth; `Claude.md` points here.
+| Layer | Dev Server | Linter | Formatter | Type Checker | Tests / Build |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Backend** (`backend/`) | `uv run uvicorn app.main:app --reload --port 8001` | `uv run ruff check .` | `uv run ruff format --check .` | `uv run mypy` | `uv run python test_api.py` |
+| **Frontend** (`frontend/`) | `npm run dev` (port `5174`) | `npm run lint` (`oxlint`) | `npm run format:check` (`prettier`) | `npm run type-check` (`tsc -b`) | `npm run build` |
 
-## Local development
+Full-stack one-shot verification: `python .agents/skills/fullstack-verification/scripts/verify-all.py`.
 
-1. Backend: from `backend/`, run `uv sync` then `uv run dev` (see `[tool.uv.scripts]` in `pyproject.toml`).
-2. Frontend: from `frontend/`, run `npm install` then `npm run dev` (dev server port **5174**; default API base: `http://localhost:8001/api`).
+## 4. Non-Negotiable Invariants
 
-VS Code: `.vscode/launch.json` starts the backend; `.vscode/tasks.json` installs dependencies and runs the frontend dev server.
+1. **JSON Array Store**: Every `backend/data/*.json` file must remain a valid root-level JSON array (`[...]`).
+2. **Layer Isolation**: FastAPI routers depend strictly on services (`Depends(get_*_service)`), never repositories or raw files.
+3. **Zero-Error Gate**: All linters, formatters, type checkers, and integration tests must exit with `0` errors before completion or commit.

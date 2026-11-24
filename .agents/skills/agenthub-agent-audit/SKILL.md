@@ -6,6 +6,7 @@ description: >-
   terminal setup sequences, and operational edge cases.
 ---
 
+<!-- [DEMO-03] Progressive Disclosure Skill: Loaded on demand for technical agent audits -->
 # AgentHub Autonomous Agent Technical Audit Skill
 
 This skill provides a standardized runbook for technical evaluations of autonomous AI agents submitted to or listed on AgentHub.

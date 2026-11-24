@@ -29,6 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# === [DEMO-08] Layered FastAPI Architecture: Mounting Feature Routers ===
 app.include_router(agents.router, prefix="/api")
 app.include_router(categories.router, prefix="/api")
 app.include_router(submissions.router, prefix="/api")
@@ -82,20 +83,3 @@ def api_index():
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "service": "AgentHub API"}
-
-
-@app.post("/api/easter-egg/launch-dota")
-def launch_dota() -> dict[str, str]:
-    import os
-    import sys
-
-    try:
-        if sys.platform == "win32":
-            os.startfile("steam://rungameid/570")
-        else:
-            import subprocess
-
-            subprocess.Popen(["xdg-open", "steam://rungameid/570"])
-        return {"status": "ok", "message": "Dota 2 launch initiated via Steam"}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}

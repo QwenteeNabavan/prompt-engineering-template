@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# === [DEMO-06] Deterministic Backend Hook: PostToolUse Auto-Format + Stop Gate ===
 """Antigravity lifecycle hook script for backend linting, formatting, type-checking, and tests.
 
 - PostToolUse: Auto-formats modified backend Python files with Ruff and checks Python syntax.

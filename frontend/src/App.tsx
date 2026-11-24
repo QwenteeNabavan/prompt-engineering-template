@@ -1,19 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
-import {
-  syncFromUrl,
-  openTetris,
-  closeTetris,
-  closeHardestGame,
-  openInvoker,
-  closeInvoker,
-  openPudge,
-  closePudge,
-  closeFeaturesMenu,
-  setSearchQuery,
-  type ActiveView,
-} from '@/store/slices/appSlice'
+import { syncFromUrl, closeFeaturesMenu, type ActiveView } from '@/store/slices/appSlice'
 import { setComparisonSlugs } from '@/store/slices/compareSlice'
 import { Navbar } from '@/components/layout/Navbar'
 import { StagingDock } from '@/components/compare/StagingDock'
@@ -21,21 +9,14 @@ import { AgentHubDashboard } from '@/components/agenthub/AgentHubDashboard'
 import { AgentProfilePage } from '@/features/profile/AgentProfilePage'
 import { SubmissionPage } from '@/features/submit/SubmissionPage'
 import { ComparePage } from '@/features/compare/ComparePage'
-import { TetrisModal } from '@/components/agenthub/TetrisModal'
-import { HardestGameModal } from '@/components/agenthub/HardestGameModal'
-import { InvokerTrainerModal } from '@/components/agenthub/InvokerTrainerModal'
-import { PudgeHookTrainerModal } from '@/components/agenthub/PudgeHookTrainerModal'
-import { ArcadePage } from '@/features/arcade/ArcadePage'
-import { TastyDropPage } from '@/features/tastydrop/TastyDropPage'
 import { FeaturesMenuDrawer } from '@/components/layout/FeaturesMenuDrawer'
+
+const VALID_VIEWS: ActiveView[] = ['directory', 'profile', 'compare', 'collections', 'submit']
 
 function App() {
   const dispatch = useDispatch()
   const appState = useSelector((state: RootState) => state.app)
   const stagedSlugs = useSelector((state: RootState) => state.compare.stagedAgentSlugs)
-
-  // Feature flag to temporarily hide arcades and mini-games
-  const SHOW_ARCADE = false
 
   const isPopstateRef = useRef(false)
   const prevViewRef = useRef(appState.activeView)
@@ -55,22 +36,8 @@ function App() {
       const sort = params.get('sort')
 
       let targetView: ActiveView = 'directory'
-      if (
-        viewParam &&
-        [
-          'directory',
-          'profile',
-          'compare',
-          'collections',
-          'submit',
-          'arcade',
-          'tastydrop',
-        ].includes(viewParam)
-      ) {
-        targetView =
-          !SHOW_ARCADE && (viewParam === 'arcade' || viewParam === 'tastydrop')
-            ? 'directory'
-            : viewParam
+      if (viewParam && VALID_VIEWS.includes(viewParam)) {
+        targetView = viewParam
       } else if (slug) {
         targetView = 'profile'
       } else if (collection) {
@@ -103,44 +70,8 @@ function App() {
     }
 
     parseUrlAndSyncState()
-
-    const handlePopstate = () => {
-      parseUrlAndSyncState()
-    }
-    window.addEventListener('popstate', handlePopstate)
-
-    // Global Easter Egg shortcuts:
-    // Tetris: Alt+T or Shift+T (outside inputs)
-    // Invoker Trainer: Alt+I or Shift+I (outside inputs)
-    const handleGameShortcuts = (e: KeyboardEvent) => {
-      if (!SHOW_ARCADE) return
-      const isInput = ['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)
-      if (
-        (e.altKey && e.key.toLowerCase() === 't') ||
-        (e.shiftKey && e.key.toLowerCase() === 't' && !isInput)
-      ) {
-        e.preventDefault()
-        dispatch(openTetris())
-      } else if (
-        (e.altKey && e.key.toLowerCase() === 'i') ||
-        (e.shiftKey && e.key.toLowerCase() === 'i' && !isInput)
-      ) {
-        e.preventDefault()
-        dispatch(openInvoker())
-      } else if (
-        (e.altKey && e.key.toLowerCase() === 'p') ||
-        (e.shiftKey && e.key.toLowerCase() === 'p' && !isInput)
-      ) {
-        e.preventDefault()
-        dispatch(openPudge())
-      }
-    }
-    window.addEventListener('keydown', handleGameShortcuts)
-
-    return () => {
-      window.removeEventListener('popstate', handlePopstate)
-      window.removeEventListener('keydown', handleGameShortcuts)
-    }
+    window.addEventListener('popstate', parseUrlAndSyncState)
+    return () => window.removeEventListener('popstate', parseUrlAndSyncState)
   }, [dispatch])
 
   // 2. Synchronize Redux state to URL search parameters
@@ -202,14 +133,7 @@ function App() {
 
   return (
     <>
-      {SHOW_ARCADE && appState.activeView === 'tastydrop' ? (
-        <div className="min-h-screen bg-[#070b14] text-foreground flex flex-col">
-          <Navbar />
-          <TastyDropPage />
-        </div>
-      ) : appState.activeView === 'directory' ||
-        (!SHOW_ARCADE &&
-          (appState.activeView === 'arcade' || appState.activeView === 'tastydrop')) ? (
+      {appState.activeView === 'directory' ? (
         <AgentHubDashboard />
       ) : (
         <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
@@ -220,7 +144,6 @@ function App() {
             {appState.activeView === 'compare' && <ComparePage />}
             {appState.activeView === 'collections' && <ComparePage />}
             {appState.activeView === 'submit' && <SubmissionPage />}
-            {SHOW_ARCADE && appState.activeView === 'arcade' && <ArcadePage />}
           </main>
 
           <StagingDock />
@@ -238,46 +161,6 @@ function App() {
             </div>
           </footer>
         </div>
-      )}
-
-      {/* Global Embedded Mini-Game Popups (Hidden when SHOW_ARCADE = false) */}
-      {SHOW_ARCADE && (
-        <>
-          <TetrisModal isOpen={appState.isTetrisOpen} onClose={() => dispatch(closeTetris())} />
-          <HardestGameModal
-            isOpen={appState.isHardestGameOpen}
-            onClose={() => {
-              dispatch(closeHardestGame())
-              if (appState.searchQuery.trim().toLowerCase() === 'game') {
-                dispatch(setSearchQuery(''))
-              }
-            }}
-          />
-          <InvokerTrainerModal
-            isOpen={appState.isInvokerOpen}
-            onClose={() => {
-              dispatch(closeInvoker())
-              if (
-                ['invoker', 'dota', 'spell'].includes(appState.searchQuery.trim().toLowerCase())
-              ) {
-                dispatch(setSearchQuery(''))
-              }
-            }}
-          />
-          <PudgeHookTrainerModal
-            isOpen={appState.isPudgeOpen}
-            onClose={() => {
-              dispatch(closePudge())
-              if (
-                ['pudge', 'hook', 'meat', 'fresh meat'].includes(
-                  appState.searchQuery.trim().toLowerCase()
-                )
-              ) {
-                dispatch(setSearchQuery(''))
-              }
-            }}
-          />
-        </>
       )}
 
       {/* Global Categorized Features & Navigation Menu Drawer */}

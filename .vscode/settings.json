@@ -2,6 +2,8 @@
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
   "python.terminal.activateEnvironment": true,
   "editor.formatOnSave": true,
+  "editor.folding": true,
+  "editor.showFoldingControls": "always",
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.codeActionsOnSave": {
@@ -20,5 +22,6 @@
   },
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "todo-tree.general.tags": ["[DEMO-01]", "[DEMO-02]", "[DEMO-03]", "[DEMO-06]", "[DEMO-07]", "[DEMO-08]", "[DEMO-09]", "[DEMO-10]", "[DEMO-11]", "[DEMO-12]"]
 }

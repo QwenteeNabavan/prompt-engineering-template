@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-export type ActiveView =
-  'directory' | 'profile' | 'compare' | 'collections' | 'submit' | 'arcade' | 'tastydrop'
+export type ActiveView = 'directory' | 'profile' | 'compare' | 'collections' | 'submit'
 
 interface AppState {
   activeView: ActiveView
@@ -12,10 +11,6 @@ interface AppState {
   selectedRuntime: string
   selectedMonetization: string
   sortBy: string
-  isTetrisOpen: boolean
-  isHardestGameOpen: boolean
-  isInvokerOpen: boolean
-  isPudgeOpen: boolean
   isFeaturesMenuOpen: boolean
 }
 
@@ -28,10 +23,6 @@ const initialState: AppState = {
   selectedRuntime: 'all',
   selectedMonetization: 'all',
   sortBy: 'trending',
-  isTetrisOpen: false,
-  isHardestGameOpen: false,
-  isInvokerOpen: false,
-  isPudgeOpen: false,
   isFeaturesMenuOpen: false,
 }
 
@@ -66,42 +57,6 @@ export const appSlice = createSlice({
     },
     setSortBy(state, action: PayloadAction<string>) {
       state.sortBy = action.payload
-    },
-    openTetris(state) {
-      state.isTetrisOpen = true
-    },
-    closeTetris(state) {
-      state.isTetrisOpen = false
-    },
-    setTetrisOpen(state, action: PayloadAction<boolean>) {
-      state.isTetrisOpen = action.payload
-    },
-    openHardestGame(state) {
-      state.isHardestGameOpen = true
-    },
-    closeHardestGame(state) {
-      state.isHardestGameOpen = false
-    },
-    setHardestGameOpen(state, action: PayloadAction<boolean>) {
-      state.isHardestGameOpen = action.payload
-    },
-    openInvoker(state) {
-      state.isInvokerOpen = true
-    },
-    closeInvoker(state) {
-      state.isInvokerOpen = false
-    },
-    setInvokerOpen(state, action: PayloadAction<boolean>) {
-      state.isInvokerOpen = action.payload
-    },
-    openPudge(state) {
-      state.isPudgeOpen = true
-    },
-    closePudge(state) {
-      state.isPudgeOpen = false
-    },
-    setPudgeOpen(state, action: PayloadAction<boolean>) {
-      state.isPudgeOpen = action.payload
     },
     openFeaturesMenu(state) {
       state.isFeaturesMenuOpen = true
@@ -139,18 +94,6 @@ export const {
   setSelectedRuntime,
   setSelectedMonetization,
   setSortBy,
-  openTetris,
-  closeTetris,
-  setTetrisOpen,
-  openHardestGame,
-  closeHardestGame,
-  setHardestGameOpen,
-  openInvoker,
-  closeInvoker,
-  setInvokerOpen,
-  openPudge,
-  closePudge,
-  setPudgeOpen,
   openFeaturesMenu,
   closeFeaturesMenu,
   toggleFeaturesMenu,

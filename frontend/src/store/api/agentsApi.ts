@@ -13,6 +13,7 @@ import type {
   ReviewCreateInput,
 } from '@/types/agent'
 
+// #region ★ [DEMO-11] RTK Query API Slice & Tag-Based Cache Invalidation
 export const agentsApi = createApi({
   reducerPath: 'agentsApi',
   baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
@@ -118,3 +119,4 @@ export const {
   useListReviewsQuery,
   useCreateReviewMutation,
 } = agentsApi
+// #endregion

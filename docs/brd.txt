@@ -31,23 +31,21 @@ The fourth view drives editorial context and structured organic discovery. It co
 
 Users can stage two or three tools within the same operational domain to evaluate key engineering parameters: degree of execution autonomy, built-in vector memory or RAG integration, multimodal asset handling, estimated token consumption overhead, and community maintenance cadence.
 
-3. Data Schema and Database Architecture
-Data persistence is handled by a relational model hosted on PostgreSQL.
+3. Data Schema and Persistence Architecture
+Data persistence is implemented using structured flat-file JSON array stores under backend/data/*.json (agents.json, categories.json, collections.json, upvotes.json, reviews.json), validated through strict Pydantic v2 schemas (*Request, *InDb, *Response) across a 4-tier FastAPI architecture (routers -> services -> repositories -> json_store).
 
-The core entity resides within the agents table. It utilizes a UUID primary key, unique URL slug, formal title, teaser tagline, full Markdown documentation body, and secure URI references for logos, landing pages, and source repositories. GitHub star volume is tracked via an integer column refreshed periodically. Domain categorization links to a defined dictionary key. Deployment targets and supported LLM backends are stored as native text arrays. Discrete boolean flags record open-source status and MCP compliance. The table maintains a total upvote tally, lifecycle state (pending, approved, or rejected), submitter email, and timestamp audit columns. Dedicated database indexes cover the slug, category, and composite state-upvote pairs to optimize query read performance.
+The core entity resides within agents.json (AgentInDb). It utilizes a UUID primary key, unique URL slug, formal title, teaser tagline, 120-character card summary, full Markdown documentation body, and secure URI references for logos, landing pages, and source repositories. GitHub star volume is tracked via an integer field synchronized via SyncService. Domain categorization links to categories.json by UUID. Deployment targets and supported LLM backends are stored as string arrays. Discrete boolean flags record open-source status and MCP compliance. Records also store 5 standardized comparison telemetry fields (autonomy_level, has_vector_rag, memory_backend, multimodal_capabilities, token_overhead_tier, maintenance_cadence), upvote tallies, lifecycle state (pending, approved, rejected), submitter email, and UTC audit timestamps.
 
-The upvotes table prevents duplicate vote allocation. It binds an agent identifier to either an authenticated user ID or a hashed client digital footprint via a foreign key relationship, enforcing a strict unique composite constraint across both fields.
+The upvotes.json store prevents duplicate vote allocation. It binds an agent identifier to either a user ID or a client digital fingerprint hash, enforcing deduplicated toggle semantics.
 
-The categories reference table stores unique semantic category slugs, localized display titles, functional domain definitions, and icon token identifiers.
+The categories.json reference store holds unique semantic category slugs, display titles, functional domain definitions, and icon token identifiers across all 5 domains.
 
-4. Ranking Algorithms and Background Jobs
+4. Ranking Algorithms and Synchronization Services
 To prevent directory stagnation where legacy projects permanently dominate visibility, AgentHub applies an exponential time-decay ranking algorithm. The dynamic score is computed by dividing the net upvotes accumulated over a rolling seven-day window (with a single-unit offset) by the elapsed record age in hours plus two, raised to the power of 1.5. This mathematical degradation ensures emerging solutions with rapid short-term engagement surge to discovery tiers.
 
-Data synchronization is orchestrated via an automated nightly cron routine executed through a serverless scheduling layer. The routine queries all approved records containing active repository links, fetches current metrics via the GitHub API, synchronizes star tallies in the database, and flags archived repositories to deactivate outdated projects automatically.
+Repository metric synchronization is encapsulated in SyncService (backend/app/services/sync_service.py), which inspects approved records with repository links, refreshes metrics, and flags archived repositories to keep listings accurate.
 
-5. Technology Stack and Infrastructure
-Both client and server layers are constructed using Next.js with React Server Components, delivering aggressive static page generation across public directories to maximize technical SEO indexing for high-intent queries. The interface layer is built with Tailwind CSS utility architecture paired with accessible headless UI primitives, supporting system-level dark mode out of the box.
+5. Technology Stack and Quality Infrastructure
+The backend layer is built with Python 3.11+, FastAPI, Pydantic v2, and uv, exposing REST endpoints under /api with automatic OpenAPI documentation (/docs) and guarded by Ruff (linter + formatter) and Mypy (static type checker).
 
-Data persistence, authentication flows, and Row-Level Security policies are managed by Supabase PostgreSQL. First-stage search leverages in-browser fuzzy matching via Fuse.js, eliminating dedicated search cluster infrastructure expenses while guaranteeing response latencies under fifty milliseconds for catalog volumes up to one thousand entities.
-
-Application hosting and edge asset distribution are deployed across globally distributed serverless infrastructure on Vercel or Cloudflare Pages, maintaining edge caching near end-users and keeping initial page load benchmarks within one second.
+The frontend layer is constructed with React 19, TypeScript, Vite, Tailwind CSS v4, and Radix UI / shadcn/ui primitives in a responsive dark telemetry aesthetic. Server state and cache invalidation are managed by Redux Toolkit (RTK Query), while first-stage search leverages in-browser fuzzy matching via Fuse.js with a 250ms debounce window for sub-50ms responsiveness. Frontend code quality is enforced via Oxlint, Prettier, and strict TypeScript (tsc -b --noEmit), automated through Antigravity lifecycle hooks (.agents/hooks.json) and Git pre-commit hooks.
