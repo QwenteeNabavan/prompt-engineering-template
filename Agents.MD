@@ -1,7 +1,7 @@
 <!-- [DEMO-01] Single Source of Truth for AI Coding Agents (Agents.MD) -->
 # AgentHub — Project Agents Guide
 
-This repository is the **AgentHub** autonomous AI agent directory and technical benchmarking platform (**FastAPI** backend + **React 19 / TypeScript** frontend). This file is the **Single Source of Truth**; [`Claude.md`](./Claude.md) points here.
+This repository is the **AgentHub** autonomous AI agent directory and technical benchmarking platform (**FastAPI** backend + **React 19 / TypeScript** frontend). This file is the **Single Source of Truth** for AI coding agents.
 
 ## 1. Architecture & Layout
 
